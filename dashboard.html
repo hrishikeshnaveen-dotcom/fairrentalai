@@ -3,35 +3,22 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FairRentalAI — Landlord Dashboard</title>
+<title>FairRentalAI — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --navy:#0e1e3a;--navy-mid:#162d56;--navy-light:#1e3d72;
-  --gold:#c9963a;--gold-light:#e8b55a;--gold-pale:#f5e6c8;
-  --cream:#faf7f2;--white:#ffffff;
-  --text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;
-  --border:rgba(14,30,58,0.1);
-  --green:#3a9a6e;--green-bg:#eaf6f1;
-  --red:#c0392b;--red-bg:#fdf0ee;
-  --amber:#b07d2a;--amber-bg:#fdf4e3;
-  --blue:#1a6bbd;--blue-bg:#e8f0fb;
-  --purple:#5b3ec2;--purple-bg:#ede9fb;
-  --sidebar-w:240px;
-}
+:root{--navy:#0e1e3a;--navy-mid:#162d56;--gold:#c9963a;--gold-light:#e8b55a;--gold-pale:#f5e6c8;--cream:#faf7f2;--white:#fff;--text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;--border:rgba(14,30,58,0.1);--green:#3a9a6e;--green-bg:#eaf6f1;--red:#c0392b;--red-bg:#fdf0ee;--amber:#b07d2a;--amber-bg:#fdf4e3;--blue:#1a6bbd;--blue-bg:#e8f0fb;--sidebar-w:240px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:var(--text-dark);}
 .layout{display:flex;min-height:100vh;}
 
 /* SIDEBAR */
 .sidebar{width:var(--sidebar-w);background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;border-right:1px solid rgba(201,150,58,0.15);}
-.sidebar-logo{padding:1.5rem 1.5rem 1.25rem;font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:white;border-bottom:1px solid rgba(255,255,255,0.07);}
+.sidebar-logo{padding:1.5rem 1.5rem 1.25rem;font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:white;border-bottom:1px solid rgba(255,255,255,0.07);}
 .sidebar-logo span{color:var(--gold);}
 .sidebar-section-label{font-size:0.65rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:1.25rem 1.5rem 0.5rem;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:0.65rem 1.5rem;margin:1px 0.75rem;border-radius:8px;cursor:pointer;font-size:0.875rem;color:rgba(255,255,255,0.55);transition:background 0.15s,color 0.15s;text-decoration:none;}
 .nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);}
 .nav-item.active{background:rgba(201,150,58,0.15);color:white;}
-.nav-item.active .icon{color:var(--gold);}
 .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 .nav-badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:0.65rem;font-weight:700;padding:1px 7px;border-radius:100px;}
 .usage-box{margin:0 0.75rem 0.75rem;background:rgba(255,255,255,0.05);border:1px solid rgba(201,150,58,0.2);border-radius:10px;padding:0.9rem 1rem;}
@@ -56,12 +43,18 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .topbar-right{display:flex;align-items:center;gap:1rem;}
 .btn-gold{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--navy);font-weight:500;font-size:0.825rem;padding:0.55rem 1.1rem;border-radius:7px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
 .btn-gold:hover{background:var(--gold-light);}
-.notif-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;color:var(--text-mid);}
-.notif-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;position:absolute;top:7px;right:7px;}
+.btn-logout{background:transparent;border:1px solid var(--border);border-radius:7px;padding:0.45rem 0.9rem;font-size:0.8rem;color:var(--text-mid);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-logout:hover{background:#f5f3ef;}
 
 /* VIEWS */
 .view{display:none;padding:2rem;flex:1;}
 .view.active{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:4rem;color:var(--text-light);font-size:0.9rem;gap:10px;}
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
@@ -69,25 +62,19 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .stat-label{font-size:0.75rem;color:var(--text-light);margin-bottom:0.5rem;}
 .stat-value{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--navy);line-height:1;}
 .stat-sub{font-size:0.75rem;color:var(--text-light);margin-top:0.4rem;}
-.stat-pill{display:inline-block;font-size:0.7rem;font-weight:500;padding:2px 8px;border-radius:100px;margin-top:0.4rem;}
-.pill-green{background:var(--green-bg);color:var(--green);}
-.pill-amber{background:var(--amber-bg);color:var(--amber);}
-.pill-blue{background:var(--blue-bg);color:var(--blue);}
 
 /* MAIN GRID */
 .main-grid{display:grid;grid-template-columns:1fr 380px;gap:1.5rem;}
 .panel{background:var(--white);border:1px solid var(--border);border-radius:14px;}
 .panel-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .panel-title{font-size:0.9rem;font-weight:500;}
-.panel-action{font-size:0.8rem;color:var(--gold);cursor:pointer;text-decoration:none;}
 
-/* APPLICANT CAP BAR */
-.cap-bar-row{padding:0.75rem 1.5rem;background:#fdf8f0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
-.cap-bar-bg{flex:1;height:6px;background:#f0ede8;border-radius:3px;overflow:hidden;}
-.cap-bar-fill{height:6px;border-radius:3px;background:var(--gold);transition:width 0.4s;}
-.cap-text{font-size:0.75rem;color:var(--text-mid);white-space:nowrap;}
-.cap-text strong{color:var(--navy);}
+/* EMPTY STATE */
+.empty-state{padding:3rem;text-align:center;color:var(--text-light);}
+.empty-state-title{font-size:1rem;font-weight:500;color:var(--navy);margin-bottom:0.5rem;}
+.empty-state-desc{font-size:0.85rem;margin-bottom:1.5rem;line-height:1.6;}
 
+/* PROPERTY CARDS */
 .property-card{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;}
 .property-card:last-child{border-bottom:none;}
 .property-card:hover{background:#faf9f7;}
@@ -98,13 +85,12 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .prop-status{font-size:0.7rem;font-weight:500;padding:3px 9px;border-radius:100px;}
 .status-active{background:var(--green-bg);color:var(--green);}
 .status-closed{background:#f0f0f0;color:#888;}
-.status-reviewing{background:var(--amber-bg);color:var(--amber);}
-.prop-meta{display:flex;gap:1.5rem;}
+.prop-meta{display:flex;gap:1.5rem;flex-wrap:wrap;}
 .prop-meta-item{font-size:0.78rem;color:var(--text-mid);}
 .prop-meta-item strong{color:var(--navy);font-weight:500;}
 .prop-bar-row{margin-top:0.75rem;}
 .prop-bar-bg{height:4px;background:#f0ede8;border-radius:2px;overflow:hidden;}
-.prop-bar-fill{height:4px;background:var(--gold);border-radius:2px;}
+.prop-bar-fill{height:4px;border-radius:2px;}
 .prop-bar-label{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-light);margin-bottom:4px;}
 
 /* APPLICANT LIST */
@@ -113,7 +99,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .applicant-row:last-child{border-bottom:none;}
 .applicant-row:hover{background:#faf9f7;}
 .applicant-row.selected{background:#fdf8f0;}
-.app-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:500;}
+.app-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:500;background:var(--gold-pale);color:var(--navy);}
 .app-info{flex:1;min-width:0;}
 .app-name{font-size:0.85rem;font-weight:500;color:var(--navy);}
 .app-detail{font-size:0.71rem;color:var(--text-light);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -124,119 +110,47 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .rank-2{background:#e8e8e8;color:#666;}
 .rank-3{background:#f0ede8;color:#999;}
 .rank-n{background:#f5f5f5;color:#bbb;}
-
-/* STATUS CHIPS in applicant row */
 .status-chip{font-size:0.62rem;font-weight:500;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
 .chip-pending{background:#f0f0f0;color:#888;}
 .chip-initial{background:var(--blue-bg);color:var(--blue);}
-.chip-docs{background:var(--purple-bg);color:var(--purple);}
+.chip-docs{background:#ede9fb;color:#5b3ec2;}
 .chip-final{background:var(--green-bg);color:var(--green);}
 .chip-declined{background:var(--red-bg);color:var(--red);}
 
 /* DETAIL PANEL */
 .detail-panel{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
 .detail-header{background:var(--navy);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;}
-.detail-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:500;flex-shrink:0;}
+.detail-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:500;flex-shrink:0;background:rgba(201,150,58,0.25);color:var(--gold-light);}
 .detail-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;}
 .detail-sub{font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:2px;}
 .detail-score-big{margin-left:auto;text-align:center;}
 .detail-score-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;}
 .detail-score-label{font-size:0.62rem;color:rgba(255,255,255,0.4);letter-spacing:0.05em;text-transform:uppercase;}
-.detail-body{padding:1.25rem;}
+.detail-body{padding:1.25rem;overflow-y:auto;max-height:calc(100vh - 300px);}
 .detail-section{margin-bottom:1.1rem;}
 .detail-section-title{font-size:0.68rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.6rem;}
 .detail-row{display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border);}
 .detail-row:last-child{border-bottom:none;}
 .detail-row-label{font-size:0.78rem;color:var(--text-mid);}
-.detail-row-value{font-size:0.78rem;font-weight:500;color:var(--navy);}
+.detail-row-value{font-size:0.78rem;font-weight:500;color:var(--navy);text-align:right;max-width:60%;}
 .tag{display:inline-block;font-size:0.68rem;padding:3px 7px;border-radius:5px;margin:2px;}
 .tag-green{background:var(--green-bg);color:var(--green);}
 .tag-red{background:var(--red-bg);color:var(--red);}
 .tag-amber{background:var(--amber-bg);color:var(--amber);}
 .ai-summary{background:#fdf8f0;border:1px solid rgba(201,150,58,0.2);border-radius:8px;padding:0.85rem;font-size:0.78rem;color:var(--text-mid);line-height:1.65;margin-bottom:1rem;}
 .ai-label{font-size:0.65rem;font-weight:500;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.35rem;}
-
-/* APPROVAL WORKFLOW STEPPER */
-.workflow-stepper{display:flex;align-items:center;gap:0;margin-bottom:1rem;}
-.wf-step{flex:1;text-align:center;position:relative;}
-.wf-step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600;margin:0 auto 4px;border:2px solid transparent;}
-.wf-step-label{font-size:0.65rem;color:var(--text-light);}
-.wf-step.done .wf-step-dot{background:var(--green);color:white;border-color:var(--green);}
-.wf-step.done .wf-step-label{color:var(--green);}
-.wf-step.active .wf-step-dot{background:var(--navy);color:white;border-color:var(--navy);}
-.wf-step.active .wf-step-label{color:var(--navy);font-weight:500;}
-.wf-step.future .wf-step-dot{background:#f0ede8;color:var(--text-light);border-color:#e0ddd8;}
-.wf-step-line{flex:1;height:2px;background:#e0ddd8;margin-top:-18px;}
-.wf-step-line.done{background:var(--green);}
-
-/* DOCUMENT UPLOAD SECTION */
-.doc-upload-area{border:1.5px dashed var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;}
-.doc-upload-title{font-size:0.78rem;font-weight:500;color:var(--navy);margin-bottom:4px;}
-.doc-upload-sub{font-size:0.72rem;color:var(--text-light);}
-.doc-item{display:flex;align-items:center;gap:10px;padding:0.6rem 0.75rem;background:#f8f6f2;border-radius:8px;margin-bottom:6px;}
-.doc-item-icon{width:28px;height:28px;border-radius:6px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.doc-item-name{flex:1;font-size:0.78rem;color:var(--navy);font-weight:500;}
-.doc-item-status{font-size:0.68rem;}
-.doc-pending{color:var(--amber);}
-.doc-uploaded{color:var(--green);}
-.fake-upload-btn{background:transparent;border:1px dashed var(--border);border-radius:7px;padding:0.5rem;font-size:0.75rem;color:var(--text-mid);cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;transition:background 0.15s;text-align:center;}
-.fake-upload-btn:hover{background:#f5f3ef;}
-
-/* ACTION BUTTONS */
 .action-row{display:flex;gap:8px;flex-wrap:wrap;}
-.btn-approve{flex:1;background:var(--green);color:white;border:none;border-radius:8px;padding:0.6rem;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.15s;white-space:nowrap;}
+.btn-action{flex:1;border-radius:8px;padding:0.6rem;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;white-space:nowrap;border:none;}
+.btn-approve{background:var(--green);color:white;}
 .btn-approve:hover{opacity:0.85;}
-.btn-initial{flex:1;background:var(--blue);color:white;border:none;border-radius:8px;padding:0.6rem;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.15s;white-space:nowrap;}
+.btn-initial{background:var(--blue);color:white;}
 .btn-initial:hover{opacity:0.85;}
-.btn-final{flex:1;background:var(--green);color:white;border:none;border-radius:8px;padding:0.6rem;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.15s;white-space:nowrap;}
+.btn-final{background:var(--green);color:white;}
 .btn-final:hover{opacity:0.85;}
-.btn-decline{flex:1;background:transparent;color:var(--red);border:1px solid rgba(192,57,43,0.25);border-radius:8px;padding:0.6rem;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s;white-space:nowrap;}
+.btn-decline{background:transparent;color:var(--red);border:1px solid rgba(192,57,43,0.25)!important;}
 .btn-decline:hover{background:var(--red-bg);}
-.btn-waitlist{flex:1;background:transparent;color:var(--text-mid);border:1px solid var(--border);border-radius:8px;padding:0.6rem;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s;white-space:nowrap;}
+.btn-waitlist{background:transparent;color:var(--text-mid);border:1px solid var(--border)!important;}
 .btn-waitlist:hover{background:#f5f3ef;}
-
-/* BILLING */
-.billing-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
-.billing-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem;}
-.billing-card-title{font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:1rem;}
-.plan-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem;}
-.plan-price{font-size:0.875rem;color:var(--text-mid);margin-bottom:1rem;}
-.plan-price strong{color:var(--navy);}
-.usage-detail-bar{margin:1rem 0;}
-.usage-detail-label{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-mid);margin-bottom:6px;}
-.usage-detail-bg{height:8px;background:#f0ede8;border-radius:4px;overflow:hidden;}
-.usage-detail-fill{height:8px;border-radius:4px;background:var(--gold);transition:width 0.5s ease;}
-.usage-tier{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;}
-.usage-tier:last-child{border-bottom:none;}
-.usage-tier-label{color:var(--text-mid);}
-.usage-tier-val{font-weight:500;color:var(--navy);}
-.usage-tier-free{color:var(--green);font-weight:500;}
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;}
-.plan-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem;position:relative;transition:box-shadow 0.2s;}
-.plan-card.current{border:2px solid var(--gold);}
-.plan-card-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:0.65rem;font-weight:700;padding:3px 12px;border-radius:100px;white-space:nowrap;}
-.plan-card-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem;}
-.plan-card-price{font-size:1.6rem;font-weight:700;color:var(--navy);margin:0.75rem 0 0.25rem;font-family:'Playfair Display',serif;}
-.plan-card-price span{font-size:0.8rem;font-weight:400;color:var(--text-light);font-family:'DM Sans',sans-serif;}
-.plan-card-desc{font-size:0.78rem;color:var(--text-mid);margin-bottom:1.25rem;line-height:1.5;}
-.plan-features{list-style:none;display:flex;flex-direction:column;gap:0.55rem;margin-bottom:1.25rem;}
-.plan-features li{font-size:0.8rem;color:var(--text-mid);display:flex;align-items:flex-start;gap:8px;}
-.feat-check{width:15px;height:15px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.feat-check::after{content:'';width:4px;height:6px;border:1.5px solid var(--green);border-top:none;border-left:none;transform:rotate(40deg) translateY(-1px);display:block;}
-.btn-plan{width:100%;padding:0.6rem;border-radius:8px;font-size:0.825rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
-.btn-plan-current{background:#f0ede8;color:var(--text-mid);border:1px solid var(--border);cursor:default;}
-.btn-plan-upgrade{background:var(--gold);color:var(--navy);border:none;}
-.btn-plan-upgrade:hover{background:var(--gold-light);}
-.btn-plan-enterprise{background:var(--navy);color:white;border:none;}
-.btn-plan-enterprise:hover{background:var(--navy-mid);}
-.invoice-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
-.invoice-table th{text-align:left;font-weight:500;color:var(--text-light);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.6rem 1rem;border-bottom:1px solid var(--border);}
-.invoice-table td{padding:0.75rem 1rem;border-bottom:1px solid var(--border);color:var(--text-mid);}
-.invoice-table tr:last-child td{border-bottom:none;}
-.invoice-table td:first-child{color:var(--navy);font-weight:500;}
-.inv-badge{display:inline-block;font-size:0.68rem;padding:2px 8px;border-radius:100px;}
-.inv-paid{background:var(--green-bg);color:var(--green);}
-.inv-free{background:var(--amber-bg);color:var(--amber);}
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,30,58,0.55);z-index:200;align-items:center;justify-content:center;}
@@ -247,7 +161,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .modal-close{width:100%;background:transparent;border:1px solid var(--border);border-radius:8px;padding:0.65rem;font-size:0.85rem;color:var(--text-mid);cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;}
 .link-box{background:#f5f3ef;border:1px solid var(--border);border-radius:8px;padding:0.75rem 1rem;display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
 .link-text{flex:1;font-size:0.82rem;color:var(--navy);word-break:break-all;}
-.copy-btn{background:var(--gold);color:var(--navy);border:none;border-radius:6px;padding:0.45rem 0.9rem;font-size:0.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background 0.15s;}
+.copy-btn{background:var(--gold);color:var(--navy);border:none;border-radius:6px;padding:0.45rem 0.9rem;font-size:0.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
 .copy-btn:hover{background:var(--gold-light);}
 .form-group{margin-bottom:1rem;}
 .form-label{font-size:0.78rem;color:var(--text-mid);margin-bottom:5px;display:block;}
@@ -255,8 +169,10 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .form-input:focus{border-color:var(--gold);}
 select.form-input{cursor:pointer;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.error-banner{background:var(--red-bg);color:var(--red);border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;}
+.error-banner.show{display:block;}
 
-/* EMAIL PREVIEW MODAL */
+/* EMAIL PREVIEW */
 .email-preview{background:#f8f6f2;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem;}
 .email-header{background:var(--navy);padding:1rem 1.25rem;}
 .email-header-logo{font-family:'Playfair Display',serif;font-size:1rem;color:white;}
@@ -264,7 +180,6 @@ select.form-input{cursor:pointer;}
 .email-meta{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);background:white;}
 .email-meta-row{display:flex;gap:8px;font-size:0.78rem;margin-bottom:3px;}
 .email-meta-label{color:var(--text-light);min-width:30px;}
-.email-meta-val{color:var(--text-dark);}
 .email-body{padding:1.25rem;background:white;font-size:0.83rem;color:var(--text-mid);line-height:1.7;}
 .email-body h3{font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:0.75rem;font-size:1rem;}
 .email-body p{margin-bottom:0.75rem;}
@@ -275,7 +190,14 @@ select.form-input{cursor:pointer;}
 .badge-final{background:var(--green-bg);color:var(--green);}
 .badge-declined{background:var(--red-bg);color:var(--red);}
 
-/* UPGRADE MODALS */
+/* CAP BAR */
+.cap-bar-row{padding:0.75rem 1.5rem;background:#fdf8f0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.cap-bar-bg{flex:1;height:6px;background:#f0ede8;border-radius:3px;overflow:hidden;}
+.cap-bar-fill{height:6px;border-radius:3px;background:var(--gold);transition:width 0.4s;}
+.cap-text{font-size:0.75rem;color:var(--text-mid);white-space:nowrap;}
+.cap-text strong{color:var(--navy);}
+
+/* UPGRADE MODAL */
 .upgrade-hero{background:var(--navy);margin:-2rem -2rem 1.5rem;padding:2rem;border-radius:14px 14px 0 0;text-align:center;position:relative;overflow:hidden;}
 .upgrade-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,150,58,0.12) 0%,transparent 70%);}
 .upgrade-hero-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:0.4rem;position:relative;z-index:1;}
@@ -289,11 +211,6 @@ select.form-input{cursor:pointer;}
 .ucheck::after{content:'';width:4px;height:7px;border:1.5px solid var(--green);border-top:none;border-left:none;transform:rotate(40deg) translateY(-1px);display:block;}
 .btn-upgrade-full{width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:0.85rem;font-size:0.95rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:0.75rem;transition:background 0.15s;}
 .btn-upgrade-full:hover{background:var(--gold-light);}
-
-/* CAPACITY WARNING */
-.cap-warning{background:var(--red-bg);border:1px solid rgba(192,57,43,0.2);border-radius:8px;padding:0.75rem 1rem;font-size:0.8rem;color:var(--red);margin-bottom:0.75rem;}
-
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -303,38 +220,30 @@ select.form-input{cursor:pointer;}
 <aside class="sidebar">
   <div class="sidebar-logo">Fair<span>RentalAI</span></div>
   <div class="sidebar-section-label">Main</div>
-  <a class="nav-item active" id="nav-dashboard" onclick="switchView('dashboard',this)">
+  <a class="nav-item active" onclick="switchView('dashboard',this)">
     <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </a>
-  <a class="nav-item" id="nav-properties" onclick="switchView('dashboard',this)">
+  <a class="nav-item" onclick="switchView('dashboard',this)">
     <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Properties <span class="nav-badge">3</span>
-  </a>
-  <a class="nav-item" id="nav-applicants" onclick="switchView('dashboard',this)">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    Applicants <span class="nav-badge">7</span>
+    Properties <span class="nav-badge" id="prop-count-badge">0</span>
   </a>
   <div class="sidebar-section-label">Account</div>
-  <a class="nav-item" id="nav-billing" onclick="switchView('billing',this)">
-    <svg class="icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-    Billing &amp; plan
-  </a>
-  <a class="nav-item" onclick="switchView('dashboard',this)">
-    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-    Account
+  <a class="nav-item" href="/index.html">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
+    Back to website
   </a>
   <div style="flex:1;"></div>
   <div class="usage-box">
     <div class="usage-label">Properties used</div>
-    <div class="usage-count" id="sb-usage-count">3 <span>of 5 free</span></div>
-    <div class="usage-bar-bg"><div class="usage-bar-fill" id="sb-usage-bar" style="width:60%;background:var(--gold);"></div></div>
-    <div class="usage-free" id="sb-usage-note"><strong>2 free slots</strong> remaining</div>
-    <button class="btn-upgrade-sm" onclick="switchView('billing',document.getElementById('nav-billing'))">View plan</button>
+    <div class="usage-count" id="sb-usage-count">0 <span>of 5 free</span></div>
+    <div class="usage-bar-bg"><div class="usage-bar-fill" id="sb-usage-bar" style="width:0%;background:var(--gold);"></div></div>
+    <div class="usage-free" id="sb-usage-note"><strong>5 free slots</strong> remaining</div>
+    <button class="btn-upgrade-sm" onclick="document.getElementById('upgradeModal').classList.add('open')">Upgrade plan</button>
   </div>
   <div class="sidebar-footer">
-    <div class="user-avatar">JL</div>
-    <div><div class="user-name">James Liu</div><div class="user-role">Landlord</div></div>
+    <div class="user-avatar" id="user-initials">?</div>
+    <div><div class="user-name" id="user-name">Loading...</div><div class="user-role">Landlord</div></div>
   </div>
 </aside>
 
@@ -343,61 +252,49 @@ select.form-input{cursor:pointer;}
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Dashboard</div>
     <div class="topbar-right">
-      <button class="notif-btn">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <div class="notif-dot"></div>
-      </button>
       <button class="btn-gold" onclick="tryAddProperty()">
         <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke-width:2.5;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add property
       </button>
+      <button class="btn-logout" onclick="doLogout()">Log out</button>
     </div>
   </div>
 
   <!-- DASHBOARD VIEW -->
   <div class="view active" id="view-dashboard">
     <div class="stats-row">
-      <div class="stat-card"><div class="stat-label">Active properties</div><div class="stat-value">3</div><div class="stat-sub">2 accepting applications</div></div>
-      <div class="stat-card"><div class="stat-label">Total applicants</div><div class="stat-value">7</div><span class="stat-pill pill-green">+4 this week</span></div>
-      <div class="stat-card"><div class="stat-label">Awaiting docs</div><div class="stat-value" id="stat-docs">1</div><span class="stat-pill pill-blue">Action needed</span></div>
+      <div class="stat-card"><div class="stat-label">Active properties</div><div class="stat-value" id="stat-props">0</div><div class="stat-sub">Listed on FairRentalAI</div></div>
+      <div class="stat-card"><div class="stat-label">Total applicants</div><div class="stat-value" id="stat-apps">0</div><div class="stat-sub">Across all properties</div></div>
+      <div class="stat-card"><div class="stat-label">Awaiting docs</div><div class="stat-value" id="stat-docs">0</div><div class="stat-sub">Action needed</div></div>
       <div class="stat-card"><div class="stat-label">Finally approved</div><div class="stat-value" id="stat-approved">0</div><div class="stat-sub">This month</div></div>
     </div>
+
     <div class="main-grid">
       <div style="display:flex;flex-direction:column;gap:1.5rem;">
         <!-- PROPERTIES -->
         <div class="panel">
-          <div class="panel-header"><div class="panel-title">Your properties</div><a class="panel-action">View all</a></div>
-          <div class="property-card selected" onclick="selectProperty(this,'unit4b')" id="prop-unit4b">
-            <div class="prop-top"><div><div class="prop-name">Unit 4B — 1 Bed / 1 Bath</div><div class="prop-addr">240 Riverside Ave, Calgary AB</div></div><div class="prop-status status-active">Active</div></div>
-            <div class="prop-meta"><div class="prop-meta-item"><strong>$1,850</strong>/mo</div><div class="prop-meta-item"><strong>5</strong> applicants</div><div class="prop-meta-item">fairrentalai.com/apply/4b-cx92</div></div>
-            <div class="prop-bar-row"><div class="prop-bar-label"><span>Applicant capacity</span><span id="cap-label-unit4b">5 / 200</span></div><div class="prop-bar-bg"><div class="prop-bar-fill" id="cap-bar-unit4b" style="width:2.5%"></div></div></div>
+          <div class="panel-header">
+            <div class="panel-title">Your properties</div>
+            <button class="btn-gold" style="font-size:0.75rem;padding:0.4rem 0.9rem;" onclick="tryAddProperty()">+ Add property</button>
           </div>
-          <div class="property-card" onclick="selectProperty(this,'unit2a')" id="prop-unit2a">
-            <div class="prop-top"><div><div class="prop-name">Unit 2A — 2 Bed / 1 Bath</div><div class="prop-addr">112 Elm Street, Calgary AB</div></div><div class="prop-status status-reviewing">Reviewing</div></div>
-            <div class="prop-meta"><div class="prop-meta-item"><strong>$2,400</strong>/mo</div><div class="prop-meta-item"><strong>2</strong> applicants</div><div class="prop-meta-item">fairrentalai.com/apply/2a-mw44</div></div>
-            <div class="prop-bar-row"><div class="prop-bar-label"><span>Applicant capacity</span><span id="cap-label-unit2a">2 / 200</span></div><div class="prop-bar-bg"><div class="prop-bar-fill" id="cap-bar-unit2a" style="width:1%"></div></div></div>
-          </div>
-          <div class="property-card" onclick="selectProperty(this,'house1')" id="prop-house1">
-            <div class="prop-top"><div><div class="prop-name">House — 3 Bed / 2 Bath</div><div class="prop-addr">88 Maple Crescent, Calgary AB</div></div><div class="prop-status status-closed">Closed</div></div>
-            <div class="prop-meta"><div class="prop-meta-item"><strong>$3,100</strong>/mo</div><div class="prop-meta-item"><strong>0</strong> applicants</div><div class="prop-meta-item">Link not yet shared</div></div>
-            <div class="prop-bar-row"><div class="prop-bar-label"><span>Applicant capacity</span><span>0 / 200</span></div><div class="prop-bar-bg"><div class="prop-bar-fill" style="width:0%"></div></div></div>
+          <div id="properties-list">
+            <div class="loading"><div class="spinner"></div>Loading properties...</div>
           </div>
         </div>
 
         <!-- APPLICANTS -->
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title" id="applicants-panel-title">Applicants — Unit 4B</div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <div id="cap-chip" style="font-size:0.72rem;color:var(--text-light);"></div>
-              <button class="btn-gold" style="font-size:0.75rem;padding:0.4rem 0.9rem;" onclick="showLink()">Share link</button>
-            </div>
+            <div class="panel-title" id="applicants-panel-title">Select a property to view applicants</div>
+            <button class="btn-gold" style="font-size:0.75rem;padding:0.4rem 0.9rem;display:none;" id="share-link-btn" onclick="showShareLink()">Share link</button>
           </div>
-          <div class="cap-bar-row">
-            <div class="cap-bar-bg"><div class="cap-bar-fill" id="detail-cap-bar" style="width:2.5%"></div></div>
-            <div class="cap-text" id="detail-cap-text"><strong>5</strong> / 200 applicants</div>
+          <div class="cap-bar-row" id="cap-bar-row" style="display:none;">
+            <div class="cap-bar-bg"><div class="cap-bar-fill" id="cap-bar-fill" style="width:0%"></div></div>
+            <div class="cap-text" id="cap-text"><strong>0</strong> / 200 applicants</div>
           </div>
-          <div class="applicant-list" id="applicant-list"></div>
+          <div id="applicant-list">
+            <div class="empty-state"><div class="empty-state-title">No property selected</div><div class="empty-state-desc">Click a property above to see its ranked applicants.</div></div>
+          </div>
         </div>
       </div>
 
@@ -405,65 +302,27 @@ select.form-input{cursor:pointer;}
       <div>
         <div class="detail-panel">
           <div class="detail-header">
-            <div class="detail-avatar" id="d-avatar" style="background:rgba(201,150,58,0.25);color:var(--gold-light);">SR</div>
-            <div><div class="detail-name" id="d-name">Sarah R.</div><div class="detail-sub" id="d-sub">Rank #1 · Unit 4B</div></div>
-            <div class="detail-score-big"><div class="detail-score-num" id="d-score" style="color:var(--gold-light);">94</div><div class="detail-score-label">Score</div></div>
+            <div class="detail-avatar" id="d-avatar">?</div>
+            <div><div class="detail-name" id="d-name">Select an applicant</div><div class="detail-sub" id="d-sub">Click any applicant to view details</div></div>
+            <div class="detail-score-big"><div class="detail-score-num" id="d-score" style="color:var(--text-light);">—</div><div class="detail-score-label">Score</div></div>
           </div>
           <div class="detail-body" id="detail-body">
-            <!-- populated by JS -->
+            <div style="padding:2rem;text-align:center;color:var(--text-light);font-size:0.85rem;">Select an applicant from the list to view their full profile and take action.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- BILLING VIEW -->
-  <div class="view" id="view-billing">
-    <div style="margin-bottom:2rem;"><h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem;">Billing &amp; plan</h2><p style="font-size:0.9rem;color:var(--text-mid);">Manage your subscription and usage.</p></div>
-    <div class="billing-grid">
-      <div class="billing-card">
-        <div class="billing-card-title">Current plan</div>
-        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);color:var(--green);font-size:0.72rem;font-weight:500;padding:3px 10px;border-radius:100px;margin-bottom:0.75rem;">Active</div>
-        <div class="plan-name">Free plan</div>
-        <div class="plan-price"><strong>$0/month</strong> for up to 5 properties</div>
-        <div style="font-size:0.82rem;color:var(--text-mid);line-height:1.65;">Your first 5 properties are always free. Each additional is <strong>$5/month</strong>. Every property accepts up to <strong>200 applicants</strong>.</div>
-        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-          <div class="usage-tier"><span class="usage-tier-label">Properties 1–5</span><span class="usage-tier-free">Free forever</span></div>
-          <div class="usage-tier"><span class="usage-tier-label">Properties 6+</span><span class="usage-tier-val">$5 each / month</span></div>
-          <div class="usage-tier"><span class="usage-tier-label">Applicants per property</span><span class="usage-tier-val">200 max</span></div>
-          <div class="usage-tier"><span class="usage-tier-label">AI screening &amp; ranking</span><span class="usage-tier-val">Included</span></div>
-          <div class="usage-tier"><span class="usage-tier-label">Approval workflow</span><span class="usage-tier-val">Included</span></div>
-        </div>
-      </div>
-      <div class="billing-card">
-        <div class="billing-card-title">Usage this month</div>
-        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:0.25rem;"><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--navy);" id="bill-prop-count">3</div><div style="font-size:0.85rem;color:var(--text-mid);">of 5 free properties</div></div>
-        <div class="usage-detail-bar"><div class="usage-detail-label"><span>Free tier</span><span id="bill-pct">60% used</span></div><div class="usage-detail-bg"><div class="usage-detail-fill" id="bill-bar" style="width:60%"></div></div></div>
-        <div class="usage-tier"><span class="usage-tier-label">Monthly bill</span><span class="usage-tier-free" id="bill-total">$0.00</span></div>
-        <div class="usage-tier"><span class="usage-tier-label">Free slots remaining</span><span class="usage-tier-val" id="bill-slots">2 slots</span></div>
-        <div class="usage-tier"><span class="usage-tier-label">Paid properties</span><span class="usage-tier-val" id="bill-paid-count">0</span></div>
-        <div style="margin-top:1rem;"><button class="btn-gold" style="width:100%;justify-content:center;" onclick="document.getElementById('upgradeModal').classList.add('open')">Add more properties — $5 each</button></div>
-      </div>
-    </div>
-    <div style="margin-bottom:1rem;"><div style="font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:1rem;">All plans</div>
-    <div class="plans-grid">
-      <div class="plan-card current"><div class="plan-card-badge">Current plan</div><div class="plan-card-name">Free</div><div class="plan-card-price">$0 <span>/ month</span></div><div class="plan-card-desc">Perfect for individual landlords.</div><ul class="plan-features"><li><div class="feat-check"></div>Up to 5 properties free</li><li><div class="feat-check"></div>200 applicants per property</li><li><div class="feat-check"></div>AI screening &amp; ranking</li><li><div class="feat-check"></div>Full approval workflow</li><li><div class="feat-check"></div>Email notifications</li></ul><button class="btn-plan btn-plan-current">Your current plan</button></div>
-      <div class="plan-card"><div class="plan-card-name">Pay as you grow</div><div class="plan-card-price">$5 <span>/ extra property / month</span></div><div class="plan-card-desc">Pay only for what you use beyond 5 free.</div><ul class="plan-features"><li><div class="feat-check"></div>Everything in Free</li><li><div class="feat-check"></div>Unlimited properties at $5 each</li><li><div class="feat-check"></div>No long-term contract</li><li><div class="feat-check"></div>Add &amp; remove anytime</li><li><div class="feat-check"></div>Monthly billing</li></ul><button class="btn-plan btn-plan-upgrade" onclick="document.getElementById('upgradeModal').classList.add('open')">Add properties</button></div>
-      <div class="plan-card"><div class="plan-card-name">Enterprise</div><div class="plan-card-price">Custom <span>pricing</span></div><div class="plan-card-desc">For property management companies.</div><ul class="plan-features"><li><div class="feat-check"></div>Everything in Pay as you grow</li><li><div class="feat-check"></div>Volume discounts</li><li><div class="feat-check"></div>Dedicated account manager</li><li><div class="feat-check"></div>Custom integrations</li><li><div class="feat-check"></div>Priority support</li></ul><button class="btn-plan btn-plan-enterprise">Contact sales</button></div>
-    </div></div>
-    <div class="panel"><div class="panel-header"><div class="panel-title">Billing history</div></div>
-    <table class="invoice-table"><thead><tr><th>Date</th><th>Description</th><th>Properties</th><th>Amount</th><th>Status</th></tr></thead>
-    <tbody id="invoice-body"><tr><td>Mar 1, 2026</td><td>FairRentalAI Free plan</td><td>3</td><td>$0.00</td><td><span class="inv-badge inv-free">Free</span></td></tr><tr><td>Feb 1, 2026</td><td>FairRentalAI Free plan</td><td>2</td><td>$0.00</td><td><span class="inv-badge inv-free">Free</span></td></tr></tbody></table></div>
-  </div>
-</div><!-- /main -->
-</div><!-- /layout -->
+</div>
+</div>
 
 <!-- SHARE LINK MODAL -->
 <div class="modal-overlay" id="linkModal">
   <div class="modal">
     <div class="modal-title">Share your application link</div>
-    <div class="modal-sub">Post this in your listing. Applicants fill out a form and appear ranked automatically. Each property accepts up to 200 applicants.</div>
-    <div class="link-box"><div class="link-text" id="modal-link-text">fairrentalai.com/apply/4b-cx92</div><button class="copy-btn" onclick="copyLink()">Copy</button></div>
+    <div class="modal-sub">Post this link in your Facebook listing, Kijiji ad, or anywhere you advertise. Tenants go straight to your application form.</div>
+    <div class="link-box"><div class="link-text" id="modal-link-text"></div><button class="copy-btn" onclick="copyLink()">Copy</button></div>
+    <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:1.25rem;">All applicants who submit via this link will appear ranked on your dashboard automatically.</div>
     <button class="modal-close" onclick="document.getElementById('linkModal').classList.remove('open')">Close</button>
   </div>
 </div>
@@ -472,19 +331,20 @@ select.form-input{cursor:pointer;}
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <div class="modal-title">Add a property</div>
-    <div class="modal-sub">Fill in your unit details to get a unique application link.</div>
-    <div class="form-group"><label class="form-label">Property address</label><input class="form-input" type="text" placeholder="e.g. 45 Oak Ave, Unit 3, Calgary AB"/></div>
+    <div class="modal-sub">Fill in your unit details to get a unique application link to share in your listing.</div>
+    <div class="error-banner" id="add-error"></div>
+    <div class="form-group"><label class="form-label">Property address *</label><input class="form-input" type="text" id="add-address" placeholder="e.g. 45 Oak Ave, Unit 3, Calgary AB"/></div>
     <div class="form-grid">
-      <div class="form-group"><label class="form-label">Unit type</label><select class="form-input"><option>Studio</option><option>1 bed / 1 bath</option><option selected>2 bed / 1 bath</option><option>3 bed / 2 bath</option><option>House</option></select></div>
-      <div class="form-group"><label class="form-label">Monthly rent ($)</label><input class="form-input" type="number" placeholder="e.g. 2200"/></div>
+      <div class="form-group"><label class="form-label">Unit type *</label><select class="form-input" id="add-type"><option value="">Select...</option><option>Studio</option><option>1 bed / 1 bath</option><option>2 bed / 1 bath</option><option>2 bed / 2 bath</option><option>3 bed / 2 bath</option><option>House</option></select></div>
+      <div class="form-group"><label class="form-label">Monthly rent ($) *</label><input class="form-input" type="number" id="add-rent" placeholder="e.g. 2200"/></div>
     </div>
     <div class="form-grid">
-      <div class="form-group"><label class="form-label">Ideal tenant</label><select class="form-input"><option>Single</option><option>Couple</option><option>Small family</option><option>Any</option></select></div>
-      <div class="form-group"><label class="form-label">Pets allowed?</label><select class="form-input"><option>No pets</option><option>Cats only</option><option>Small dogs</option><option>Any pets</option></select></div>
+      <div class="form-group"><label class="form-label">Ideal tenant</label><select class="form-input" id="add-tenant"><option value="">Any</option><option>Single</option><option>Couple</option><option>Small family</option></select></div>
+      <div class="form-group"><label class="form-label">Pets allowed?</label><select class="form-input" id="add-pets"><option value="no_pets">No pets</option><option value="cats">Cats only</option><option value="small_dogs">Small dogs</option><option value="any_pets">Any pets</option></select></div>
     </div>
     <div id="add-cost-notice" style="display:none;background:var(--amber-bg);border:1px solid rgba(176,125,42,0.25);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:var(--amber);">This property is beyond your 5 free — billed at <strong>$5/month</strong>.</div>
     <div style="display:flex;gap:8px;margin-top:0.5rem;">
-      <button class="btn-gold" style="flex:1;justify-content:center;" onclick="confirmAddProperty()">Create &amp; get link</button>
+      <button class="btn-gold" style="flex:1;justify-content:center;" id="add-confirm-btn" onclick="confirmAddProperty()">Create & get link</button>
       <button class="modal-close" style="flex:1;margin-top:0;" onclick="document.getElementById('addModal').classList.remove('open')">Cancel</button>
     </div>
   </div>
@@ -494,7 +354,7 @@ select.form-input{cursor:pointer;}
 <div class="modal-overlay" id="emailModal">
   <div class="modal" style="width:540px;">
     <div class="modal-title" id="email-modal-title">Email sent to tenant</div>
-    <div class="modal-sub" id="email-modal-sub">This is a preview of the email that was automatically sent.</div>
+    <div class="modal-sub" id="email-modal-sub">This is a preview of the email automatically sent.</div>
     <div id="email-preview-content"></div>
     <button class="modal-close" onclick="document.getElementById('emailModal').classList.remove('open')">Close preview</button>
   </div>
@@ -512,314 +372,264 @@ select.form-input{cursor:pointer;}
       <div class="upgrade-feature"><div class="ucheck"></div>No contract — cancel anytime</div>
       <div class="upgrade-feature"><div class="ucheck"></div>Same AI screening for every property</div>
       <div class="upgrade-feature"><div class="ucheck"></div>200 applicants per property included</div>
-      <div class="upgrade-feature"><div class="ucheck"></div>Full approval workflow included</div>
     </div>
     <button class="btn-upgrade-full" onclick="document.getElementById('upgradeModal').classList.remove('open');document.getElementById('add-cost-notice').style.display='block';document.getElementById('addModal').classList.add('open')">Add a property — $5/month</button>
     <button class="modal-close" onclick="document.getElementById('upgradeModal').classList.remove('open')">Maybe later</button>
   </div>
 </div>
 
-<!-- LIMIT MODAL -->
-<div class="modal-overlay" id="limitModal">
-  <div class="modal" style="width:500px;">
-    <div class="upgrade-hero">
-      <div class="upgrade-hero-title">All 5 free properties used</div>
-      <div class="upgrade-hero-sub">Adding more is just $5 per property per month.</div>
-      <div class="upgrade-price-row"><div class="upgrade-price">$5</div><div class="upgrade-price-label">per extra property / month</div></div>
-    </div>
-    <div class="upgrade-features">
-      <div class="upgrade-feature"><div class="ucheck"></div>Keep your 5 free properties as-is</div>
-      <div class="upgrade-feature"><div class="ucheck"></div>Pay only for what you add beyond 5</div>
-      <div class="upgrade-feature"><div class="ucheck"></div>200 applicants per property, all features included</div>
-    </div>
-    <button class="btn-upgrade-full" onclick="document.getElementById('limitModal').classList.remove('open');document.getElementById('add-cost-notice').style.display='block';document.getElementById('addModal').classList.add('open')">Continue — add property for $5/mo</button>
-    <button class="modal-close" onclick="document.getElementById('limitModal').classList.remove('open')">Not right now</button>
-  </div>
-</div>
-
 <script>
-const MAX_APPLICANTS = 200;
+const API = 'https://tenantiq-api-production.up.railway.app';
 const FREE_LIMIT = 5;
-let propertyCount = 3;
-let currentProp = 'unit4b';
-let currentApplicant = 0;
+const MAX_APPS = 200;
 
-// APPROVAL STATES: 'pending' | 'initial' | 'docs_requested' | 'docs_received' | 'final' | 'declined'
-const properties = {
-  unit4b: {
-    name:'Unit 4B — 1 Bed', link:'fairrentalai.com/apply/4b-cx92',
-    applicants:[
-      {initials:'SR',avatar:'rgba(201,150,58,0.25)',avatarText:'var(--gold-light)',name:'Sarah R.',email:'sarah.r@email.com',detail:'Couple · $7,200/mo · Credit 760',score:94,rank:1,
-       status:'docs_requested',
-       docs:{paystubs:'uploaded',govid:'pending',bankstmt:'pending'},
-       summary:'Excellent candidate. Income is 3.9× rent, credit score 760. 6 years rental history, no evictions. Couple is ideal for a 1-bed.',
-       income:'$7,200',ratio:'3.9×',credit:'760',employment:'Full-time, 4 yrs',household:'Couple',pets:'None',movein:'Mar 1, 2026',history:'6 years',evictions:'None',
-       tags:[{t:'High income',c:'green'},{t:'Strong credit',c:'green'},{t:'No evictions',c:'green'},{t:'Ideal household',c:'green'}]},
-      {initials:'JM',avatar:'rgba(30,61,114,0.2)',avatarText:'#4a7ac8',name:'James M.',email:'james.m@email.com',detail:'Single · $5,800/mo · Credit 710',score:78,rank:2,
-       status:'pending',docs:{paystubs:'pending',govid:'pending',bankstmt:'pending'},
-       summary:'Good candidate. Income 3.1× rent. Stable employment. No evictions.',
-       income:'$5,800',ratio:'3.1×',credit:'710',employment:'Full-time, 2 yrs',household:'Single',pets:'1 cat',movein:'Feb 15, 2026',history:'4 years',evictions:'None',
-       tags:[{t:'Stable income',c:'green'},{t:'No evictions',c:'green'},{t:'Has a cat',c:'amber'}]},
-      {initials:'PK',avatar:'rgba(58,154,110,0.2)',avatarText:'#2a8a5a',name:'Priya K.',email:'priya.k@email.com',detail:'Single · $6,100/mo · Credit 690',score:71,rank:3,
-       status:'pending',docs:{paystubs:'pending',govid:'pending',bankstmt:'pending'},
-       summary:'Decent candidate. Good income. Self-employed. No evictions.',
-       income:'$6,100',ratio:'3.3×',credit:'690',employment:'Self-employed, 3 yrs',household:'Single',pets:'None',movein:'Mar 15, 2026',history:'3 years',evictions:'None',
-       tags:[{t:'Good income',c:'green'},{t:'No evictions',c:'green'},{t:'Self-employed',c:'amber'},{t:'Lower credit',c:'amber'}]},
-      {initials:'TK',avatar:'rgba(176,125,42,0.2)',avatarText:'#b07d2a',name:'Tom K.',email:'tom.k@email.com',detail:'Single · $4,100/mo · Credit 640',score:51,rank:4,
-       status:'pending',docs:{paystubs:'pending',govid:'pending',bankstmt:'pending'},
-       summary:'Below average. Income 2.2× rent. 1 past eviction. Lower credit.',
-       income:'$4,100',ratio:'2.2×',credit:'640',employment:'Part-time, 1 yr',household:'Single',pets:'None',movein:'Apr 1, 2026',history:'2 years',evictions:'1 eviction',
-       tags:[{t:'Low income ratio',c:'red'},{t:'Past eviction',c:'red'},{t:'Short tenure',c:'amber'}]},
-      {initials:'LB',avatar:'rgba(192,57,43,0.15)',avatarText:'#c0392b',name:'L. Brown (family)',email:'lbrown@email.com',detail:'Family of 4 · $6,500/mo · Credit 700',score:38,rank:5,
-       status:'declined',docs:{paystubs:'pending',govid:'pending',bankstmt:'pending'},
-       summary:'Poor fit. Family of 4 in a 1-bed unit is a major suitability concern.',
-       income:'$6,500',ratio:'3.5×',credit:'700',employment:'Full-time, 5 yrs',household:'Family of 4',pets:'1 dog',movein:'Mar 1, 2026',history:'5 years',evictions:'None',
-       tags:[{t:'Household too large',c:'red'},{t:'Has a dog',c:'amber'},{t:'Good income',c:'green'}]},
-    ]},
-  unit2a:{
-    name:'Unit 2A — 2 Bed',link:'fairrentalai.com/apply/2a-mw44',
-    applicants:[
-      {initials:'MC',avatar:'rgba(201,150,58,0.25)',avatarText:'var(--gold-light)',name:'Maria C.',email:'maria.c@email.com',detail:'Family · $8,400/mo · Credit 780',score:96,rank:1,
-       status:'final',docs:{paystubs:'uploaded',govid:'uploaded',bankstmt:'uploaded'},
-       summary:'Outstanding candidate. 3.5× income, excellent credit. Ideal family fit for 2-bed.',
-       income:'$8,400',ratio:'3.5×',credit:'780',employment:'Full-time, 6 yrs',household:'Family of 3',pets:'None',movein:'Feb 1, 2026',history:'7 years',evictions:'None',
-       tags:[{t:'Excellent income',c:'green'},{t:'Top credit',c:'green'},{t:'Ideal household',c:'green'},{t:'No evictions',c:'green'}]},
-      {initials:'RD',avatar:'rgba(30,61,114,0.2)',avatarText:'#4a7ac8',name:'Ryan D.',email:'ryan.d@email.com',detail:'Couple · $7,000/mo · Credit 730',score:82,rank:2,
-       status:'pending',docs:{paystubs:'pending',govid:'pending',bankstmt:'pending'},
-       summary:'Strong couple applicant. Good income and credit.',
-       income:'$7,000',ratio:'2.9×',credit:'730',employment:'Full-time, 3 yrs',household:'Couple',pets:'1 cat',movein:'Mar 1, 2026',history:'5 years',evictions:'None',
-       tags:[{t:'Good income',c:'green'},{t:'Solid credit',c:'green'},{t:'Has a cat',c:'amber'}]},
-    ]},
-  house1:{name:'House — 3 Bed',link:'fairrentalai.com/apply/house-xx00',applicants:[]}
-};
+// Auth check
+const token = localStorage.getItem('fra_token');
+const landlord = JSON.parse(localStorage.getItem('fra_landlord') || 'null');
+if (!token || !landlord) { window.location.href = '/login.html'; }
 
-const statusLabel = {pending:'Pending review',initial:'Initially approved',docs_requested:'Awaiting documents',docs_received:'Docs received',final:'Finally approved',declined:'Declined'};
-const statusChip = {pending:'chip-pending',initial:'chip-initial',docs_requested:'chip-docs',docs_received:'chip-docs',final:'chip-final',declined:'chip-declined'};
+// Set user info
+document.getElementById('user-name').textContent = landlord?.name || 'Landlord';
+document.getElementById('user-initials').textContent = (landlord?.name || 'L').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
 
-function getCapPct(propId){ const n=properties[propId].applicants.length; return Math.round((n/MAX_APPLICANTS)*100); }
+let properties = [];
+let currentPropId = null;
+let currentApplicants = [];
+let currentAppIdx = null;
 
-function renderApplicants(propId){
-  const list=document.getElementById('applicant-list');
-  const prop=properties[propId];
-  const n=prop.applicants.length;
-  const pct=getCapPct(propId);
-  document.getElementById('applicants-panel-title').textContent='Applicants — '+prop.name;
-  document.getElementById('detail-cap-bar').style.width=pct+'%';
-  document.getElementById('detail-cap-bar').style.background=pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--gold)';
-  document.getElementById('detail-cap-text').innerHTML=`<strong>${n}</strong> / ${MAX_APPLICANTS} applicants`;
-  document.getElementById('cap-chip').textContent=n+'/200';
-  if(!prop.applicants.length){list.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text-light);font-size:0.85rem;">No applicants yet. Share your link to get started.</div>';return;}
-  list.innerHTML=prop.applicants.map((a,i)=>{
-    const sc=a.score>=80?'score-high':a.score>=60?'score-mid':'score-low';
-    const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
-    return `<div class="applicant-row ${i===currentApplicant?'selected':''}" onclick="selectApplicant(${i})">
-      <div class="rank-num ${rc}">${i+1}</div>
-      <div class="app-avatar" style="background:${a.avatar};color:${a.avatarText};">${a.initials}</div>
-      <div class="app-info"><div class="app-name">${a.name}</div><div class="app-detail">${a.detail}</div></div>
-      <span class="status-chip ${statusChip[a.status]}">${statusLabel[a.status]}</span>
-      <div class="score-badge ${sc}">${a.score}</div>
+function doLogout() {
+  localStorage.removeItem('fra_token');
+  localStorage.removeItem('fra_landlord');
+  window.location.href = '/login.html';
+}
+
+async function apiCall(method, path, body) {
+  const headers = {'Content-Type':'application/json','Authorization':'Bearer '+token};
+  const res = await fetch(API+path, {method, headers, body: body?JSON.stringify(body):undefined});
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error');
+  return data;
+}
+
+function initials(name) {
+  if (!name) return '?';
+  return name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+}
+
+function fmtMoney(cents) { return '$'+(cents/100).toLocaleString(); }
+function fmtDate(d) { if(!d) return '—'; return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+
+function scoreColor(s) { return s>=80?'var(--green)':s>=60?'var(--amber)':'var(--red)'; }
+function scoreClass(s) { return s>=80?'score-high':s>=60?'score-mid':'score-low'; }
+
+const statusLabel = {PENDING:'Pending',INITIAL_APPROVED:'Initially approved',DOCS_REQUESTED:'Awaiting docs',DOCS_RECEIVED:'Docs received',FINALLY_APPROVED:'Finally approved',DECLINED:'Declined',WAITLISTED:'Waitlisted'};
+const statusChip = {PENDING:'chip-pending',INITIAL_APPROVED:'chip-initial',DOCS_REQUESTED:'chip-docs',DOCS_RECEIVED:'chip-docs',FINALLY_APPROVED:'chip-final',DECLINED:'chip-declined',WAITLISTED:'chip-pending'};
+
+async function loadDashboard() {
+  try {
+    const data = await apiCall('GET', '/api/properties');
+    properties = data.properties || [];
+    renderProperties();
+    updateStats();
+    updateUsageUI();
+  } catch(e) {
+    document.getElementById('properties-list').innerHTML = `<div class="empty-state"><div class="empty-state-title">Error loading properties</div><div class="empty-state-desc">${e.message}</div></div>`;
+  }
+}
+
+function renderProperties() {
+  const el = document.getElementById('properties-list');
+  document.getElementById('prop-count-badge').textContent = properties.length;
+  if (!properties.length) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="empty-state-title">No properties yet</div>
+      <div class="empty-state-desc">Add your first property to get a unique application link to share with potential tenants.</div>
+      <button class="btn-gold" onclick="tryAddProperty()">+ Add your first property</button>
+    </div>`;
+    return;
+  }
+  el.innerHTML = properties.map(p => {
+    const count = p._count?.applications || 0;
+    const pct = Math.round((count/MAX_APPS)*100);
+    const barColor = pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--gold)';
+    const isSelected = p.id === currentPropId;
+    return `<div class="property-card ${isSelected?'selected':''}" onclick="selectProperty('${p.id}')">
+      <div class="prop-top">
+        <div><div class="prop-name">${p.unitType} — ${p.address}</div><div class="prop-addr">${fmtMoney(p.monthlyRent)}/month</div></div>
+        <div class="prop-status ${p.status==='ACTIVE'?'status-active':'status-closed'}">${p.status==='ACTIVE'?'Active':'Closed'}</div>
+      </div>
+      <div class="prop-meta">
+        <div class="prop-meta-item"><strong>${count}</strong> applicants</div>
+        <div class="prop-meta-item" style="font-size:0.72rem;color:var(--text-light);">fairrentalai.com/apply.html?token=${p.applyToken}</div>
+      </div>
+      <div class="prop-bar-row">
+        <div class="prop-bar-label"><span>Applicant capacity</span><span>${count} / ${MAX_APPS}</span></div>
+        <div class="prop-bar-bg"><div class="prop-bar-fill" style="width:${pct}%;background:${barColor};"></div></div>
+      </div>
     </div>`;
   }).join('');
 }
 
-function buildDetailBody(a, propName){
-  const tagColors={green:'tag-green',red:'tag-red',amber:'tag-amber'};
-  const tags=a.tags.map(t=>`<span class="tag ${tagColors[t.c]}">${t.t}</span>`).join('');
+async function selectProperty(propId) {
+  currentPropId = propId;
+  currentAppIdx = null;
+  renderProperties();
+  const prop = properties.find(p=>p.id===propId);
+  document.getElementById('applicants-panel-title').textContent = `Applicants — ${prop?.unitType} · ${prop?.address}`;
+  document.getElementById('share-link-btn').style.display = 'flex';
+  document.getElementById('cap-bar-row').style.display = 'flex';
+  document.getElementById('applicant-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading applicants...</div>';
+  try {
+    const data = await apiCall('GET', `/api/properties/${propId}/applicants`);
+    currentApplicants = data.applications || [];
+    renderApplicants();
+    if (currentApplicants.length > 0) selectApplicant(0);
+  } catch(e) {
+    document.getElementById('applicant-list').innerHTML = `<div class="empty-state"><div class="empty-state-desc">${e.message}</div></div>`;
+  }
+}
 
-  // Workflow stepper
-  const steps=[
-    {key:'review',label:'Reviewed'},
-    {key:'initial',label:'Initially approved'},
-    {key:'docs',label:'Docs uploaded'},
-    {key:'final',label:'Finally approved'}
-  ];
-  const stepState=(key)=>{
-    if(a.status==='declined') return key==='review'?'done':'future';
-    const order=['pending','review','initial','docs_requested','docs_received','final'];
-    const stateIdx={pending:0,initial:2,docs_requested:2,docs_received:3,final:4,declined:0};
-    const keyIdx={review:1,initial:2,docs:3,final:4};
-    const cur=stateIdx[a.status]||0;
-    const k=keyIdx[key]||0;
-    if(k<cur) return 'done';
-    if(k===cur) return 'active';
-    return 'future';
-  };
+function renderApplicants() {
+  const el = document.getElementById('applicant-list');
+  const prop = properties.find(p=>p.id===currentPropId);
+  const count = currentApplicants.length;
+  const pct = Math.round((count/MAX_APPS)*100);
+  const barColor = pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--gold)';
+  document.getElementById('cap-bar-fill').style.width = pct+'%';
+  document.getElementById('cap-bar-fill').style.background = barColor;
+  document.getElementById('cap-text').innerHTML = `<strong>${count}</strong> / ${MAX_APPS} applicants`;
 
-  const stepperHTML=`<div class="workflow-stepper">
-    ${steps.map((s,i)=>`
-      ${i>0?`<div class="wf-step-line ${stepState(s.key)==='done'||stepState(steps[i-1].key)==='done'?'done':''}"></div>`:''}
-      <div class="wf-step ${stepState(s.key)}">
-        <div class="wf-step-dot">${stepState(s.key)==='done'?'✓':i+1}</div>
-        <div class="wf-step-label">${s.label}</div>
-      </div>`).join('')}
-  </div>`;
-
-  // Document section (show if status is docs_requested or later)
-  let docsHTML='';
-  if(['docs_requested','docs_received','final'].includes(a.status)){
-    const docDefs=[{key:'paystubs',label:'Pay stubs / pay slips'},{key:'govid',label:'Government ID'},{key:'bankstmt',label:'Bank statements'}];
-    const docItems=docDefs.map(d=>{
-      const uploaded=a.docs[d.key]==='uploaded';
-      return `<div class="doc-item">
-        <div class="doc-item-icon"><svg class="icon" style="color:var(--blue);" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-        <div class="doc-item-name">${d.label}</div>
-        <div class="doc-item-status ${uploaded?'doc-uploaded':'doc-pending'}">${uploaded?'✓ Uploaded':'Awaiting'}</div>
-        ${!uploaded?`<button class="fake-upload-btn" style="width:auto;padding:3px 10px;" onclick="fakeUpload('${d.key}',event)">Mark uploaded</button>`:''}
-      </div>`;
-    }).join('');
-    docsHTML=`<div class="detail-section">
-      <div class="detail-section-title">Document verification</div>
-      ${docItems}
+  if (!currentApplicants.length) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="empty-state-title">No applicants yet</div>
+      <div class="empty-state-desc">Share your application link to start receiving applications.</div>
+      <button class="btn-gold" onclick="showShareLink()">Share application link</button>
     </div>`;
+    return;
+  }
+  el.innerHTML = currentApplicants.map((a,i) => {
+    const score = a.aiScore ?? '—';
+    const sc = typeof score==='number'?scoreClass(score):'score-mid';
+    const rc = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+    const init = initials(`${a.firstName} ${a.lastName}`);
+    return `<div class="applicant-row ${i===currentAppIdx?'selected':''}" onclick="selectApplicant(${i})">
+      <div class="rank-num ${rc}">${i+1}</div>
+      <div class="app-avatar">${init}</div>
+      <div class="app-info">
+        <div class="app-name">${a.firstName} ${a.lastName}</div>
+        <div class="app-detail">$${(a.monthlyIncome/100).toLocaleString()}/mo · Credit ${a.creditScore} · ${a.householdType}</div>
+      </div>
+      <span class="status-chip ${statusChip[a.status]||'chip-pending'}">${statusLabel[a.status]||a.status}</span>
+      <div class="score-badge ${sc}">${score}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectApplicant(i) {
+  currentAppIdx = i;
+  const a = currentApplicants[i];
+  if (!a) return;
+  const init = initials(`${a.firstName} ${a.lastName}`);
+  const score = a.aiScore ?? '—';
+  document.getElementById('d-avatar').textContent = init;
+  document.getElementById('d-name').textContent = `${a.firstName} ${a.lastName}`;
+  document.getElementById('d-sub').textContent = `Rank #${i+1} · Applied ${fmtDate(a.submittedAt)}`;
+  document.getElementById('d-score').textContent = score;
+  document.getElementById('d-score').style.color = typeof score==='number'?scoreColor(score):'var(--text-light)';
+
+  const tags = a.aiTags || {};
+  const strengths = (tags.strengths||[]).map(s=>`<span class="tag tag-green">${s}</span>`).join('');
+  const concerns = (tags.concerns||[]).map(c=>`<span class="tag tag-red">${c}</span>`).join('');
+
+  let actionsHTML = '';
+  if (a.status === 'PENDING') {
+    actionsHTML = `<div class="action-row">
+      <button class="btn-action btn-initial" onclick="updateStatus('INITIAL_APPROVED')">Initial approval</button>
+      <button class="btn-action btn-waitlist" onclick="updateStatus('WAITLISTED')">Waitlist</button>
+      <button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button>
+    </div>`;
+  } else if (a.status === 'INITIAL_APPROVED') {
+    actionsHTML = `<div class="action-row">
+      <button class="btn-action btn-initial" onclick="updateStatus('DOCS_REQUESTED')">Request documents</button>
+      <button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button>
+    </div>`;
+  } else if (a.status === 'DOCS_REQUESTED') {
+    actionsHTML = `<div style="background:var(--blue-bg);color:var(--blue);padding:0.6rem 0.85rem;border-radius:8px;font-size:0.78rem;margin-bottom:0.75rem;">Waiting for tenant to upload documents.</div>
+    <div class="action-row"><button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button></div>`;
+  } else if (a.status === 'DOCS_RECEIVED') {
+    actionsHTML = `<div class="action-row">
+      <button class="btn-action btn-final" onclick="updateStatus('FINALLY_APPROVED')">Give final approval</button>
+      <button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button>
+    </div>`;
+  } else if (a.status === 'FINALLY_APPROVED') {
+    actionsHTML = `<div style="background:var(--green-bg);border:1px solid rgba(58,154,110,0.25);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--green);font-weight:500;">Tenant finally approved ✓</div>`;
+  } else if (a.status === 'DECLINED') {
+    actionsHTML = `<div style="background:var(--red-bg);border:1px solid rgba(192,57,43,0.2);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--red);font-weight:500;">Application declined</div>`;
   }
 
-  // Capacity warning if near limit
-  const n=properties[currentProp].applicants.length;
-  const capWarn = n>=190?`<div class="cap-warning">This property is at ${n}/200 applicants. New applications will be closed at 200.</div>`:'';
-
-  // Action buttons based on status
-  let actionsHTML='';
-  if(a.status==='pending'){
-    actionsHTML=`<div class="action-row">
-      <button class="btn-initial" onclick="doInitialApproval()">Initial approval</button>
-      <button class="btn-waitlist" onclick="doWaitlist()">Waitlist</button>
-      <button class="btn-decline" onclick="doDecline()">Decline</button>
-    </div>`;
-  } else if(a.status==='initial'){
-    actionsHTML=`<div class="action-row">
-      <button class="btn-gold" onclick="doRequestDocs()" style="flex:1;justify-content:center;">Request documents</button>
-      <button class="btn-decline" onclick="doDecline()">Decline</button>
-    </div>`;
-  } else if(a.status==='docs_requested'){
-    actionsHTML=`<div style="font-size:0.78rem;color:var(--blue);background:var(--blue-bg);padding:0.6rem 0.85rem;border-radius:8px;margin-bottom:0.75rem;">Waiting for tenant to upload documents.</div>
-    <div class="action-row">
-      <button class="btn-decline" onclick="doDecline()">Decline</button>
-    </div>`;
-  } else if(a.status==='docs_received'){
-    actionsHTML=`<div class="action-row">
-      <button class="btn-final" onclick="doFinalApproval()">Give final approval</button>
-      <button class="btn-decline" onclick="doDecline()">Decline</button>
-    </div>`;
-  } else if(a.status==='final'){
-    actionsHTML=`<div style="background:var(--green-bg);border:1px solid rgba(58,154,110,0.25);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--green);font-weight:500;">Tenant finally approved</div>`;
-  } else if(a.status==='declined'){
-    actionsHTML=`<div style="background:var(--red-bg);border:1px solid rgba(192,57,43,0.2);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--red);font-weight:500;">Application declined</div>`;
-  }
-
-  return `
-    <div class="detail-section">
-      <div class="detail-section-title">Approval status</div>
-      ${stepperHTML}
-    </div>
+  document.getElementById('detail-body').innerHTML = `
     <div class="ai-label">AI summary</div>
-    <div class="ai-summary">${a.summary}</div>
+    <div class="ai-summary">${a.aiSummary || 'AI scoring in progress...'}</div>
     <div class="detail-section">
       <div class="detail-section-title">Financial</div>
-      <div class="detail-row"><span class="detail-row-label">Monthly income</span><span class="detail-row-value">${a.income}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Income-to-rent ratio</span><span class="detail-row-value">${a.ratio}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Credit score</span><span class="detail-row-value">${a.credit}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Employment</span><span class="detail-row-value">${a.employment}</span></div>
+      <div class="detail-row"><span class="detail-row-label">Monthly income</span><span class="detail-row-value">$${(a.monthlyIncome/100).toLocaleString()}/mo</span></div>
+      <div class="detail-row"><span class="detail-row-label">Income-to-rent ratio</span><span class="detail-row-value">${((a.monthlyIncome/100)/(properties.find(p=>p.id===currentPropId)?.monthlyRent/100||1)).toFixed(1)}×</span></div>
+      <div class="detail-row"><span class="detail-row-label">Credit score</span><span class="detail-row-value">${a.creditScore} / 850</span></div>
+      <div class="detail-row"><span class="detail-row-label">Employment</span><span class="detail-row-value">${a.employmentStatus}${a.jobYears?' · '+a.jobYears+' yrs':''}</span></div>
     </div>
     <div class="detail-section">
       <div class="detail-section-title">Lifestyle fit</div>
-      <div class="detail-row"><span class="detail-row-label">Household</span><span class="detail-row-value">${a.household}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Pets</span><span class="detail-row-value">${a.pets}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Move-in date</span><span class="detail-row-value">${a.movein}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Rental history</span><span class="detail-row-value">${a.history}</span></div>
-      <div class="detail-row"><span class="detail-row-label">Evictions</span><span class="detail-row-value">${a.evictions}</span></div>
+      <div class="detail-row"><span class="detail-row-label">Household</span><span class="detail-row-value">${a.householdType}</span></div>
+      <div class="detail-row"><span class="detail-row-label">Occupants</span><span class="detail-row-value">${a.occupants}</span></div>
+      <div class="detail-row"><span class="detail-row-label">Pets</span><span class="detail-row-value">${a.pets||'None'}</span></div>
+      <div class="detail-row"><span class="detail-row-label">Move-in date</span><span class="detail-row-value">${fmtDate(a.moveInDate)}</span></div>
+      <div class="detail-row"><span class="detail-row-label">Rental history</span><span class="detail-row-value">${a.rentalYears} yrs</span></div>
+      <div class="detail-row"><span class="detail-row-label">Evictions</span><span class="detail-row-value">${a.hasEviction?'Yes':'None'}</span></div>
     </div>
-    <div class="detail-section">
-      <div class="detail-section-title">Strengths &amp; concerns</div>
-      <div>${tags}</div>
-    </div>
-    ${docsHTML}
-    ${capWarn}
+    ${strengths||concerns?`<div class="detail-section"><div class="detail-section-title">Strengths & concerns</div><div>${strengths}${concerns}</div></div>`:''}
+    ${a.notes?`<div class="detail-section"><div class="detail-section-title">Notes from applicant</div><div style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;">${a.notes}</div></div>`:''}
     ${actionsHTML}`;
+
+  renderApplicants();
 }
 
-function selectApplicant(i){
-  currentApplicant=i;
-  const a=properties[currentProp].applicants[i];
-  if(!a) return;
-  document.getElementById('d-avatar').textContent=a.initials;
-  document.getElementById('d-avatar').style.background=a.avatar;
-  document.getElementById('d-avatar').style.color=a.avatarText;
-  document.getElementById('d-name').textContent=a.name;
-  document.getElementById('d-sub').textContent=`Rank #${a.rank} · ${properties[currentProp].name}`;
-  document.getElementById('d-score').textContent=a.score;
-  document.getElementById('d-score').style.color=a.score>=80?'var(--gold-light)':a.score>=60?'#e8b55a':'#e57373';
-  document.getElementById('detail-body').innerHTML=buildDetailBody(a, properties[currentProp].name);
-  renderApplicants(currentProp);
-  updateStats();
+async function updateStatus(status) {
+  const a = currentApplicants[currentAppIdx];
+  if (!a) return;
+  try {
+    const data = await apiCall('PUT', `/api/apply/applications/${a.id}/status`, {status});
+    currentApplicants[currentAppIdx] = {...a, status};
+    selectApplicant(currentAppIdx);
+    updateStats();
+    showEmailPreview(status, a);
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
 }
 
-function selectProperty(el,propId){
-  document.querySelectorAll('.property-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  currentProp=propId; currentApplicant=0;
-  renderApplicants(propId);
-  if(properties[propId].applicants.length>0) selectApplicant(0);
-  document.getElementById('modal-link-text').textContent=properties[propId].link;
-}
+function showEmailPreview(status, a) {
+  const name = a.firstName;
+  const prop = properties.find(p=>p.id===currentPropId);
+  const addr = prop?.address || 'your property';
+  const uploadLink = `https://fairrentalai.com/upload.html?id=${a.id}`;
 
-// APPROVAL ACTIONS
-function currentA(){ return properties[currentProp].applicants[currentApplicant]; }
-
-function showEmail(type, a){
-  const emails={
-    initial:{
-      badge:'badge-initial',badgeLabel:'Initial approval',
-      title:'Email sent — initial approval',
-      sub:'Tenant has been notified and asked to upload their documents.',
-      subject:`Your rental application — initial approval`,
-      body:`<h3>You've been initially approved!</h3>
-        <p>Dear ${a.name},</p>
-        <p>Great news — you've received <strong>initial approval</strong> for your application for <strong>${properties[currentProp].name}</strong>.</p>
-        <p>To complete your application and receive <strong>final approval</strong>, please upload the following documents:</p>
-        <ul style="margin:0.5rem 0 0.75rem 1.25rem;color:var(--text-mid);">
-          <li>Pay stubs / pay slips (last 2 months)</li>
-          <li>Government-issued photo ID</li>
-          <li>Bank statements (last 3 months)</li>
-        </ul>
-        <p>Please upload your documents as soon as possible to secure your spot.</p>
-        <a class="email-cta" href="#">Upload my documents</a>
-        <p style="font-size:0.78rem;color:var(--text-light);">This offer is conditional on satisfactory verification of your documents.</p>`
-    },
-    final:{
-      badge:'badge-final',badgeLabel:'Final approval',
-      title:'Email sent — final approval',
-      sub:'Tenant has been notified of their final approval.',
-      subject:`Congratulations — your tenancy is confirmed!`,
-      body:`<h3>Congratulations — you're approved!</h3>
-        <p>Dear ${a.name},</p>
-        <p>We're thrilled to let you know that your application for <strong>${properties[currentProp].name}</strong> has been <strong>finally approved</strong>.</p>
-        <p>Your tenancy is now confirmed. Your landlord will be in touch shortly with next steps, including your lease agreement and move-in details.</p>
-        <p>Welcome to your new home!</p>
-        <a class="email-cta" href="#">View my application</a>
-        <p style="font-size:0.78rem;color:var(--text-light);">If you have any questions, please contact your landlord directly.</p>`
-    },
-    declined:{
-      badge:'badge-declined',badgeLabel:'Application declined',
-      title:'Email sent — application declined',
-      sub:'Tenant has been notified their application was unsuccessful.',
-      subject:`Your rental application — update`,
-      body:`<h3>Application update</h3>
-        <p>Dear ${a.name},</p>
-        <p>Thank you for your interest in <strong>${properties[currentProp].name}</strong>.</p>
-        <p>After careful consideration, we regret to inform you that your application has been <strong>unsuccessful</strong> at this time. This decision was based on objective screening criteria and is in no way a reflection of your personal character.</p>
-        <p>We wish you the best in your search for a new home.</p>
-        <p style="font-size:0.78rem;color:var(--text-light);">FairRentalAI screens applications based purely on financial and lifestyle fit criteria.</p>`
-    }
+  const emails = {
+    INITIAL_APPROVED: {badge:'badge-initial',badgeLabel:'Initial approval email',title:'Email sent — initial approval',sub:'Tenant has been notified and asked to upload documents.',subject:`You've been initially approved — ${addr}`,body:`<h3>You've been initially approved!</h3><p>Hi ${name},</p><p>Great news — you've received <strong>initial approval</strong> for your application for <strong>${addr}</strong>.</p><p>To complete your application, please upload:</p><ul style="margin:0.5rem 0 0.75rem 1.25rem;color:var(--text-mid);"><li>Pay stubs / pay slips (last 2 months)</li><li>Government-issued photo ID</li><li>Bank statements (last 3 months)</li></ul><p>Please upload within <strong>5 days</strong> to secure your spot.</p><a class="email-cta" href="${uploadLink}">Upload my documents</a>`},
+    FINALLY_APPROVED: {badge:'badge-final',badgeLabel:'Final approval email',title:'Email sent — final approval',sub:'Tenant has been notified of their final approval.',subject:`Congratulations — your tenancy is confirmed!`,body:`<h3>Congratulations, ${name}!</h3><p>Your application for <strong>${addr}</strong> has been <strong>finally approved</strong>.</p><p>Your landlord will be in touch about your lease and move-in details.</p><p style="font-size:18px;text-align:center;margin:24px 0;">🏠 Welcome to your new home!</p>`},
+    DECLINED: {badge:'badge-declined',badgeLabel:'Declined email',title:'Email sent — application declined',sub:'Tenant has been notified.',subject:`Update on your application`,body:`<h3>Application update</h3><p>Hi ${name},</p><p>Thank you for your interest in <strong>${addr}</strong>. After careful review, your application was unsuccessful at this time. This decision was based on objective screening criteria.</p><p>We wish you the best in your search.</p>`}
   };
-  const e=emails[type];
-  document.getElementById('email-modal-title').textContent=e.title;
-  document.getElementById('email-modal-sub').textContent=e.sub;
-  document.getElementById('email-preview-content').innerHTML=`
-    <span class="email-type-badge ${e.badge}">${e.badgeLabel} email</span>
+
+  const e = emails[status];
+  if (!e) return;
+
+  document.getElementById('email-modal-title').textContent = e.title;
+  document.getElementById('email-modal-sub').textContent = e.sub;
+  document.getElementById('email-preview-content').innerHTML = `
+    <span class="email-type-badge ${e.badge}">${e.badgeLabel}</span>
     <div class="email-preview">
       <div class="email-header"><div class="email-header-logo">Fair<span>RentalAI</span></div></div>
       <div class="email-meta">
-        <div class="email-meta-row"><span class="email-meta-label">To:</span><span class="email-meta-val">${a.name} &lt;${a.email}&gt;</span></div>
+        <div class="email-meta-row"><span class="email-meta-label">To:</span><span class="email-meta-val">${a.firstName} ${a.lastName} &lt;${a.email}&gt;</span></div>
         <div class="email-meta-row"><span class="email-meta-label">Sub:</span><span class="email-meta-val">${e.subject}</span></div>
       </div>
       <div class="email-body">${e.body}</div>
@@ -828,118 +638,85 @@ function showEmail(type, a){
   document.getElementById('emailModal').classList.add('open');
 }
 
-function doInitialApproval(){
-  const a=currentA(); a.status='initial';
-  selectApplicant(currentApplicant);
-  showEmail('initial',a);
-}
-
-function doRequestDocs(){
-  const a=currentA(); a.status='docs_requested';
-  selectApplicant(currentApplicant);
-}
-
-function doDecline(){
-  const a=currentA(); a.status='declined';
-  selectApplicant(currentApplicant);
-  showEmail('declined',a);
-}
-
-function doWaitlist(){
-  const a=currentA(); a.status='initial'; // treat waitlist same step for now
-  selectApplicant(currentApplicant);
-}
-
-function doFinalApproval(){
-  const a=currentA(); a.status='final';
-  selectApplicant(currentApplicant);
-  showEmail('final',a);
-  // update stats
-  const cur=parseInt(document.getElementById('stat-approved').textContent)||0;
-  document.getElementById('stat-approved').textContent=cur+1;
-}
-
-function fakeUpload(docKey, e){
-  e.stopPropagation();
-  const a=currentA();
-  a.docs[docKey]='uploaded';
-  // Check if all docs uploaded
-  const allUploaded=Object.values(a.docs).every(v=>v==='uploaded');
-  if(allUploaded) a.status='docs_received';
-  selectApplicant(currentApplicant);
-}
-
-function updateStats(){
-  let docsWaiting=0, finalApproved=0;
-  Object.values(properties).forEach(p=>{
-    p.applicants.forEach(a=>{
-      if(a.status==='docs_requested') docsWaiting++;
-      if(a.status==='final') finalApproved++;
-    });
+function updateStats() {
+  let totalApps = 0, docsWaiting = 0, finalApproved = 0;
+  properties.forEach(p => { totalApps += p._count?.applications || 0; });
+  currentApplicants.forEach(a => {
+    if (a.status === 'DOCS_REQUESTED') docsWaiting++;
+    if (a.status === 'FINALLY_APPROVED') finalApproved++;
   });
-  document.getElementById('stat-docs').textContent=docsWaiting;
-  document.getElementById('stat-approved').textContent=finalApproved;
+  document.getElementById('stat-props').textContent = properties.filter(p=>p.status==='ACTIVE').length;
+  document.getElementById('stat-apps').textContent = totalApps;
+  document.getElementById('stat-docs').textContent = docsWaiting;
+  document.getElementById('stat-approved').textContent = finalApproved;
 }
 
-// SUBSCRIPTION
-function updateUsageUI(){
-  const pct=Math.min(100,Math.round((propertyCount/FREE_LIMIT)*100));
-  const overFree=Math.max(0,propertyCount-FREE_LIMIT);
-  const bill=overFree*5;
-  const slots=Math.max(0,FREE_LIMIT-propertyCount);
-  const barColor=propertyCount>=FREE_LIMIT?'var(--red)':propertyCount>=4?'var(--amber)':'var(--gold)';
-  document.getElementById('sb-usage-count').innerHTML=`${propertyCount} <span>of ${FREE_LIMIT} free</span>`;
-  document.getElementById('sb-usage-bar').style.width=pct+'%';
-  document.getElementById('sb-usage-bar').style.background=barColor;
-  document.getElementById('sb-usage-note').innerHTML=propertyCount>=FREE_LIMIT?`<strong style="color:#e57373;">Free limit reached</strong>`:`<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
-  document.getElementById('bill-prop-count').textContent=propertyCount;
-  document.getElementById('bill-pct').textContent=pct+'% used';
-  document.getElementById('bill-bar').style.width=pct+'%';
-  document.getElementById('bill-bar').style.background=barColor;
-  document.getElementById('bill-total').textContent='$'+bill.toFixed(2);
-  document.getElementById('bill-slots').textContent=slots>0?slots+' slot'+(slots!==1?'s':''):'None — $5/property';
-  document.getElementById('bill-paid-count').textContent=overFree;
+function updateUsageUI() {
+  const count = properties.length;
+  const pct = Math.min(100, Math.round((count/FREE_LIMIT)*100));
+  const slots = Math.max(0, FREE_LIMIT-count);
+  const barColor = count>=FREE_LIMIT?'var(--red)':count>=4?'var(--amber)':'var(--gold)';
+  document.getElementById('sb-usage-count').innerHTML = `${count} <span>of ${FREE_LIMIT} free</span>`;
+  document.getElementById('sb-usage-bar').style.width = pct+'%';
+  document.getElementById('sb-usage-bar').style.background = barColor;
+  document.getElementById('sb-usage-note').innerHTML = count>=FREE_LIMIT?`<strong style="color:#e57373;">Free limit reached</strong>`:`<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
 }
 
-function switchView(viewId,navEl){
+function tryAddProperty() {
+  if (properties.length >= FREE_LIMIT) { document.getElementById('upgradeModal').classList.add('open'); return; }
+  document.getElementById('add-error').classList.remove('show');
+  document.getElementById('add-cost-notice').style.display = 'none';
+  document.getElementById('addModal').classList.add('open');
+}
+
+async function confirmAddProperty() {
+  const address = document.getElementById('add-address').value.trim();
+  const unitType = document.getElementById('add-type').value;
+  const monthlyRent = parseInt(document.getElementById('add-rent').value) * 100;
+  const idealTenant = document.getElementById('add-tenant').value;
+  const petsAllowed = document.getElementById('add-pets').value;
+  const err = document.getElementById('add-error');
+  err.classList.remove('show');
+  if (!address) { err.textContent='Please enter a property address.'; err.classList.add('show'); return; }
+  if (!unitType) { err.textContent='Please select a unit type.'; err.classList.add('show'); return; }
+  if (!monthlyRent || monthlyRent<=0) { err.textContent='Please enter a valid monthly rent.'; err.classList.add('show'); return; }
+  const btn = document.getElementById('add-confirm-btn');
+  btn.disabled = true; btn.textContent = 'Creating...';
+  try {
+    const data = await apiCall('POST', '/api/properties', {address, unitType, monthlyRent, idealTenant, petsAllowed});
+    document.getElementById('addModal').classList.remove('open');
+    await loadDashboard();
+    if (data.property) selectProperty(data.property.id);
+  } catch(e) {
+    err.textContent = e.message; err.classList.add('show');
+  } finally { btn.disabled = false; btn.textContent = 'Create & get link'; }
+}
+
+function showShareLink() {
+  const prop = properties.find(p=>p.id===currentPropId);
+  if (!prop) return;
+  document.getElementById('modal-link-text').textContent = `https://fairrentalai.com/apply.html?token=${prop.applyToken}`;
+  document.getElementById('linkModal').classList.add('open');
+}
+
+function copyLink() {
+  navigator.clipboard?.writeText(document.getElementById('modal-link-text').textContent);
+  const btn = document.querySelector('.copy-btn'); btn.textContent='Copied!';
+  setTimeout(()=>btn.textContent='Copy', 1800);
+}
+
+function switchView(viewId, navEl) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+viewId).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(navEl) navEl.classList.add('active');
-  document.getElementById('topbar-title').textContent={dashboard:'Dashboard',billing:'Billing & plan'}[viewId]||'Dashboard';
-}
-
-function tryAddProperty(){
-  if(propertyCount>=FREE_LIMIT){ document.getElementById('limitModal').classList.add('open'); }
-  else{ document.getElementById('add-cost-notice').style.display='none'; document.getElementById('addModal').classList.add('open'); }
-}
-
-function confirmAddProperty(){
-  propertyCount++;
-  updateUsageUI();
-  document.getElementById('addModal').classList.remove('open');
-}
-
-function showLink(){
-  document.getElementById('modal-link-text').textContent=properties[currentProp].link;
-  document.getElementById('linkModal').classList.add('open');
-}
-
-function copyLink(){
-  navigator.clipboard?.writeText(document.getElementById('modal-link-text').textContent);
-  const btn=document.querySelector('.copy-btn'); btn.textContent='Copied!';
-  setTimeout(()=>btn.textContent='Copy',1800);
 }
 
 document.querySelectorAll('.modal-overlay').forEach(o=>{
-  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
 });
 
-// INIT
-renderApplicants('unit4b');
-selectApplicant(0);
-updateUsageUI();
-updateStats();
+loadDashboard();
 </script>
 </body>
 </html>

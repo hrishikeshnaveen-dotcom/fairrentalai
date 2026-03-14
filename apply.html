@@ -3,52 +3,32 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FairRentalAI — Apply for Unit 4B</title>
+<title>FairRentalAI — Apply for a Rental</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --navy:#0e1e3a;--navy-mid:#162d56;--navy-light:#1e3d72;
-  --gold:#c9963a;--gold-light:#e8b55a;--gold-pale:#f5e6c8;
-  --cream:#faf7f2;--white:#fff;
-  --text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;
-  --border:rgba(14,30,58,0.12);
-  --green:#3a9a6e;--green-bg:#eaf6f1;
-  --red:#c0392b;--red-bg:#fdf0ee;
-  --amber:#b07d2a;--amber-bg:#fdf4e3;
-  --radius:12px;
-}
+:root{--navy:#0e1e3a;--navy-mid:#162d56;--gold:#c9963a;--gold-light:#e8b55a;--gold-pale:#f5e6c8;--cream:#faf7f2;--white:#fff;--text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;--border:rgba(14,30,58,0.12);--green:#3a9a6e;--green-bg:#eaf6f1;--red:#c0392b;--red-bg:#fdf0ee;--amber:#b07d2a;--amber-bg:#fdf4e3;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);min-height:100vh;}
-
-/* NAV */
 .nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,150,58,0.2);}
 .nav-logo{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:white;}
 .nav-logo span{color:var(--gold);}
 .nav-secure{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:rgba(255,255,255,0.45);}
-.nav-secure svg{width:13px;height:13px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-
-/* HERO BANNER */
-.hero-banner{background:var(--navy);padding:2.5rem 5% 3.5rem;position:relative;overflow:hidden;}
-.hero-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(201,150,58,0.08) 0%,transparent 65%);}
-.hero-banner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:48px;background:var(--cream);border-radius:48px 48px 0 0;}
-.property-card-hero{position:relative;z-index:2;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
-.prop-icon{width:56px;height:56px;border-radius:14px;background:rgba(201,150,58,0.15);border:1px solid rgba(201,150,58,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.prop-icon svg{width:24px;height:24px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-.prop-info{}
-.prop-label{font-size:0.7rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
-.prop-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:white;margin-bottom:4px;}
-.prop-meta-row{display:flex;gap:1.25rem;flex-wrap:wrap;}
-.prop-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:3px 10px;font-size:0.75rem;color:rgba(255,255,255,0.65);}
-.prop-chip svg{width:11px;height:11px;stroke:var(--gold-light);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.bias-badge{margin-left:auto;background:rgba(201,150,58,0.12);border:1px solid rgba(201,150,58,0.25);border-radius:10px;padding:0.75rem 1rem;max-width:260px;}
-.bias-badge-title{font-size:0.72rem;font-weight:500;color:var(--gold-light);margin-bottom:3px;}
-.bias-badge-desc{font-size:0.68rem;color:rgba(255,255,255,0.45);line-height:1.5;}
-
-/* MAIN WRAPPER */
-.main-wrap{max-width:720px;margin:0 auto;padding:2rem 1.5rem 4rem;}
-
-/* PROGRESS */
+.hero{background:var(--navy);padding:2.5rem 5% 3.5rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 40%,rgba(201,150,58,0.08) 0%,transparent 65%);}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:48px;background:var(--cream);border-radius:48px 48px 0 0;}
+.hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(58,154,110,0.2);border:1px solid rgba(58,154,110,0.35);color:#5fcfa0;font-size:0.75rem;font-weight:500;padding:5px 12px;border-radius:100px;margin-bottom:1.25rem;letter-spacing:0.03em;}
+.hero-badge::before{content:'';width:7px;height:7px;background:#5fcfa0;border-radius:50%;flex-shrink:0;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;color:white;margin-bottom:0.75rem;line-height:1.2;}
+.hero-title span{color:var(--gold-light);}
+.hero-sub{font-size:0.95rem;color:rgba(255,255,255,0.55);line-height:1.7;max-width:520px;margin-bottom:1.5rem;}
+.hero-property{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.85rem 1.1rem;width:fit-content;}
+.hero-property-icon{width:36px;height:36px;border-radius:9px;background:rgba(201,150,58,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-property-icon svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.hero-property-name{font-size:0.875rem;font-weight:500;color:white;}
+.hero-property-addr{font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:1px;}
+.main{max-width:720px;margin:0 auto;padding:2rem 1.5rem 4rem;}
 .progress-wrap{margin-bottom:2rem;}
 .progress-steps{display:flex;align-items:center;gap:0;margin-bottom:0.75rem;}
 .ps{flex:1;text-align:center;position:relative;}
@@ -63,8 +43,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .ps-line.done{background:var(--green);}
 .progress-bar-bg{height:4px;background:#e8e5e0;border-radius:2px;overflow:hidden;}
 .progress-bar-fill{height:4px;background:var(--gold);border-radius:2px;transition:width 0.5s ease;}
-
-/* FORM CARD */
+.trust-strip{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-light);}
+.trust-item svg{width:13px;height:13px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .form-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:2rem;margin-bottom:1.5rem;animation:slideUp 0.4s ease;}
 @keyframes slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .form-card-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem;}
@@ -75,7 +56,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-d
 .form-group:last-child{margin-bottom:0;}
 .form-label{font-size:0.78rem;font-weight:500;color:var(--text-dark);margin-bottom:6px;display:block;}
 .form-label span{color:var(--red);margin-left:2px;}
-.form-sublabel{font-size:0.72rem;color:var(--text-light);margin-bottom:6px;display:block;margin-top:-2px;}
 .form-input{width:100%;padding:0.7rem 0.95rem;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;color:var(--navy);font-family:'DM Sans',sans-serif;outline:none;background:white;transition:border-color 0.2s,box-shadow 0.2s;}
 .form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,150,58,0.1);}
 .form-input::placeholder{color:#c0bdb8;}
@@ -84,67 +64,45 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .form-input.error{border-color:var(--red);}
 .error-msg{font-size:0.72rem;color:var(--red);margin-top:4px;display:none;}
 .error-msg.show{display:block;}
-
-/* RADIO / OPTION CARDS */
 .option-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.75rem;margin-top:0.5rem;}
 .option-card{border:1.5px solid var(--border);border-radius:10px;padding:0.9rem 0.75rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
 .option-card:hover{border-color:rgba(201,150,58,0.4);background:#fdf8f0;}
 .option-card.selected{border-color:var(--gold);background:#fdf8f0;}
 .option-card.selected::after{content:'✓';position:absolute;top:6px;right:8px;font-size:0.65rem;color:var(--gold);font-weight:600;}
-.option-card input{display:none;}
 .option-icon{font-size:1.4rem;margin-bottom:5px;}
 .option-label{font-size:0.78rem;font-weight:500;color:var(--navy);}
 .option-sub{font-size:0.68rem;color:var(--text-light);margin-top:2px;}
-
-/* PET TOGGLE */
 .toggle-row{display:flex;gap:0.75rem;}
 .toggle-opt{flex:1;border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;text-align:center;cursor:pointer;transition:all 0.2s;font-size:0.85rem;color:var(--text-mid);}
 .toggle-opt:hover{border-color:rgba(201,150,58,0.3);}
 .toggle-opt.selected{border-color:var(--gold);background:#fdf8f0;color:var(--navy);font-weight:500;}
-
-/* RANGE SLIDER */
 .range-wrap{position:relative;padding-top:0.5rem;}
 .form-range{width:100%;-webkit-appearance:none;appearance:none;height:5px;background:linear-gradient(to right,var(--gold) var(--pct,0%),#e8e5e0 var(--pct,0%));border-radius:3px;outline:none;cursor:pointer;}
 .form-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--navy);border:3px solid var(--gold);cursor:pointer;transition:transform 0.15s;}
 .form-range::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .range-labels{display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text-light);margin-top:6px;}
 .range-value{display:inline-block;background:var(--navy);color:white;font-size:0.78rem;font-weight:500;padding:2px 10px;border-radius:100px;margin-top:6px;}
-
-/* UPLOAD ZONE */
-.upload-zone{border:2px dashed rgba(14,30,58,0.15);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;background:#fafaf8;position:relative;}
-.upload-zone:hover{border-color:var(--gold);background:#fdf8f0;}
-.upload-zone.has-file{border-color:var(--green);background:var(--green-bg);}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upload-icon{width:40px;height:40px;border-radius:10px;background:rgba(14,30,58,0.06);display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;}
-.upload-icon svg{width:18px;height:18px;stroke:var(--text-light);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-.upload-title{font-size:0.85rem;font-weight:500;color:var(--navy);margin-bottom:3px;}
-.upload-sub{font-size:0.75rem;color:var(--text-light);}
-.upload-file-name{font-size:0.82rem;font-weight:500;color:var(--green);margin-top:6px;}
-
-/* NAV BUTTONS */
 .form-nav{display:flex;gap:1rem;align-items:center;}
 .btn-next{flex:1;background:var(--navy);color:white;border:none;border-radius:10px;padding:0.85rem 1.5rem;font-size:0.95rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s,transform 0.15s;}
-.btn-next:hover{background:var(--navy-mid);transform:translateY(-1px);}
-.btn-next svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.btn-next:hover:not(:disabled){background:var(--navy-mid);transform:translateY(-1px);}
+.btn-next:disabled{opacity:0.5;cursor:not-allowed;}
 .btn-back{background:transparent;border:1.5px solid var(--border);border-radius:10px;padding:0.85rem 1.25rem;font-size:0.9rem;color:var(--text-mid);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
 .btn-back:hover{border-color:var(--text-mid);color:var(--navy);}
 .btn-submit{flex:1;background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:0.9rem 1.5rem;font-size:1rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s,transform 0.15s;}
-.btn-submit:hover{background:var(--gold-light);transform:translateY(-1px);}
-
-/* TRUST STRIP */
-.trust-strip{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
-.trust-item{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-light);}
-.trust-item svg{width:13px;height:13px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-
-/* REVIEW SECTION */
+.btn-submit:hover:not(:disabled){background:var(--gold-light);transform:translateY(-1px);}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
+.fairness-note{background:var(--navy);border-radius:14px;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem;}
+.fairness-note svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;}
+.fairness-note-text{font-size:0.8rem;color:rgba(255,255,255,0.6);line-height:1.65;}
+.fairness-note-text strong{color:white;}
 .review-section{margin-bottom:1.5rem;}
 .review-section-title{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
 .review-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.45rem 0;border-bottom:1px solid #f5f2ee;}
 .review-row:last-child{border-bottom:none;}
 .review-label{font-size:0.8rem;color:var(--text-mid);}
 .review-value{font-size:0.8rem;font-weight:500;color:var(--navy);text-align:right;max-width:60%;}
-
-/* SUCCESS STATE */
+.error-banner{background:var(--red-bg);color:var(--red);border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;}
+.error-banner.show{display:block;}
 .success-wrap{text-align:center;padding:3rem 1rem;}
 .success-icon{width:80px;height:80px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);}
 @keyframes popIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
@@ -156,499 +114,364 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .success-step-num{width:28px;height:28px;border-radius:50%;background:var(--navy);color:white;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:600;flex-shrink:0;}
 .success-step-text{font-size:0.82rem;color:var(--text-mid);line-height:1.5;}
 .success-step-text strong{color:var(--navy);}
-
-/* FAIRNESS NOTE */
-.fairness-note{background:var(--navy);border-radius:14px;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;}
-.fairness-note svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;}
-.fairness-note-text{font-size:0.8rem;color:rgba(255,255,255,0.6);line-height:1.65;}
-.fairness-note-text strong{color:white;}
-
-@media(max-width:600px){
-  .form-grid-2,.form-grid-3{grid-template-columns:1fr;}
-  .property-card-hero{flex-direction:column;}
-  .bias-badge{max-width:100%;}
-}
+.not-found{text-align:center;padding:4rem 2rem;}
+.not-found-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:1rem;}
+.not-found-sub{font-size:0.9rem;color:var(--text-mid);line-height:1.7;}
+@media(max-width:600px){.form-grid-2,.form-grid-3{grid-template-columns:1fr;}.hero-property{flex-wrap:wrap;}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">Fair<span>RentalAI</span></div>
   <div class="nav-secure">
-    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-    Secure &amp; encrypted
+    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Secure & encrypted
   </div>
 </nav>
 
-<!-- HERO BANNER -->
-<div class="hero-banner">
-  <div class="property-card-hero">
-    <div class="prop-icon">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </div>
-    <div class="prop-info">
-      <div class="prop-label">Rental application for</div>
-      <div class="prop-title">Unit 4B — 1 Bed / 1 Bath</div>
-      <div class="prop-meta-row">
-        <div class="prop-chip"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>$1,850/month</div>
-        <div class="prop-chip"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>240 Riverside Ave, Calgary AB</div>
-        <div class="prop-chip"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Ideal for couple or single</div>
-      </div>
-    </div>
-    <div class="bias-badge">
-      <div class="bias-badge-title">Screened fairly by FairRentalAI</div>
-      <div class="bias-badge-desc">Applications are ranked by financial fit and lifestyle match only — no bias, no favouritism.</div>
+<div id="loading-state" style="text-align:center;padding:4rem;color:var(--text-light);">
+  <div style="width:24px;height:24px;border:2px solid #e0ddd8;border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 1rem;"></div>
+  <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+  Loading property details...
+</div>
+
+<div id="not-found-state" style="display:none;">
+  <div class="main">
+    <div class="not-found">
+      <div class="not-found-title">Application link not found</div>
+      <div class="not-found-sub">This application link may have expired or is invalid. Please check the link you received and try again.<br/><br/><a href="/index.html" style="color:var(--gold);">Return to FairRentalAI.com</a></div>
     </div>
   </div>
 </div>
 
-<!-- MAIN -->
-<div class="main-wrap">
-
-  <!-- PROGRESS -->
-  <div class="progress-wrap" id="progress-wrap">
-    <div class="progress-steps" id="progress-steps">
-      <div class="ps active" id="ps-0"><div class="ps-dot">1</div><div class="ps-label">You</div></div>
-      <div class="ps-line" id="pl-0"></div>
-      <div class="ps future" id="ps-1"><div class="ps-dot">2</div><div class="ps-label">Income</div></div>
-      <div class="ps-line" id="pl-1"></div>
-      <div class="ps future" id="ps-2"><div class="ps-dot">3</div><div class="ps-label">Household</div></div>
-      <div class="ps-line" id="pl-2"></div>
-      <div class="ps future" id="ps-3"><div class="ps-dot">4</div><div class="ps-label">History</div></div>
-      <div class="ps-line" id="pl-3"></div>
-      <div class="ps future" id="ps-4"><div class="ps-dot">5</div><div class="ps-label">Review</div></div>
-    </div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:10%"></div></div>
-  </div>
-
-  <!-- TRUST STRIP -->
-  <div class="trust-strip">
-    <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Takes about 3 minutes</div>
-    <div class="trust-item"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Your data is secure</div>
-    <div class="trust-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No bias in our scoring</div>
-  </div>
-
-  <!-- STEP 0: Personal info -->
-  <div id="step-0">
-    <div class="form-card">
-      <div class="form-card-title">Tell us about yourself</div>
-      <div class="form-card-sub">Basic contact details — used to identify your application only.</div>
-      <div class="form-grid-2">
-        <div class="form-group">
-          <label class="form-label">First name <span>*</span></label>
-          <input class="form-input" id="f-firstname" type="text" placeholder="Jane"/>
-          <div class="error-msg" id="err-firstname">Please enter your first name.</div>
+<div id="app-state" style="display:none;">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Rental application</div>
+      <h1 class="hero-title">Apply for <span id="hero-unit">this unit</span></h1>
+      <p class="hero-sub">Complete this form to apply. Your application is scored fairly by AI — no bias, no favouritism.</p>
+      <div class="hero-property">
+        <div class="hero-property-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
-        <div class="form-group">
-          <label class="form-label">Last name <span>*</span></label>
-          <input class="form-input" id="f-lastname" type="text" placeholder="Smith"/>
-          <div class="error-msg" id="err-lastname">Please enter your last name.</div>
+        <div>
+          <div class="hero-property-name" id="hero-prop-name">Loading...</div>
+          <div class="hero-property-addr" id="hero-prop-addr"></div>
         </div>
       </div>
-      <div class="form-grid-2">
-        <div class="form-group">
-          <label class="form-label">Email address <span>*</span></label>
-          <input class="form-input" id="f-email" type="email" placeholder="jane@example.com"/>
-          <div class="error-msg" id="err-email">Please enter a valid email.</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Phone number</label>
-          <input class="form-input" id="f-phone" type="tel" placeholder="(403) 555-0100"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Desired move-in date <span>*</span></label>
-        <input class="form-input" id="f-movein" type="date"/>
-        <div class="error-msg" id="err-movein">Please select a move-in date.</div>
-      </div>
-    </div>
-
-    <div class="fairness-note" style="margin-bottom:1.5rem;">
-      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <div class="fairness-note-text"><strong>Your application is scored fairly.</strong> We never consider your name, photo, or any personal characteristic. Our AI scores applications purely on financial fit and lifestyle match for this specific unit.</div>
-    </div>
-
-    <div class="form-nav">
-      <button class="btn-next" onclick="nextStep(0)">Continue <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
     </div>
   </div>
 
-  <!-- STEP 1: Income & employment -->
-  <div id="step-1" style="display:none;">
-    <div class="form-card">
-      <div class="form-card-title">Income &amp; employment</div>
-      <div class="form-card-sub">This helps us assess your ability to pay rent. The ideal income-to-rent ratio for this unit is 3× or above ($5,550+/month).</div>
-      <div class="form-grid-2">
+  <div class="main">
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-steps" id="progress-steps">
+        <div class="ps active" id="ps-0"><div class="ps-dot">1</div><div class="ps-label">You</div></div>
+        <div class="ps-line" id="pl-0"></div>
+        <div class="ps future" id="ps-1"><div class="ps-dot">2</div><div class="ps-label">Income</div></div>
+        <div class="ps-line" id="pl-1"></div>
+        <div class="ps future" id="ps-2"><div class="ps-dot">3</div><div class="ps-label">Household</div></div>
+        <div class="ps-line" id="pl-2"></div>
+        <div class="ps future" id="ps-3"><div class="ps-dot">4</div><div class="ps-label">History</div></div>
+        <div class="ps-line" id="pl-3"></div>
+        <div class="ps future" id="ps-4"><div class="ps-dot">5</div><div class="ps-label">Review</div></div>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:10%"></div></div>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Takes about 3 minutes</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Your data is secure</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No bias in our scoring</div>
+    </div>
+
+    <!-- STEP 0 -->
+    <div id="step-0">
+      <div class="form-card">
+        <div class="form-card-title">Tell us about yourself</div>
+        <div class="form-card-sub">Basic contact details — used to identify your application only.</div>
+        <div class="form-grid-2">
+          <div class="form-group"><label class="form-label">First name <span>*</span></label><input class="form-input" id="f-firstname" type="text" placeholder="Jane"/><div class="error-msg" id="err-firstname">Please enter your first name.</div></div>
+          <div class="form-group"><label class="form-label">Last name <span>*</span></label><input class="form-input" id="f-lastname" type="text" placeholder="Smith"/><div class="error-msg" id="err-lastname">Please enter your last name.</div></div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group"><label class="form-label">Email address <span>*</span></label><input class="form-input" id="f-email" type="email" placeholder="jane@example.com"/><div class="error-msg" id="err-email">Please enter a valid email.</div></div>
+          <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" id="f-phone" type="tel" placeholder="(403) 555-0100"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Desired move-in date <span>*</span></label><input class="form-input" id="f-movein" type="date"/><div class="error-msg" id="err-movein">Please select a move-in date.</div></div>
+      </div>
+      <div class="fairness-note">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="fairness-note-text"><strong>Your application is scored fairly.</strong> We never consider your name, photo, or any personal characteristic. Our AI scores applications purely on financial fit and lifestyle match.</div>
+      </div>
+      <div class="form-nav"><button class="btn-next" onclick="nextStep(0)">Continue <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step-1" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-title">Income & employment</div>
+        <div class="form-card-sub" id="income-sub">This helps us assess your ability to pay rent.</div>
+        <div class="form-grid-2">
+          <div class="form-group"><label class="form-label">Monthly gross income ($) <span>*</span></label><input class="form-input" id="f-income" type="number" placeholder="e.g. 6500" min="0"/><div class="error-msg" id="err-income">Please enter your monthly income.</div></div>
+          <div class="form-group"><label class="form-label">Employment status <span>*</span></label><select class="form-input" id="f-employment"><option value="">Select...</option><option>Full-time employed</option><option>Part-time employed</option><option>Self-employed</option><option>Contract / freelance</option><option>Retired</option><option>Student</option><option>Other</option></select><div class="error-msg" id="err-employment">Please select your employment status.</div></div>
+        </div>
+        <div class="form-group"><label class="form-label">Employer / business name</label><input class="form-input" id="f-employer" type="text" placeholder="e.g. Acme Corp"/></div>
         <div class="form-group">
-          <label class="form-label">Monthly gross income ($) <span>*</span></label>
-          <input class="form-input" id="f-income" type="number" placeholder="e.g. 6500" min="0"/>
-          <div class="error-msg" id="err-income">Please enter your monthly income.</div>
+          <label class="form-label">Years at current job / income source</label>
+          <div class="range-wrap"><input type="range" class="form-range" id="f-jobyears" min="0" max="20" value="2" step="1" oninput="updateRange('f-jobyears','jobyears-val',v=>v>=20?'20+ years':v+' year'+(v!=1?'s':''));"/><div class="range-labels"><span>Just started</span><span>5 yrs</span><span>10 yrs</span><span>20+ yrs</span></div><div class="range-value" id="jobyears-val">2 years</div></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Employment status <span>*</span></label>
-          <select class="form-input" id="f-employment">
-            <option value="">Select...</option>
-            <option>Full-time employed</option>
-            <option>Part-time employed</option>
-            <option>Self-employed</option>
-            <option>Contract / freelance</option>
-            <option>Retired</option>
-            <option>Student</option>
-            <option>Other</option>
-          </select>
-          <div class="error-msg" id="err-employment">Please select your employment status.</div>
+          <label class="form-label">Self-reported credit score</label>
+          <div class="range-wrap"><input type="range" class="form-range" id="f-credit" min="300" max="850" value="700" step="10" oninput="updateRange('f-credit','credit-val',v=>v+' / 850');"/><div class="range-labels"><span>300 (Poor)</span><span>580</span><span>670</span><span>740</span><span>850 (Excellent)</span></div><div class="range-value" id="credit-val">700 / 850</div></div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Employer / business name</label>
-        <input class="form-input" id="f-employer" type="text" placeholder="e.g. Acme Corp"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Years at current job / income source</label>
-        <div class="range-wrap">
-          <input type="range" class="form-range" id="f-jobyears" min="0" max="20" value="2" step="1" oninput="updateRange('f-jobyears','jobyears-val',v=>v>=20?'20+ years':v+' year'+(v!=1?'s':''));"/>
-          <div class="range-labels"><span>Just started</span><span>5 yrs</span><span>10 yrs</span><span>20+ yrs</span></div>
-          <div class="range-value" id="jobyears-val">2 years</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Self-reported credit score</label>
-        <span class="form-sublabel">Don't know your exact score? Give your best estimate.</span>
-        <div class="range-wrap">
-          <input type="range" class="form-range" id="f-credit" min="300" max="850" value="700" step="10" oninput="updateRange('f-credit','credit-val',v=>v+' / 850');"/>
-          <div class="range-labels"><span>300 (Poor)</span><span>580</span><span>670</span><span>740</span><span>850 (Excellent)</span></div>
-          <div class="range-value" id="credit-val">700 / 850</div>
-        </div>
-      </div>
+      <div class="form-nav"><button class="btn-back" onclick="prevStep(1)">Back</button><button class="btn-next" onclick="nextStep(1)">Continue <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
     </div>
-    <div class="form-nav">
-      <button class="btn-back" onclick="prevStep(1)">Back</button>
-      <button class="btn-next" onclick="nextStep(1)">Continue <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-    </div>
-  </div>
 
-  <!-- STEP 2: Household -->
-  <div id="step-2" style="display:none;">
-    <div class="form-card">
-      <div class="form-card-title">Your household</div>
-      <div class="form-card-sub">Help us understand who will be living in the unit. This helps match you to the right property.</div>
-      <div class="form-group">
-        <label class="form-label">Who will be living in this unit? <span>*</span></label>
-        <div class="option-grid" id="household-options">
-          <div class="option-card" onclick="selectOption('household','single',this)"><input type="radio" name="household" value="single"/><div class="option-icon">🙋</div><div class="option-label">Just me</div><div class="option-sub">Single occupant</div></div>
-          <div class="option-card" onclick="selectOption('household','couple',this)"><input type="radio" name="household" value="couple"/><div class="option-icon">👫</div><div class="option-label">Couple</div><div class="option-sub">2 adults</div></div>
-          <div class="option-card" onclick="selectOption('household','small_family',this)"><input type="radio" name="household" value="small_family"/><div class="option-icon">👨‍👩‍👦</div><div class="option-label">Small family</div><div class="option-sub">2 adults + 1–2 kids</div></div>
-          <div class="option-card" onclick="selectOption('household','large_family',this)"><input type="radio" name="household" value="large_family"/><div class="option-icon">👨‍👩‍👧‍👦</div><div class="option-label">Larger family</div><div class="option-sub">3+ adults or 3+ kids</div></div>
-          <div class="option-card" onclick="selectOption('household','roommates',this)"><input type="radio" name="household" value="roommates"/><div class="option-icon">🏠</div><div class="option-label">Roommates</div><div class="option-sub">2+ unrelated adults</div></div>
-        </div>
-        <div class="error-msg" id="err-household">Please select your household type.</div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Total number of occupants <span>*</span></label>
-        <select class="form-input" id="f-occupants">
-          <option value="">Select...</option>
-          <option value="1">1 person</option>
-          <option value="2">2 people</option>
-          <option value="3">3 people</option>
-          <option value="4">4 people</option>
-          <option value="5+">5 or more</option>
-        </select>
-        <div class="error-msg" id="err-occupants">Please select the number of occupants.</div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Do you have pets?</label>
-        <div class="toggle-row">
-          <div class="toggle-opt" onclick="selectToggle('pets','no',this)" id="pets-no">No pets</div>
-          <div class="toggle-opt" onclick="selectToggle('pets','cat',this)" id="pets-cat">Cat(s)</div>
-          <div class="toggle-opt" onclick="selectToggle('pets','dog',this)" id="pets-dog">Dog(s)</div>
-          <div class="toggle-opt" onclick="selectToggle('pets','other',this)" id="pets-other">Other</div>
-        </div>
-      </div>
-      <div class="form-group" id="pet-details-wrap" style="display:none;">
-        <label class="form-label">Tell us about your pet(s)</label>
-        <input class="form-input" id="f-petdetails" type="text" placeholder="e.g. 1 small dog, golden retriever, 8kg"/>
-      </div>
-    </div>
-    <div class="form-nav">
-      <button class="btn-back" onclick="prevStep(2)">Back</button>
-      <button class="btn-next" onclick="nextStep(2)">Continue <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-    </div>
-  </div>
-
-  <!-- STEP 3: Rental history -->
-  <div id="step-3" style="display:none;">
-    <div class="form-card">
-      <div class="form-card-title">Rental history &amp; references</div>
-      <div class="form-card-sub">Your rental background helps landlords understand your experience as a tenant.</div>
-      <div class="form-group">
-        <label class="form-label">Years of renting experience</label>
-        <div class="range-wrap">
-          <input type="range" class="form-range" id="f-rentyears" min="0" max="20" value="3" step="1" oninput="updateRange('f-rentyears','rentyears-val',v=>v===0?'First time renter':v>=20?'20+ years':v+' year'+(v!=1?'s':''));"/>
-          <div class="range-labels"><span>First time</span><span>5 yrs</span><span>10 yrs</span><span>20+</span></div>
-          <div class="range-value" id="rentyears-val">3 years</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Have you ever been evicted? <span>*</span></label>
-        <div class="toggle-row">
-          <div class="toggle-opt selected" onclick="selectToggle('eviction','no',this)" id="eviction-no">No evictions</div>
-          <div class="toggle-opt" onclick="selectToggle('eviction','yes',this)" id="eviction-yes">Yes</div>
-        </div>
-        <div class="error-msg" id="err-eviction" style="display:none;"></div>
-      </div>
-      <div class="form-group" id="eviction-explain-wrap" style="display:none;">
-        <label class="form-label">Please briefly explain</label>
-        <textarea class="form-input" id="f-eviction-explain" placeholder="e.g. Eviction in 2019 due to job loss, since resolved..."></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Previous landlord reference name</label>
-        <input class="form-input" id="f-ref-name" type="text" placeholder="e.g. Bob Johnson"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Previous landlord reference phone / email</label>
-        <input class="form-input" id="f-ref-contact" type="text" placeholder="e.g. bob@example.com or (403) 555-0199"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Anything else you'd like the landlord to know?</label>
-        <textarea class="form-input" id="f-notes" placeholder="e.g. I work from home, am a quiet tenant, and take excellent care of my spaces..."></textarea>
-      </div>
-    </div>
-    <div class="form-nav">
-      <button class="btn-back" onclick="prevStep(3)">Back</button>
-      <button class="btn-next" onclick="nextStep(3)">Review application <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-    </div>
-  </div>
-
-  <!-- STEP 4: Review & submit -->
-  <div id="step-4" style="display:none;">
-    <div class="form-card">
-      <div class="form-card-title">Review your application</div>
-      <div class="form-card-sub">Please check everything looks correct before submitting.</div>
-      <div id="review-content"><!-- populated by JS --></div>
-    </div>
-    <div class="form-card" style="background:#fdf8f0;border-color:rgba(201,150,58,0.25);">
-      <div style="font-size:0.8rem;color:var(--text-mid);line-height:1.7;">
-        By submitting this application you confirm all information provided is accurate and truthful. You consent to FairRentalAI sharing this information with the property landlord for screening purposes only. Your application is scored objectively — no personal characteristics are considered.
-      </div>
-    </div>
-    <div class="form-nav">
-      <button class="btn-back" onclick="prevStep(4)">Back</button>
-      <button class="btn-submit" onclick="submitApp()">Submit application <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><polyline points="20 6 9 17 4 12"/></svg></button>
-    </div>
-  </div>
-
-  <!-- SUCCESS -->
-  <div id="step-success" style="display:none;">
-    <div class="form-card">
-      <div class="success-wrap">
-        <div class="success-icon">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="success-title">Application submitted!</div>
-        <div class="success-sub">Thank you for applying for <strong>Unit 4B</strong>. Your application has been received and is being reviewed.</div>
-        <div class="success-steps">
-          <div class="success-step">
-            <div class="success-step-num">1</div>
-            <div class="success-step-text"><strong>Application received</strong> — your application is now in the landlord's ranked list.</div>
+    <!-- STEP 2 -->
+    <div id="step-2" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-title">Your household</div>
+        <div class="form-card-sub">Help us understand who will be living in the unit.</div>
+        <div class="form-group">
+          <label class="form-label">Who will be living in this unit? <span>*</span></label>
+          <div class="option-grid" id="household-options">
+            <div class="option-card" onclick="selectOption('household','Single',this)"><div class="option-icon">🙋</div><div class="option-label">Just me</div><div class="option-sub">Single occupant</div></div>
+            <div class="option-card" onclick="selectOption('household','Couple',this)"><div class="option-icon">👫</div><div class="option-label">Couple</div><div class="option-sub">2 adults</div></div>
+            <div class="option-card" onclick="selectOption('household','Small family',this)"><div class="option-icon">👨‍👩‍👦</div><div class="option-label">Small family</div><div class="option-sub">2 adults + 1–2 kids</div></div>
+            <div class="option-card" onclick="selectOption('household','Large family',this)"><div class="option-icon">👨‍👩‍👧‍👦</div><div class="option-label">Larger family</div><div class="option-sub">3+ adults or 3+ kids</div></div>
+            <div class="option-card" onclick="selectOption('household','Roommates',this)"><div class="option-icon">🏠</div><div class="option-label">Roommates</div><div class="option-sub">2+ unrelated adults</div></div>
           </div>
-          <div class="success-step">
-            <div class="success-step-num">2</div>
-            <div class="success-step-text"><strong>If initially approved</strong> — you'll receive an email asking you to upload documents (pay stubs, ID, bank statements).</div>
-          </div>
-          <div class="success-step">
-            <div class="success-step-num">3</div>
-            <div class="success-step-text"><strong>Final approval</strong> — once your documents are verified you'll receive a congratulations email confirming your tenancy.</div>
+          <div class="error-msg" id="err-household">Please select your household type.</div>
+        </div>
+        <div class="form-group"><label class="form-label">Total number of occupants <span>*</span></label><select class="form-input" id="f-occupants"><option value="">Select...</option><option value="1">1 person</option><option value="2">2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 or more</option></select><div class="error-msg" id="err-occupants">Please select the number of occupants.</div></div>
+        <div class="form-group">
+          <label class="form-label">Do you have pets?</label>
+          <div class="toggle-row">
+            <div class="toggle-opt selected" onclick="selectToggle('pets','no',this)" id="pets-no">No pets</div>
+            <div class="toggle-opt" onclick="selectToggle('pets','cat',this)" id="pets-cat">Cat(s)</div>
+            <div class="toggle-opt" onclick="selectToggle('pets','dog',this)" id="pets-dog">Dog(s)</div>
+            <div class="toggle-opt" onclick="selectToggle('pets','other',this)" id="pets-other">Other</div>
           </div>
         </div>
-        <div style="margin-top:2rem;padding:1rem 1.25rem;background:var(--green-bg);border-radius:10px;font-size:0.82rem;color:var(--green);text-align:center;">
-          A confirmation email has been sent to <strong id="success-email"></strong>
+        <div class="form-group" id="pet-details-wrap" style="display:none;"><label class="form-label">Tell us about your pet(s)</label><input class="form-input" id="f-petdetails" type="text" placeholder="e.g. 1 small dog, golden retriever, 8kg"/></div>
+      </div>
+      <div class="form-nav"><button class="btn-back" onclick="prevStep(2)">Back</button><button class="btn-next" onclick="nextStep(2)">Continue <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step-3" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-title">Rental history & references</div>
+        <div class="form-card-sub">Your rental background helps landlords understand your experience as a tenant.</div>
+        <div class="form-group">
+          <label class="form-label">Years of renting experience</label>
+          <div class="range-wrap"><input type="range" class="form-range" id="f-rentyears" min="0" max="20" value="3" step="1" oninput="updateRange('f-rentyears','rentyears-val',v=>v===0?'First time renter':v>=20?'20+ years':v+' year'+(v!=1?'s':''));"/><div class="range-labels"><span>First time</span><span>5 yrs</span><span>10 yrs</span><span>20+</span></div><div class="range-value" id="rentyears-val">3 years</div></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Have you ever been evicted? <span>*</span></label>
+          <div class="toggle-row">
+            <div class="toggle-opt selected" onclick="selectToggle('eviction','no',this)" id="eviction-no">No evictions</div>
+            <div class="toggle-opt" onclick="selectToggle('eviction','yes',this)" id="eviction-yes">Yes</div>
+          </div>
+        </div>
+        <div class="form-group" id="eviction-explain-wrap" style="display:none;"><label class="form-label">Please briefly explain</label><textarea class="form-input" id="f-eviction-explain" placeholder="e.g. Eviction in 2019 due to job loss, since resolved..."></textarea></div>
+        <div class="form-group"><label class="form-label">Previous landlord reference name</label><input class="form-input" id="f-ref-name" type="text" placeholder="e.g. Bob Johnson"/></div>
+        <div class="form-group"><label class="form-label">Previous landlord reference phone / email</label><input class="form-input" id="f-ref-contact" type="text" placeholder="e.g. bob@example.com or (403) 555-0199"/></div>
+        <div class="form-group"><label class="form-label">Anything else you'd like the landlord to know?</label><textarea class="form-input" id="f-notes" placeholder="e.g. I work from home, am a quiet tenant, and take excellent care of my spaces..."></textarea></div>
+      </div>
+      <div class="form-nav"><button class="btn-back" onclick="prevStep(3)">Back</button><button class="btn-next" onclick="nextStep(3)">Review application <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="step-4" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-title">Review your application</div>
+        <div class="form-card-sub">Please check everything looks correct before submitting.</div>
+        <div id="review-content"></div>
+      </div>
+      <div class="form-card" style="background:#fdf8f0;border-color:rgba(201,150,58,0.25);">
+        <div style="font-size:0.8rem;color:var(--text-mid);line-height:1.7;">By submitting this application you confirm all information is accurate and truthful. You consent to FairRentalAI sharing this with the property landlord for screening purposes only.</div>
+      </div>
+      <div class="error-banner" id="submit-error"></div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="prevStep(4)">Back</button>
+        <button class="btn-submit" id="submit-btn" onclick="submitApp()">Submit application <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><polyline points="20 6 9 17 4 12"/></svg></button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="step-success" style="display:none;">
+      <div class="form-card">
+        <div class="success-wrap">
+          <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="success-title">Application submitted!</div>
+          <div class="success-sub">Your application has been received and is being reviewed. A confirmation email has been sent to <strong id="success-email"></strong></div>
+          <div class="success-steps">
+            <div class="success-step"><div class="success-step-num">1</div><div class="success-step-text"><strong>Application received</strong> — now in the landlord's ranked list.</div></div>
+            <div class="success-step"><div class="success-step-num">2</div><div class="success-step-text"><strong>If initially approved</strong> — you'll receive an email asking you to upload documents.</div></div>
+            <div class="success-step"><div class="success-step-num">3</div><div class="success-step-text"><strong>Final approval</strong> — once verified you'll receive a congratulations email.</div></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-</div><!-- /main-wrap -->
+</div>
 
 <script>
-let currentStep=0;
-const totalSteps=5;
-const formData={};
-const selections={household:null,pets:null,eviction:null};
+const API = 'https://tenantiq-api-production.up.railway.app';
+const params = new URLSearchParams(window.location.search);
+const token = params.get('token');
+let propertyData = null;
+let formData = {};
+const selections = {household:null, pets:'no', eviction:'no'};
 
-function updateRange(inputId,valId,formatter){
-  const v=parseInt(document.getElementById(inputId).value);
-  document.getElementById(valId).textContent=formatter(v);
-  const min=parseInt(document.getElementById(inputId).min);
-  const max=parseInt(document.getElementById(inputId).max);
-  const pct=((v-min)/(max-min))*100;
-  document.getElementById(inputId).style.setProperty('--pct',pct+'%');
+async function loadProperty() {
+  if (!token) { showNotFound(); return; }
+  try {
+    // We'll just show the form — property details will come from the token on submit
+    // For now show a generic header
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('app-state').style.display = 'block';
+    document.getElementById('hero-unit').textContent = 'this rental unit';
+    document.getElementById('hero-prop-name').textContent = 'Application form';
+    document.getElementById('hero-prop-addr').textContent = 'Powered by FairRentalAI';
+    document.getElementById('income-sub').textContent = 'This helps us assess your ability to pay rent. Ideal income is 3× the monthly rent.';
+  } catch(e) {
+    showNotFound();
+  }
 }
 
-function selectOption(group,value,el){
+function showNotFound() {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('not-found-state').style.display = 'block';
+}
+
+function updateRange(inputId, valId, formatter) {
+  const v = parseInt(document.getElementById(inputId).value);
+  document.getElementById(valId).textContent = formatter(v);
+  const min = parseInt(document.getElementById(inputId).min);
+  const max = parseInt(document.getElementById(inputId).max);
+  const pct = ((v-min)/(max-min))*100;
+  document.getElementById(inputId).style.setProperty('--pct', pct+'%');
+}
+
+function selectOption(group, value, el) {
   document.querySelectorAll(`#${group}-options .option-card`).forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
-  selections[group]=value;
+  selections[group] = value;
 }
 
-function selectToggle(group,value,el){
-  const siblings=el.parentElement.querySelectorAll('.toggle-opt');
-  siblings.forEach(s=>s.classList.remove('selected'));
+function selectToggle(group, value, el) {
+  el.parentElement.querySelectorAll('.toggle-opt').forEach(s=>s.classList.remove('selected'));
   el.classList.add('selected');
-  selections[group]=value;
-  if(group==='pets'){
-    document.getElementById('pet-details-wrap').style.display=(value!=='no')?'block':'none';
-  }
-  if(group==='eviction'){
-    document.getElementById('eviction-explain-wrap').style.display=(value==='yes')?'block':'none';
-  }
+  selections[group] = value;
+  if (group==='pets') document.getElementById('pet-details-wrap').style.display = (value!=='no')?'block':'none';
+  if (group==='eviction') document.getElementById('eviction-explain-wrap').style.display = (value==='yes')?'block':'none';
 }
 
-function showStep(n){
+function showStep(n) {
   for(let i=0;i<=4;i++) document.getElementById('step-'+i).style.display='none';
   document.getElementById('step-success').style.display='none';
   if(n<5) document.getElementById('step-'+n).style.display='block';
   else document.getElementById('step-success').style.display='block';
-
-  // Update progress
   for(let i=0;i<5;i++){
     const ps=document.getElementById('ps-'+i);
     ps.className='ps '+(i<n?'done':i===n?'active':'future');
-    if(i<n) ps.querySelector('.ps-dot').textContent='✓';
-    else ps.querySelector('.ps-dot').textContent=i+1;
+    ps.querySelector('.ps-dot').textContent=i<n?'✓':(i+1);
   }
-  for(let i=0;i<4;i++){
-    const pl=document.getElementById('pl-'+i);
-    pl.className='ps-line '+(i<n?'done':'');
-  }
-  const pct=Math.min(100,Math.round((n/4)*100));
-  document.getElementById('progress-bar').style.width=(n>=5?100:pct+10)+'%';
+  for(let i=0;i<4;i++) document.getElementById('pl-'+i).className='ps-line '+(i<n?'done':'');
+  document.getElementById('progress-bar').style.width=(n>=5?100:((n/4)*100+10))+'%';
   window.scrollTo({top:0,behavior:'smooth'});
-  currentStep=n;
-  if(n>=5) document.getElementById('progress-wrap').style.opacity='0.4';
-  else document.getElementById('progress-wrap').style.opacity='1';
 }
 
-function validate(step){
-  let ok=true;
-  function req(id,errId,check){
-    const el=document.getElementById(id);
-    const err=document.getElementById(errId);
-    const valid=check?check(el.value):el.value.trim()!=='';
-    el.classList.toggle('error',!valid);
-    if(err){ err.classList.toggle('show',!valid); }
+function validate(step) {
+  let ok = true;
+  function req(id, errId, check) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    const valid = check ? check(el.value) : el.value.trim()!=='';
+    el.classList.toggle('error', !valid);
+    if(err) err.classList.toggle('show', !valid);
     if(!valid) ok=false;
   }
-  if(step===0){
-    req('f-firstname','err-firstname');
-    req('f-lastname','err-lastname');
-    req('f-email','err-email',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
-    req('f-movein','err-movein');
-  }
-  if(step===1){
-    req('f-income','err-income',v=>v>0);
-    req('f-employment','err-employment');
-  }
+  if(step===0){req('f-firstname','err-firstname');req('f-lastname','err-lastname');req('f-email','err-email',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));req('f-movein','err-movein');}
+  if(step===1){req('f-income','err-income',v=>v>0);req('f-employment','err-employment');}
   if(step===2){
-    if(!selections.household){
-      document.getElementById('err-household').classList.add('show');
-      ok=false;
-    } else { document.getElementById('err-household').classList.remove('show'); }
+    if(!selections.household){document.getElementById('err-household').classList.add('show');ok=false;}
+    else document.getElementById('err-household').classList.remove('show');
     req('f-occupants','err-occupants');
   }
   return ok;
 }
 
-function nextStep(step){
-  if(!validate(step)) return;
-  collectData(step);
-  if(step===3) buildReview();
-  showStep(step+1);
-}
-function prevStep(step){ showStep(step-1); }
-
-function collectData(step){
-  if(step===0){
-    formData.firstname=document.getElementById('f-firstname').value.trim();
-    formData.lastname=document.getElementById('f-lastname').value.trim();
-    formData.email=document.getElementById('f-email').value.trim();
-    formData.phone=document.getElementById('f-phone').value.trim();
-    formData.movein=document.getElementById('f-movein').value;
-  }
-  if(step===1){
-    formData.income=document.getElementById('f-income').value;
-    formData.employment=document.getElementById('f-employment').value;
-    formData.employer=document.getElementById('f-employer').value.trim();
-    formData.jobyears=document.getElementById('f-jobyears').value;
-    formData.credit=document.getElementById('f-credit').value;
-  }
-  if(step===2){
-    formData.household=selections.household;
-    formData.occupants=document.getElementById('f-occupants').value;
-    formData.pets=selections.pets||'no';
-    formData.petdetails=document.getElementById('f-petdetails').value.trim();
-  }
-  if(step===3){
-    formData.rentyears=document.getElementById('f-rentyears').value;
-    formData.eviction=selections.eviction||'no';
-    formData.evictionExplain=document.getElementById('f-eviction-explain').value.trim();
-    formData.refName=document.getElementById('f-ref-name').value.trim();
-    formData.refContact=document.getElementById('f-ref-contact').value.trim();
-    formData.notes=document.getElementById('f-notes').value.trim();
-  }
+function collectData(step) {
+  if(step===0){formData.firstName=document.getElementById('f-firstname').value.trim();formData.lastName=document.getElementById('f-lastname').value.trim();formData.email=document.getElementById('f-email').value.trim();formData.phone=document.getElementById('f-phone').value.trim();formData.moveInDate=document.getElementById('f-movein').value;}
+  if(step===1){formData.monthlyIncome=parseInt(document.getElementById('f-income').value)*100;formData.employmentStatus=document.getElementById('f-employment').value;formData.employer=document.getElementById('f-employer').value.trim();formData.jobYears=parseInt(document.getElementById('f-jobyears').value);formData.creditScore=parseInt(document.getElementById('f-credit').value);}
+  if(step===2){formData.householdType=selections.household;formData.occupants=parseInt(document.getElementById('f-occupants').value);formData.pets=selections.pets;formData.petDetails=document.getElementById('f-petdetails').value.trim();}
+  if(step===3){formData.rentalYears=parseInt(document.getElementById('f-rentyears').value);formData.hasEviction=selections.eviction==='yes';formData.evictionExplain=document.getElementById('f-eviction-explain').value.trim();formData.refName=document.getElementById('f-ref-name').value.trim();formData.refContact=document.getElementById('f-ref-contact').value.trim();formData.notes=document.getElementById('f-notes').value.trim();}
 }
 
-function fmtDate(d){ if(!d) return '—'; const dt=new Date(d+'T00:00:00'); return dt.toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'}); }
-function fmtCurrency(v){ return v?'$'+parseInt(v).toLocaleString()+'/month':'—'; }
-const householdLabels={single:'Just me (single)',couple:'Couple (2 adults)',small_family:'Small family',large_family:'Larger family',roommates:'Roommates'};
-const petLabels={no:'No pets',cat:'Cat(s)',dog:'Dog(s)',other:'Other pets'};
+function nextStep(step){if(!validate(step)) return;collectData(step);if(step===3)buildReview();showStep(step+1);}
+function prevStep(step){showStep(step-1);}
 
-function buildReview(){
-  const r=formData;
+function buildReview() {
+  const r = formData;
+  const householdLabels={Single:'Just me (single)',Couple:'Couple (2 adults)','Small family':'Small family','Large family':'Larger family',Roommates:'Roommates'};
+  const petLabels={no:'No pets',cat:'Cat(s)',dog:'Dog(s)',other:'Other pets'};
   document.getElementById('review-content').innerHTML=`
-    <div class="review-section">
-      <div class="review-section-title">Personal</div>
-      <div class="review-row"><span class="review-label">Name</span><span class="review-value">${r.firstname} ${r.lastname}</span></div>
+    <div class="review-section"><div class="review-section-title">Personal</div>
+      <div class="review-row"><span class="review-label">Name</span><span class="review-value">${r.firstName} ${r.lastName}</span></div>
       <div class="review-row"><span class="review-label">Email</span><span class="review-value">${r.email}</span></div>
-      <div class="review-row"><span class="review-label">Phone</span><span class="review-value">${r.phone||'—'}</span></div>
-      <div class="review-row"><span class="review-label">Move-in date</span><span class="review-value">${fmtDate(r.movein)}</span></div>
+      <div class="review-row"><span class="review-label">Move-in date</span><span class="review-value">${r.moveInDate||'—'}</span></div>
     </div>
-    <div class="review-section">
-      <div class="review-section-title">Income &amp; employment</div>
-      <div class="review-row"><span class="review-label">Monthly income</span><span class="review-value">${fmtCurrency(r.income)}</span></div>
-      <div class="review-row"><span class="review-label">Employment</span><span class="review-value">${r.employment||'—'}</span></div>
-      <div class="review-row"><span class="review-label">Employer</span><span class="review-value">${r.employer||'—'}</span></div>
-      <div class="review-row"><span class="review-label">Time at job</span><span class="review-value">${r.jobyears>=20?'20+ years':r.jobyears+' year'+(r.jobyears!=1?'s':'')}</span></div>
-      <div class="review-row"><span class="review-label">Credit score</span><span class="review-value">${r.credit} / 850</span></div>
+    <div class="review-section"><div class="review-section-title">Income & employment</div>
+      <div class="review-row"><span class="review-label">Monthly income</span><span class="review-value">$${(r.monthlyIncome/100).toLocaleString()}/mo</span></div>
+      <div class="review-row"><span class="review-label">Employment</span><span class="review-value">${r.employmentStatus||'—'}</span></div>
+      <div class="review-row"><span class="review-label">Credit score</span><span class="review-value">${r.creditScore} / 850</span></div>
     </div>
-    <div class="review-section">
-      <div class="review-section-title">Household</div>
-      <div class="review-row"><span class="review-label">Household type</span><span class="review-value">${householdLabels[r.household]||r.household||'—'}</span></div>
+    <div class="review-section"><div class="review-section-title">Household</div>
+      <div class="review-row"><span class="review-label">Household type</span><span class="review-value">${householdLabels[r.householdType]||r.householdType||'—'}</span></div>
       <div class="review-row"><span class="review-label">Occupants</span><span class="review-value">${r.occupants||'—'}</span></div>
-      <div class="review-row"><span class="review-label">Pets</span><span class="review-value">${petLabels[r.pets]||'—'}${r.petdetails?' — '+r.petdetails:''}</span></div>
+      <div class="review-row"><span class="review-label">Pets</span><span class="review-value">${petLabels[r.pets]||'—'}</span></div>
     </div>
-    <div class="review-section">
-      <div class="review-section-title">Rental history</div>
-      <div class="review-row"><span class="review-label">Renting experience</span><span class="review-value">${r.rentyears==0?'First time':r.rentyears>=20?'20+ years':r.rentyears+' year'+(r.rentyears!=1?'s':'')}</span></div>
-      <div class="review-row"><span class="review-label">Past evictions</span><span class="review-value">${r.eviction==='yes'?'Yes':'None'}</span></div>
-      ${r.eviction==='yes'&&r.evictionExplain?`<div class="review-row"><span class="review-label">Explanation</span><span class="review-value">${r.evictionExplain}</span></div>`:''}
-      <div class="review-row"><span class="review-label">Reference</span><span class="review-value">${r.refName||(r.refContact?'':'—')} ${r.refContact?'· '+r.refContact:''}</span></div>
-      ${r.notes?`<div class="review-row"><span class="review-label">Notes</span><span class="review-value">${r.notes}</span></div>`:''}
+    <div class="review-section"><div class="review-section-title">Rental history</div>
+      <div class="review-row"><span class="review-label">Experience</span><span class="review-value">${r.rentalYears===0?'First time':r.rentalYears+'+ years'}</span></div>
+      <div class="review-row"><span class="review-label">Past evictions</span><span class="review-value">${r.hasEviction?'Yes':'None'}</span></div>
     </div>`;
 }
 
-function submitApp(){
-  collectData(4);
-  document.getElementById('success-email').textContent=formData.email;
-  showStep(5);
+async function submitApp() {
+  const btn = document.getElementById('submit-btn');
+  const err = document.getElementById('submit-error');
+  err.classList.remove('show');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(14,30,58,0.3);border-top-color:var(--navy);border-radius:50%;animation:spin 0.7s linear infinite;"></span> Submitting...';
+  try {
+    const res = await fetch(`${API}/api/apply/${token}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Submission failed');
+    document.getElementById('success-email').textContent = formData.email;
+    showStep(5);
+    document.getElementById('progress-wrap').style.opacity='0.4';
+  } catch(e) {
+    err.textContent = e.message; err.classList.add('show');
+    btn.disabled = false;
+    btn.innerHTML = 'Submit application ✓';
+  }
 }
 
-// Init ranges
 updateRange('f-jobyears','jobyears-val',v=>v>=20?'20+ years':v+' year'+(v!=1?'s':''));
 updateRange('f-credit','credit-val',v=>v+' / 850');
 updateRange('f-rentyears','rentyears-val',v=>v===0?'First time renter':v>=20?'20+ years':v+' year'+(v!=1?'s':''));
-// Init eviction default
 selections.eviction='no';
+
+loadProperty();
 </script>
 </body>
 </html>
