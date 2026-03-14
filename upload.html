@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FairRentalAI — Upload Your Documents</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0e1e3a;--navy-mid:#162d56;--navy-light:#1e3d72;
+  --gold:#c9963a;--gold-light:#e8b55a;--gold-pale:#f5e6c8;
+  --cream:#faf7f2;--white:#fff;
+  --text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;
+  --border:rgba(14,30,58,0.12);
+  --green:#3a9a6e;--green-bg:#eaf6f1;--green-mid:#2d8a60;
+  --red:#c0392b;--red-bg:#fdf0ee;
+  --amber:#b07d2a;--amber-bg:#fdf4e3;
+  --blue:#1a6bbd;--blue-bg:#e8f0fb;
+  --purple:#5b3ec2;--purple-bg:#ede9fb;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);min-height:100vh;}
+
+/* NAV */
+.nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,150,58,0.2);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:white;}
+.nav-logo span{color:var(--gold);}
+.nav-secure{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:rgba(255,255,255,0.45);}
+.nav-secure svg{width:13px;height:13px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* HERO */
+.hero{background:var(--navy);padding:2.5rem 5% 3.5rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 40%,rgba(201,150,58,0.08) 0%,transparent 65%);}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:48px;background:var(--cream);border-radius:48px 48px 0 0;}
+.hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(58,154,110,0.2);border:1px solid rgba(58,154,110,0.35);color:#5fcfa0;font-size:0.75rem;font-weight:500;padding:5px 12px;border-radius:100px;margin-bottom:1.25rem;letter-spacing:0.03em;}
+.hero-badge::before{content:'';width:7px;height:7px;background:#5fcfa0;border-radius:50%;flex-shrink:0;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;color:white;margin-bottom:0.75rem;line-height:1.2;}
+.hero-title span{color:var(--gold-light);}
+.hero-sub{font-size:0.95rem;color:rgba(255,255,255,0.55);line-height:1.7;max-width:520px;margin-bottom:1.5rem;}
+.hero-property{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.85rem 1.1rem;width:fit-content;}
+.hero-property-icon{width:36px;height:36px;border-radius:9px;background:rgba(201,150,58,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-property-icon svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.hero-property-name{font-size:0.875rem;font-weight:500;color:white;}
+.hero-property-addr{font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:1px;}
+
+/* MAIN */
+.main{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+/* PROGRESS TRACKER */
+.upload-progress{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;}
+.up-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.up-title{font-size:0.85rem;font-weight:500;color:var(--navy);}
+.up-count{font-size:0.78rem;color:var(--text-light);}
+.up-count strong{color:var(--navy);}
+.up-bar-bg{height:6px;background:#f0ede8;border-radius:3px;overflow:hidden;}
+.up-bar-fill{height:6px;border-radius:3px;background:var(--gold);transition:width 0.5s cubic-bezier(0.34,1.1,0.64,1);}
+.up-steps{display:flex;gap:0.5rem;margin-top:1rem;flex-wrap:wrap;}
+.up-step{display:flex;align-items:center;gap:6px;font-size:0.75rem;padding:4px 10px;border-radius:100px;border:1px solid var(--border);}
+.up-step.done{background:var(--green-bg);border-color:rgba(58,154,110,0.3);color:var(--green);}
+.up-step.pending{background:#f5f3ef;color:var(--text-light);}
+.up-step-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.up-step.done .up-step-dot{background:var(--green);}
+.up-step.pending .up-step-dot{background:#d0cdc8;}
+
+/* DEADLINE NOTICE */
+.deadline-notice{background:var(--amber-bg);border:1px solid rgba(176,125,42,0.25);border-radius:12px;padding:1rem 1.25rem;display:flex;gap:12px;align-items:flex-start;margin-bottom:1.5rem;}
+.deadline-notice svg{width:16px;height:16px;stroke:var(--amber);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;}
+.deadline-text{font-size:0.82rem;color:var(--amber);line-height:1.6;}
+.deadline-text strong{color:#8a5a10;}
+
+/* DOC CARDS */
+.doc-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.25rem;transition:box-shadow 0.2s;}
+.doc-card.uploaded{border-color:rgba(58,154,110,0.35);}
+.doc-card-header{padding:1.25rem 1.5rem;display:flex;align-items:center;gap:14px;}
+.doc-card-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.3s;}
+.doc-card-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.doc-card.pending .doc-card-icon{background:var(--blue-bg);color:var(--blue);}
+.doc-card.uploaded .doc-card-icon{background:var(--green-bg);color:var(--green);}
+.doc-card.error .doc-card-icon{background:var(--red-bg);color:var(--red);}
+.doc-info{flex:1;}
+.doc-name{font-size:0.9rem;font-weight:500;color:var(--navy);}
+.doc-desc{font-size:0.75rem;color:var(--text-light);margin-top:2px;line-height:1.5;}
+.doc-status-badge{font-size:0.7rem;font-weight:500;padding:3px 10px;border-radius:100px;flex-shrink:0;}
+.badge-required{background:#f0ede8;color:var(--text-mid);}
+.badge-uploaded{background:var(--green-bg);color:var(--green);}
+.badge-error{background:var(--red-bg);color:var(--red);}
+
+/* UPLOAD ZONE */
+.upload-zone-wrap{padding:0 1.5rem 1.25rem;}
+.upload-zone{border:2px dashed rgba(14,30,58,0.15);border-radius:12px;padding:1.75rem 1rem;text-align:center;cursor:pointer;transition:all 0.25s;background:#fafaf8;position:relative;overflow:hidden;}
+.upload-zone:hover{border-color:var(--gold);background:#fdf8f0;}
+.upload-zone.drag-over{border-color:var(--gold);background:#fdf8f0;transform:scale(1.01);}
+.upload-zone.uploaded-state{border-color:var(--green);background:var(--green-bg);border-style:solid;}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.uz-icon{width:46px;height:46px;border-radius:12px;background:rgba(14,30,58,0.06);display:flex;align-items:center;justify-content:center;margin:0 auto 0.85rem;transition:background 0.3s;}
+.upload-zone:hover .uz-icon,.upload-zone.drag-over .uz-icon{background:rgba(201,150,58,0.15);}
+.upload-zone.uploaded-state .uz-icon{background:rgba(58,154,110,0.2);}
+.uz-icon svg{width:20px;height:20px;stroke:var(--text-light);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.3s;}
+.upload-zone:hover .uz-icon svg,.upload-zone.drag-over .uz-icon svg{stroke:var(--gold);}
+.upload-zone.uploaded-state .uz-icon svg{stroke:var(--green);}
+.uz-title{font-size:0.875rem;font-weight:500;color:var(--navy);margin-bottom:3px;}
+.uz-sub{font-size:0.75rem;color:var(--text-light);}
+.uz-sub span{color:var(--gold);font-weight:500;}
+.uploaded-file{display:flex;align-items:center;gap:10px;justify-content:center;}
+.uploaded-file-icon{width:32px;height:32px;border-radius:8px;background:rgba(58,154,110,0.2);display:flex;align-items:center;justify-content:center;}
+.uploaded-file-icon svg{width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.uploaded-file-name{font-size:0.85rem;font-weight:500;color:var(--green);}
+.uploaded-file-size{font-size:0.72rem;color:rgba(58,154,110,0.7);}
+.remove-file{background:none;border:none;cursor:pointer;color:rgba(58,154,110,0.6);font-size:0.75rem;padding:4px 8px;border-radius:6px;transition:all 0.15s;flex-shrink:0;}
+.remove-file:hover{background:rgba(192,57,43,0.1);color:var(--red);}
+
+/* EXAMPLE DOCS */
+.example-docs{background:#f5f3ef;border-radius:10px;padding:0.85rem 1rem;margin-top:0.75rem;}
+.example-docs-title{font-size:0.7rem;font-weight:500;color:var(--text-mid);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;}
+.example-list{display:flex;flex-direction:column;gap:4px;}
+.example-item{font-size:0.75rem;color:var(--text-mid);display:flex;align-items:center;gap:6px;}
+.example-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+
+/* TIPS */
+.tips-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;}
+.tips-title{font-size:0.8rem;font-weight:500;color:var(--navy);margin-bottom:0.85rem;display:flex;align-items:center;gap:8px;}
+.tips-title svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.tip-item{display:flex;gap:8px;align-items:flex-start;}
+.tip-dot{width:16px;height:16px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.tip-dot::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.tip-text{font-size:0.78rem;color:var(--text-mid);line-height:1.55;}
+
+/* SUBMIT */
+.submit-section{margin-top:1.5rem;}
+.submit-btn{width:100%;background:var(--navy);color:white;border:none;border-radius:12px;padding:1rem 1.5rem;font-size:1rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s,transform 0.15s;position:relative;}
+.submit-btn:hover:not(:disabled){background:var(--navy-mid);transform:translateY(-1px);}
+.submit-btn:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+.submit-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.submit-note{text-align:center;font-size:0.75rem;color:var(--text-light);margin-top:0.75rem;}
+
+/* SUCCESS */
+.success-overlay{display:none;position:fixed;inset:0;background:rgba(14,30,58,0.6);z-index:100;align-items:center;justify-content:center;padding:1.5rem;}
+.success-overlay.open{display:flex;}
+.success-modal{background:white;border-radius:24px;padding:2.5rem 2rem;max-width:480px;width:100%;text-align:center;}
+.success-anim{width:88px;height:88px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;animation:popIn 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes popIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+.success-anim svg{width:40px;height:40px;stroke:var(--green);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.success-title{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;}
+.success-sub{font-size:0.9rem;color:var(--text-mid);line-height:1.7;margin-bottom:1.75rem;}
+.success-what-next{background:var(--cream);border-radius:12px;padding:1.1rem 1.25rem;text-align:left;margin-bottom:1.5rem;}
+.swn-title{font-size:0.72rem;font-weight:500;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;}
+.swn-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:0.6rem;}
+.swn-step:last-child{margin-bottom:0;}
+.swn-num{width:22px;height:22px;border-radius:50%;background:var(--navy);color:white;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:600;flex-shrink:0;margin-top:1px;}
+.swn-text{font-size:0.8rem;color:var(--text-mid);line-height:1.5;}
+.swn-text strong{color:var(--navy);}
+.confetti-strip{display:flex;justify-content:center;gap:4px;margin-bottom:1.25rem;}
+.conf{width:8px;height:22px;border-radius:2px;animation:confettiFall 1s ease forwards;}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}60%{opacity:1;}100%{transform:translateY(0) rotate(var(--rot,15deg));opacity:0.8;}}
+.btn-done{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:0.8rem 2rem;font-size:0.95rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+.btn-done:hover{background:var(--gold-light);}
+
+/* UPLOAD PROGRESS SHIMMER */
+.shimmer{position:relative;overflow:hidden;}
+.shimmer::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.4) 50%,transparent 100%);animation:shimmer 1.2s infinite;}
+@keyframes shimmer{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
+
+@media(max-width:600px){
+  .tips-grid{grid-template-columns:1fr;}
+  .hero-property{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Fair<span>RentalAI</span></div>
+  <div class="nav-secure">
+    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    256-bit encrypted upload
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Initially approved</div>
+    <h1 class="hero-title">Almost there, <span id="hero-name">Sarah</span>.</h1>
+    <p class="hero-sub">You've received initial approval. To complete your tenancy, please upload the three documents below. Once verified, you'll receive your final approval email.</p>
+    <div class="hero-property">
+      <div class="hero-property-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div>
+        <div class="hero-property-name">Unit 4B — 1 Bed / 1 Bath</div>
+        <div class="hero-property-addr">240 Riverside Ave, Calgary AB · $1,850/month</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- UPLOAD PROGRESS -->
+  <div class="upload-progress">
+    <div class="up-header">
+      <div class="up-title">Document upload progress</div>
+      <div class="up-count"><strong id="up-count-num">0</strong> of 3 uploaded</div>
+    </div>
+    <div class="up-bar-bg"><div class="up-bar-fill" id="up-bar" style="width:0%"></div></div>
+    <div class="up-steps">
+      <div class="up-step pending" id="upstep-paystubs"><div class="up-step-dot"></div>Pay stubs</div>
+      <div class="up-step pending" id="upstep-govid"><div class="up-step-dot"></div>Government ID</div>
+      <div class="up-step pending" id="upstep-bankstmt"><div class="up-step-dot"></div>Bank statements</div>
+    </div>
+  </div>
+
+  <!-- DEADLINE -->
+  <div class="deadline-notice">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div class="deadline-text"><strong>Please upload within 5 days</strong> to secure your spot. Your initial approval expires and the unit may be offered to another applicant if documents are not received in time.</div>
+  </div>
+
+  <!-- DOC 1: PAY STUBS -->
+  <div class="doc-card pending" id="card-paystubs">
+    <div class="doc-card-header">
+      <div class="doc-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <div class="doc-info">
+        <div class="doc-name">Pay stubs / pay slips</div>
+        <div class="doc-desc">Your two most recent pay stubs from your employer showing gross income.</div>
+      </div>
+      <div class="doc-status-badge badge-required" id="badge-paystubs">Required</div>
+    </div>
+    <div class="upload-zone-wrap">
+      <div class="upload-zone" id="zone-paystubs"
+        ondragover="handleDragOver(event,'paystubs')"
+        ondragleave="handleDragLeave('paystubs')"
+        ondrop="handleDrop(event,'paystubs')">
+        <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event,'paystubs')" id="input-paystubs"/>
+        <div id="zone-paystubs-idle">
+          <div class="uz-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="uz-title">Drag &amp; drop or <span style="color:var(--gold);font-weight:500;">browse</span></div>
+          <div class="uz-sub">PDF, JPG or PNG · Max 10MB</div>
+        </div>
+        <div id="zone-paystubs-done" style="display:none;">
+          <div class="uploaded-file">
+            <div class="uploaded-file-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <div class="uploaded-file-name" id="file-name-paystubs">paystub_march.pdf</div>
+              <div class="uploaded-file-size" id="file-size-paystubs">245 KB</div>
+            </div>
+            <button class="remove-file" onclick="removeFile('paystubs',event)">Remove</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-docs">
+        <div class="example-docs-title">Accepted documents</div>
+        <div class="example-list">
+          <div class="example-item">Last 2 pay stubs from your employer</div>
+          <div class="example-item">Self-employed? Include last 2 invoices or a NOA</div>
+          <div class="example-item">File must clearly show your name and income amount</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOC 2: GOVERNMENT ID -->
+  <div class="doc-card pending" id="card-govid">
+    <div class="doc-card-header">
+      <div class="doc-card-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      </div>
+      <div class="doc-info">
+        <div class="doc-name">Government-issued photo ID</div>
+        <div class="doc-desc">A clear photo or scan of one piece of valid government ID.</div>
+      </div>
+      <div class="doc-status-badge badge-required" id="badge-govid">Required</div>
+    </div>
+    <div class="upload-zone-wrap">
+      <div class="upload-zone" id="zone-govid"
+        ondragover="handleDragOver(event,'govid')"
+        ondragleave="handleDragLeave('govid')"
+        ondrop="handleDrop(event,'govid')">
+        <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event,'govid')" id="input-govid"/>
+        <div id="zone-govid-idle">
+          <div class="uz-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="uz-title">Drag &amp; drop or <span style="color:var(--gold);font-weight:500;">browse</span></div>
+          <div class="uz-sub">PDF, JPG or PNG · Max 10MB</div>
+        </div>
+        <div id="zone-govid-done" style="display:none;">
+          <div class="uploaded-file">
+            <div class="uploaded-file-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <div class="uploaded-file-name" id="file-name-govid"></div>
+              <div class="uploaded-file-size" id="file-size-govid"></div>
+            </div>
+            <button class="remove-file" onclick="removeFile('govid',event)">Remove</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-docs">
+        <div class="example-docs-title">Accepted documents (one required)</div>
+        <div class="example-list">
+          <div class="example-item">Driver's licence (front and back)</div>
+          <div class="example-item">Passport photo page</div>
+          <div class="example-item">Provincial ID card</div>
+          <div class="example-item">Must be current and not expired</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOC 3: BANK STATEMENTS -->
+  <div class="doc-card pending" id="card-bankstmt">
+    <div class="doc-card-header">
+      <div class="doc-card-icon">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="doc-info">
+        <div class="doc-name">Bank statements</div>
+        <div class="doc-desc">Last 3 months of bank statements showing your name and account activity.</div>
+      </div>
+      <div class="doc-status-badge badge-required" id="badge-bankstmt">Required</div>
+    </div>
+    <div class="upload-zone-wrap">
+      <div class="upload-zone" id="zone-bankstmt"
+        ondragover="handleDragOver(event,'bankstmt')"
+        ondragleave="handleDragLeave('bankstmt')"
+        ondrop="handleDrop(event,'bankstmt')">
+        <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event,'bankstmt')" id="input-bankstmt"/>
+        <div id="zone-bankstmt-idle">
+          <div class="uz-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="uz-title">Drag &amp; drop or <span style="color:var(--gold);font-weight:500;">browse</span></div>
+          <div class="uz-sub">PDF, JPG or PNG · Max 10MB</div>
+        </div>
+        <div id="zone-bankstmt-done" style="display:none;">
+          <div class="uploaded-file">
+            <div class="uploaded-file-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <div class="uploaded-file-name" id="file-name-bankstmt"></div>
+              <div class="uploaded-file-size" id="file-size-bankstmt"></div>
+            </div>
+            <button class="remove-file" onclick="removeFile('bankstmt',event)">Remove</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-docs">
+        <div class="example-docs-title">Accepted documents</div>
+        <div class="example-list">
+          <div class="example-item">Last 3 months of statements (any Canadian bank)</div>
+          <div class="example-item">Must show your full name and account number</div>
+          <div class="example-item">Downloaded PDF from online banking is fine</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips-card">
+    <div class="tips-title">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Tips for a smooth upload
+    </div>
+    <div class="tips-grid">
+      <div class="tip-item"><div class="tip-dot"></div><div class="tip-text">Make sure all documents clearly show your full name</div></div>
+      <div class="tip-item"><div class="tip-dot"></div><div class="tip-text">Photos should be well-lit with no blurring or cut-off edges</div></div>
+      <div class="tip-item"><div class="tip-dot"></div><div class="tip-text">PDFs downloaded from your bank are ideal for statements</div></div>
+      <div class="tip-item"><div class="tip-dot"></div><div class="tip-text">All documents are encrypted and only shared with your landlord</div></div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="submit-btn" id="submit-btn" onclick="submitDocs()" disabled>
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Submit documents
+    </button>
+    <div class="submit-note" id="submit-note">Upload all 3 documents to submit</div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-modal">
+    <div class="confetti-strip" id="confetti"></div>
+    <div class="success-anim">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="success-title">Documents submitted!</div>
+    <div class="success-sub">Your documents have been securely sent to the landlord. They'll review and send your <strong>final approval</strong> shortly.</div>
+    <div class="success-what-next">
+      <div class="swn-title">What happens next</div>
+      <div class="swn-step"><div class="swn-num">1</div><div class="swn-text"><strong>Landlord reviews</strong> your pay stubs, ID, and bank statements — usually within 1–2 business days.</div></div>
+      <div class="swn-step"><div class="swn-num">2</div><div class="swn-text"><strong>Final approval email</strong> — if everything checks out you'll receive a congratulations email confirming your tenancy.</div></div>
+      <div class="swn-step"><div class="swn-num">3</div><div class="swn-text"><strong>Next steps</strong> — your landlord will contact you about your lease, move-in date, and keys.</div></div>
+    </div>
+    <button class="btn-done" onclick="document.getElementById('successOverlay').classList.remove('open')">
+      Done — close this
+    </button>
+  </div>
+</div>
+
+<script>
+const docs={paystubs:null,govid:null,bankstmt:null};
+
+function fmtSize(bytes){
+  if(!bytes) return '';
+  if(bytes<1024) return bytes+'B';
+  if(bytes<1048576) return Math.round(bytes/1024)+'KB';
+  return (bytes/1048576).toFixed(1)+'MB';
+}
+
+function handleFileSelect(e, docId){
+  const file=e.target.files[0];
+  if(file) setFile(docId, file);
+}
+
+function handleDragOver(e, docId){
+  e.preventDefault();
+  document.getElementById('zone-'+docId).classList.add('drag-over');
+}
+function handleDragLeave(docId){
+  document.getElementById('zone-'+docId).classList.remove('drag-over');
+}
+function handleDrop(e, docId){
+  e.preventDefault();
+  document.getElementById('zone-'+docId).classList.remove('drag-over');
+  const file=e.dataTransfer.files[0];
+  if(file) setFile(docId, file);
+}
+
+function setFile(docId, file){
+  docs[docId]=file;
+  const zone=document.getElementById('zone-'+docId);
+  const card=document.getElementById('card-'+docId);
+  const badge=document.getElementById('badge-'+docId);
+  const step=document.getElementById('upstep-'+docId);
+
+  zone.classList.remove('drag-over');
+  zone.classList.add('uploaded-state');
+  document.getElementById('zone-'+docId+'-idle').style.display='none';
+  document.getElementById('zone-'+docId+'-done').style.display='block';
+  document.getElementById('file-name-'+docId).textContent=file.name;
+  document.getElementById('file-size-'+docId).textContent=fmtSize(file.size)||'—';
+
+  card.classList.remove('pending','error');
+  card.classList.add('uploaded');
+  badge.className='doc-status-badge badge-uploaded';
+  badge.textContent='Uploaded ✓';
+
+  step.classList.remove('pending');
+  step.classList.add('done');
+
+  updateProgress();
+}
+
+function removeFile(docId, e){
+  e.stopPropagation();
+  docs[docId]=null;
+  const zone=document.getElementById('zone-'+docId);
+  const card=document.getElementById('card-'+docId);
+  const badge=document.getElementById('badge-'+docId);
+  const step=document.getElementById('upstep-'+docId);
+  const inp=document.getElementById('input-'+docId);
+
+  zone.classList.remove('uploaded-state','drag-over');
+  document.getElementById('zone-'+docId+'-idle').style.display='block';
+  document.getElementById('zone-'+docId+'-done').style.display='none';
+  inp.value='';
+
+  card.classList.remove('uploaded','error');
+  card.classList.add('pending');
+  badge.className='doc-status-badge badge-required';
+  badge.textContent='Required';
+
+  step.classList.remove('done');
+  step.classList.add('pending');
+
+  updateProgress();
+}
+
+function updateProgress(){
+  const uploaded=Object.values(docs).filter(Boolean).length;
+  const pct=Math.round((uploaded/3)*100);
+  document.getElementById('up-bar').style.width=pct+'%';
+  document.getElementById('up-bar').style.background=pct===100?'var(--green)':'var(--gold)';
+  document.getElementById('up-count-num').textContent=uploaded;
+
+  const btn=document.getElementById('submit-btn');
+  const note=document.getElementById('submit-note');
+  btn.disabled=uploaded<3;
+  if(uploaded===3){
+    note.textContent='All documents ready — click to submit';
+    note.style.color='var(--green)';
+  } else {
+    const rem=3-uploaded;
+    note.textContent=`Upload ${rem} more document${rem!==1?'s':''} to submit`;
+    note.style.color='var(--text-light)';
+  }
+}
+
+function submitDocs(){
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;
+  btn.innerHTML=`<span style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;"></span> Uploading securely...`;
+  const style=document.createElement('style');
+  style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+
+  setTimeout(()=>{
+    buildConfetti();
+    document.getElementById('successOverlay').classList.add('open');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><polyline points="20 6 9 17 4 12"/></svg> Submitted!`;
+    btn.style.background='var(--green)';
+  }, 1800);
+}
+
+function buildConfetti(){
+  const colors=['var(--gold)','var(--green)','var(--navy)','#e8b55a','#5fcfa0','#3a9a6e'];
+  const strip=document.getElementById('confetti');
+  strip.innerHTML='';
+  for(let i=0;i<10;i++){
+    const c=document.createElement('div');
+    c.className='conf';
+    c.style.background=colors[i%colors.length];
+    c.style.setProperty('--rot',(Math.random()*40-20)+'deg');
+    c.style.animationDelay=(Math.random()*0.4)+'s';
+    c.style.height=(16+Math.random()*12)+'px';
+    strip.appendChild(c);
+  }
+}
+
+// Pre-fill name from URL param if present
+const params=new URLSearchParams(window.location.search);
+const name=params.get('name');
+if(name) document.getElementById('hero-name').textContent=name;
+</script>
+</body>
+</html>
