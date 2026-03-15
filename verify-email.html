@@ -6,23 +6,20 @@
 <title>FairRentalAI — Verify Email</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--navy:#0e1e3a;--gold:#c9963a;--gold-light:#e8b55a;--green:#3a9a6e;--green-bg:#eaf6f1;--red:#c0392b;--red-bg:#fdf0ee;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
-.logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:white;margin-bottom:2rem;}
-.logo span{color:var(--gold);}
+body{font-family:"DM Sans",sans-serif;background:#0e1e3a;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+.logo{font-family:"Playfair Display",serif;font-size:1.5rem;font-weight:700;color:white;margin-bottom:2rem;}
+.logo span{color:#c9963a;}
 .card{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:420px;text-align:center;}
 .icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2rem;}
-.icon-success{background:var(--green-bg);}
-.icon-error{background:var(--red-bg);}
 .icon-loading{background:#f0ede8;}
-.title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:0.75rem;}
-.sub{font-size:0.9rem;color:#4a5568;line-height:1.7;margin-bottom:2rem;}
-.btn{display:inline-block;background:var(--navy);color:white;padding:0.75rem 2rem;border-radius:10px;text-decoration:none;font-weight:500;font-size:0.9rem;transition:background 0.2s;}
-.btn:hover{background:#162d56;}
-.btn-gold{background:var(--gold);color:var(--navy);}
-.btn-gold:hover{background:var(--gold-light);}
-.spinner{width:32px;height:32px;border:3px solid #e0ddd8;border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto;}
+.icon-success{background:#eaf6f1;}
+.icon-error{background:#fdf0ee;}
+.title{font-family:"Playfair Display",serif;font-size:1.5rem;color:#0e1e3a;margin-bottom:0.75rem;}
+.sub{font-size:0.875rem;color:#4a5568;line-height:1.7;margin-bottom:2rem;}
+.btn{display:inline-block;background:#0e1e3a;color:white;padding:0.75rem 2rem;border-radius:10px;text-decoration:none;font-weight:500;font-size:0.875rem;}
+.btn-gold{background:#c9963a;color:#0e1e3a;}
+.spinner{width:28px;height:28px;border:3px solid #e0ddd8;border-top-color:#c9963a;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
@@ -33,7 +30,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;di
   <div class="title">Verifying your email...</div>
   <div class="sub">Please wait a moment.</div>
 </div>
-
 <script>
 const API = 'https://tenantiq-api-production.up.railway.app';
 const params = new URLSearchParams(window.location.search);
@@ -41,36 +37,24 @@ const token = params.get('token');
 const email = params.get('email');
 
 async function verify() {
+  if (!token || !email) {
+    document.getElementById('card').innerHTML = '<div class="icon icon-error">&#x2717;</div><div class="title">Invalid link</div><div class="sub">This verification link is invalid.</div><a href="/login.html" class="btn">Back to login</a>';
+    return;
+  }
   try {
-    const res = await fetch(`${API}/api/auth/verify-email?token=${token}&email=${encodeURIComponent(email)}`);
+    const res = await fetch(API + '/api/auth/verify-email?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email));
     const data = await res.json();
-    if (res.ok) {
-      document.getElementById('card').innerHTML = `
-        <div class="icon icon-success">✓</div>
-        <div class="title">Email verified!</div>
-        <div class="sub">Your account is now active. You can log in to your dashboard.</div>
-        <a href="/login.html" class="btn btn-gold">Go to login</a>`;
+    if (res.ok && data.success) {
+      document.getElementById('card').innerHTML = '<div class="icon icon-success">&#x2713;</div><div class="title">Email verified!</div><div class="sub">Your account is now active. You can log in to your dashboard.</div><a href="/login.html" class="btn btn-gold">Go to login</a>';
     } else {
-      throw new Error(data.error);
+      throw new Error(data.error || 'Verification failed');
     }
   } catch(e) {
-    document.getElementById('card').innerHTML = `
-      <div class="icon icon-error">✗</div>
-      <div class="title">Verification failed</div>
-      <div class="sub">${e.message || 'This link may have expired. Please register again.'}</div>
-      <a href="/login.html" class="btn">Back to login</a>`;
+    document.getElementById('card').innerHTML = '<div class="icon icon-error">&#x2717;</div><div class="title">Verification failed</div><div class="sub">' + (e.message || 'This link may have expired.') + '<br/><br/>Please register again or contact info@fairrentalai.com</div><a href="/login.html" class="btn">Back to login</a>';
   }
 }
 
-if (!token || !email) {
-  document.getElementById('card').innerHTML = `
-    <div class="icon icon-error">✗</div>
-    <div class="title">Invalid link</div>
-    <div class="sub">This verification link is invalid.</div>
-    <a href="/login.html" class="btn">Back to login</a>`;
-} else {
-  verify();
-}
+verify();
 </script>
 </body>
 </html>

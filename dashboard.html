@@ -197,30 +197,6 @@ select.form-input{cursor:pointer;}
 .cap-text{font-size:0.75rem;color:var(--text-mid);white-space:nowrap;}
 .cap-text strong{color:var(--navy);}
 
-
-/* ── MOBILE RESPONSIVE ── */
-@media(max-width:768px){
-  :root{--sidebar-w:0px;}
-  .sidebar{transform:translateX(-100%);transition:transform 0.3s ease;width:260px;}
-  .sidebar.open{transform:translateX(0);}
-  .main{margin-left:0;}
-  .topbar{padding:0 1rem;}
-  .mobile-menu-btn{display:flex!important;}
-  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:49;}
-  .sidebar-overlay.open{display:block;}
-  .stats-row{grid-template-columns:1fr 1fr;}
-  .main-grid{grid-template-columns:1fr;}
-  .view{padding:1rem;}
-  .detail-panel{margin-top:1rem;}
-  .btn-gold{font-size:0.78rem;padding:0.45rem 0.85rem;}
-  .topbar-title{font-size:0.875rem;}
-}
-@media(max-width:480px){
-  .stats-row{grid-template-columns:1fr;}
-  .stat-value{font-size:1.5rem;}
-}
-.mobile-menu-btn{display:none;background:transparent;border:none;cursor:pointer;padding:0.5rem;color:var(--text-dark);}
-
 /* UPGRADE MODAL */
 .upgrade-hero{background:var(--navy);margin:-2rem -2rem 1.5rem;padding:2rem;border-radius:14px 14px 0 0;text-align:center;position:relative;overflow:hidden;}
 .upgrade-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,150,58,0.12) 0%,transparent 70%);}
@@ -235,12 +211,28 @@ select.form-input{cursor:pointer;}
 .ucheck::after{content:'';width:4px;height:7px;border:1.5px solid var(--green);border-top:none;border-left:none;transform:rotate(40deg) translateY(-1px);display:block;}
 .btn-upgrade-full{width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:0.85rem;font-size:0.95rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:0.75rem;transition:background 0.15s;}
 .btn-upgrade-full:hover{background:var(--gold-light);}
+
+@media(max-width:768px){
+  :root{--sidebar-w:0px;}
+  .sidebar{transform:translateX(-100%);transition:transform 0.3s;width:260px;position:fixed;z-index:50;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0!important;}
+  .mobile-menu-btn{display:flex!important;}
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:49;}
+  .sidebar-overlay.open{display:block;}
+  .stats-row{grid-template-columns:1fr 1fr!important;}
+  .main-grid{grid-template-columns:1fr!important;}
+  .view{padding:1rem!important;}
+}
+@media(max-width:480px){.stats-row{grid-template-columns:1fr!important;}}
+.mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:0.4rem;color:var(--text-dark);}
 </style>
 </head>
 <body>
 <div class="layout">
 
 <!-- SIDEBAR -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <aside class="sidebar">
   <div class="sidebar-logo">Fair<span>RentalAI</span></div>
   <div class="sidebar-section-label">Main</div>
@@ -253,9 +245,9 @@ select.form-input{cursor:pointer;}
     Properties <span class="nav-badge" id="prop-count-badge">0</span>
   </a>
   <div class="sidebar-section-label">Account</div>
-  <a class="nav-item" onclick="switchView('support',this)">
+  <a class="nav-item" onclick="switchView('support',this);toggleSidebar();">
     <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    Help & Support
+    Help &amp; Support
   </a>
   <a class="nav-item" href="/index.html">
     <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
@@ -275,11 +267,15 @@ select.form-input{cursor:pointer;}
   </div>
 </aside>
 
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:0.75rem;"><button class="mobile-menu-btn" onclick="toggleSidebar()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><div class="topbar-title" id="topbar-title">Dashboard</div></div>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+      </div>
     <div class="topbar-right">
       <button class="btn-gold" onclick="tryAddProperty()">
         <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke-width:2.5;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -290,6 +286,13 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- DASHBOARD VIEW -->
+  
+  <!-- Email verify banner -->
+  <div id="verify-banner" style="display:none;background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+    <div style="font-size:0.8rem;color:#b07d2a;"><strong>Please verify your email</strong> &mdash; check your inbox for a link from info@fairrentalai.com</div>
+    <button onclick="document.getElementById('verifyModal').classList.add('open')" style="background:#b07d2a;color:white;border:none;border-radius:6px;padding:0.35rem 0.85rem;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Verify email</button>
+  </div>
+
   <div class="view active" id="view-dashboard">
     <div class="stats-row">
       <div class="stat-card"><div class="stat-label">Active properties</div><div class="stat-value" id="stat-props">0</div><div class="stat-sub">Listed on FairRentalAI</div></div>
@@ -342,65 +345,97 @@ select.form-input{cursor:pointer;}
       </div>
     </div>
   </div>
-</div>
-</div>
+
   <!-- SUPPORT VIEW -->
   <div class="view" id="view-support">
-    <div style="max-width:700px;">
+    <div style="max-width:680px;">
       <div style="margin-bottom:2rem;">
-        <div style="font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;">Help & Support</div>
-        <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--navy);margin-bottom:0.5rem;">We're here to help.</div>
-        <div style="font-size:0.9rem;color:var(--text-mid);">Questions about your account, billing, or how FairRentalAI works?</div>
+        <div style="font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;">Help &amp; Support</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--navy);margin-bottom:0.4rem;">We are here to help.</div>
+        <div style="font-size:0.875rem;color:var(--text-mid);">Questions about your account, billing, or how FairRentalAI works?</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
         <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:1.5rem;">
-          <div style="font-size:1.4rem;margin-bottom:0.75rem;">📧</div>
+          <div style="font-size:1.3rem;margin-bottom:0.6rem;">&#x1F4E7;</div>
           <div style="font-weight:500;color:var(--navy);margin-bottom:0.4rem;">Email support</div>
-          <div style="font-size:0.82rem;color:var(--text-mid);margin-bottom:0.75rem;line-height:1.6;">We respond within 24 hours on business days.</div>
-          <a href="/cdn-cgi/l/email-protection#3851565e57785e59514a4a5d564c59545951165b5755" style="color:var(--gold);font-size:0.875rem;font-weight:500;text-decoration:none;"><span class="__cf_email__" data-cfemail="e28b8c848da284838b9090878c96838e838bcc818d8f">[email&#160;protected]</span></a>
+          <div style="font-size:0.8rem;color:var(--text-mid);margin-bottom:0.75rem;line-height:1.6;">We respond within 24 hours on business days.</div>
+          <a href="mailto:info@fairrentalai.com" style="color:var(--gold);font-size:0.85rem;font-weight:500;text-decoration:none;">info@fairrentalai.com &#x2197;</a>
         </div>
         <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:1.5rem;">
-          <div style="font-size:1.4rem;margin-bottom:0.75rem;">💳</div>
+          <div style="font-size:1.3rem;margin-bottom:0.6rem;">&#x1F4B3;</div>
           <div style="font-weight:500;color:var(--navy);margin-bottom:0.4rem;">Billing questions</div>
-          <div style="font-size:0.82rem;color:var(--text-mid);margin-bottom:0.75rem;line-height:1.6;">Questions about charges or receipts? Email us and we'll help right away.</div>
-          <a href="/cdn-cgi/l/email-protection#a4cdcac2cbe4c2c5cdd6d6c1cad0c5c8c5cd8ac7cbc9" style="color:var(--gold);font-size:0.875rem;font-weight:500;text-decoration:none;">Contact billing →</a>
+          <div style="font-size:0.8rem;color:var(--text-mid);margin-bottom:0.75rem;line-height:1.6;">Questions about charges or receipts? Email us and we will help right away.</div>
+          <a href="mailto:info@fairrentalai.com" style="color:var(--gold);font-size:0.85rem;font-weight:500;text-decoration:none;">Contact billing &#x2197;</a>
         </div>
       </div>
-      <div style="background:var(--navy);border-radius:16px;padding:2rem;">
-        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;margin-bottom:1.25rem;">Frequently asked questions</div>
-        <div style="display:flex;flex-direction:column;gap:1rem;">
-          <div style="border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem;">
-            <div style="font-size:0.875rem;font-weight:500;color:white;margin-bottom:0.4rem;">How does AI scoring work?</div>
-            <div style="font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.6;">Our AI scores applicants based on income, credit score, employment stability, rental history, and household fit. We never consider name, photo, or personal characteristics.</div>
+      <div style="background:var(--navy);border-radius:16px;padding:1.75rem;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:white;margin-bottom:1rem;">Frequently asked questions</div>
+        <div style="display:flex;flex-direction:column;gap:0.85rem;">
+          <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:0.85rem;">
+            <div style="font-size:0.85rem;font-weight:500;color:white;margin-bottom:0.35rem;">How does AI scoring work?</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Our AI scores applicants based on income, credit score, employment stability, rental history, and household fit. We never consider name, photo, or personal characteristics.</div>
           </div>
-          <div style="border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem;">
-            <div style="font-size:0.875rem;font-weight:500;color:white;margin-bottom:0.4rem;">How do I add more than 5 properties?</div>
-            <div style="font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.6;">Your first 5 properties are always free. Each additional property costs a one-time $5 charge — no monthly fees.</div>
+          <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:0.85rem;">
+            <div style="font-size:0.85rem;font-weight:500;color:white;margin-bottom:0.35rem;">How do I add more than 5 properties?</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Your first 5 properties are always free. Each additional property is a one-time $5 charge with no monthly fees.</div>
           </div>
-          <div style="border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem;">
-            <div style="font-size:0.875rem;font-weight:500;color:white;margin-bottom:0.4rem;">How do tenants apply?</div>
-            <div style="font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.6;">Each property gets a unique application link. Share it in your Kijiji ad, Facebook listing, or anywhere. Tenants click the link and fill out the form — no account needed.</div>
+          <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:0.85rem;">
+            <div style="font-size:0.85rem;font-weight:500;color:white;margin-bottom:0.35rem;">How do tenants apply?</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Each property gets a unique application link. Share it in your listing. Tenants click it and fill out the form with no account needed.</div>
           </div>
           <div>
-            <div style="font-size:0.875rem;font-weight:500;color:white;margin-bottom:0.4rem;">What happens after I approve a tenant?</div>
-            <div style="font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.6;">Initial approval sends the tenant an email asking them to upload documents. Once uploaded, you review and give final approval — which sends them a congratulations email.</div>
+            <div style="font-size:0.85rem;font-weight:500;color:white;margin-bottom:0.35rem;">What happens after I approve a tenant?</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Initial approval emails the tenant asking for documents. Once uploaded you review and give final approval which sends them a confirmation email.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+</div>
+</div>
 
 
 <!-- EMAIL VERIFICATION MODAL -->
 <div class="modal-overlay" id="verifyModal">
-  <div class="modal" style="text-align:center;">
-    <div style="font-size:3rem;margin-bottom:1rem;">📧</div>
-    <div class="modal-title">Verify your email first</div>
-    <div class="modal-sub">Please check your inbox for a verification email from <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a1c8cfc7cee1c7c0c8d3d3c4cfd5c0cdc0c88fc2cecc">[email&#160;protected]</a></strong> and click the link to verify your account before adding properties.</div>
-    <div style="background:#fdf4e3;border:1px solid rgba(176,125,42,0.25);border-radius:10px;padding:0.85rem;margin-bottom:1.25rem;font-size:0.82rem;color:#b07d2a;">Check your spam folder if you don't see it in your inbox.</div>
-    <button class="btn-gold" style="width:100%;justify-content:center;margin-bottom:0.75rem;" id="resend-verify-btn" onclick="resendVerificationFromModal()">Resend verification email</button>
+  <div class="modal" style="text-align:center;max-width:400px;">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">&#x1F4E7;</div>
+    <div class="modal-title">Please verify your email</div>
+    <div class="modal-sub">Check your inbox for a verification email from <strong>info@fairrentalai.com</strong> and click the link before adding properties.</div>
+    <div style="background:#fdf4e3;border:1px solid rgba(176,125,42,0.25);border-radius:8px;padding:0.75rem;margin-bottom:1.25rem;font-size:0.8rem;color:#b07d2a;">Check your spam folder if you cannot find it in your inbox.</div>
+    <button class="btn-gold" style="width:100%;justify-content:center;margin-bottom:0.75rem;" id="resend-verify-btn" onclick="resendVerifyEmail()">Resend verification email</button>
     <button class="modal-close" onclick="document.getElementById('verifyModal').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal" style="width:480px;">
+    <div style="background:var(--navy);margin:-2rem -2rem 1.5rem;padding:1.5rem 2rem;border-radius:14px 14px 0 0;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;">Add a property</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px;">You have used all 5 free properties. Each extra property is a one-time $5 charge.</div>
+    </div>
+    <div style="background:#fdf8f0;border:1px solid rgba(201,150,58,0.2);border-radius:10px;padding:1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:0.85rem;color:var(--navy);">One additional property listing</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);">$5 <span style="font-size:0.72rem;color:var(--text-light);font-family:'DM Sans',sans-serif;">one-time</span></div>
+    </div>
+    <div class="error-banner" id="pay-error"></div>
+    <div class="form-group"><label class="form-label">Property address *</label><input class="form-input" type="text" id="pay-address" placeholder="e.g. 45 Oak Ave, Unit 3, Calgary AB"/></div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Unit type *</label><select class="form-input" id="pay-type"><option value="">Select...</option><option>Studio</option><option>1 bed / 1 bath</option><option>2 bed / 1 bath</option><option>2 bed / 2 bath</option><option>3 bed / 2 bath</option><option>House</option></select></div>
+      <div class="form-group"><label class="form-label">Monthly rent ($) *</label><input class="form-input" type="number" id="pay-rent" placeholder="2200"/></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Card details</label>
+      <div id="card-element" style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;background:white;min-height:44px;"></div>
+      <div id="card-errors" style="color:var(--red);font-size:0.78rem;margin-top:5px;"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:0.5rem;">
+      <button class="btn-gold" style="flex:1;justify-content:center;" id="pay-btn" onclick="confirmPayment()">Pay $5 &amp; add property</button>
+      <button class="modal-close" style="flex:1;margin-top:0;" onclick="document.getElementById('paymentModal').classList.remove('open')">Cancel</button>
+    </div>
+    <div style="text-align:center;font-size:0.7rem;color:var(--text-light);margin-top:0.75rem;">&#x1F512; Secure payment via Stripe</div>
   </div>
 </div>
 
@@ -466,7 +501,7 @@ select.form-input{cursor:pointer;}
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const API = 'https://tenantiq-api-production.up.railway.app';
 const FREE_LIMIT = 5;
 const MAX_APPS = 200;
@@ -750,10 +785,72 @@ function updateUsageUI() {
   document.getElementById('sb-usage-note').innerHTML = count>=FREE_LIMIT?`<strong style="color:#e57373;">Free limit reached</strong>`:`<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
 }
 
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+async function resendVerifyEmail() {
+  const btn = document.getElementById('resend-verify-btn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+    await apiCall('POST', '/api/auth/resend-verification', { email: landlord.email });
+    btn.textContent = 'Sent! Check your inbox.';
+    setTimeout(() => { btn.disabled = false; btn.textContent = 'Resend verification email'; }, 3000);
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Try again';
+  }
+}
+
+let stripeInst, cardEl;
+function initStripe() {
+  if (stripeInst) return;
+  stripeInst = Stripe('pk_live_51TAyNhGpmibFVGSwiRUrddd5pLs94yZUmqbM1mS0ofVGaV9GaPXJdSePdcUulXIpz2k93zC62g0uWjchAIxDg6KD00de8B2C87');
+  const elements = stripeInst.elements();
+  cardEl = elements.create('card', { style: { base: { fontFamily: '"DM Sans",sans-serif', fontSize: '15px', color: '#0e1e3a' } } });
+  setTimeout(() => { cardEl.mount('#card-element'); }, 100);
+  cardEl.on('change', e => { document.getElementById('card-errors').textContent = e.error ? e.error.message : ''; });
+}
+
+async function confirmPayment() {
+  const address = document.getElementById('pay-address').value.trim();
+  const unitType = document.getElementById('pay-type').value;
+  const rent = document.getElementById('pay-rent').value;
+  const monthlyRent = parseInt(rent) * 100;
+  const err = document.getElementById('pay-error');
+  err.classList.remove('show');
+  if (!address) { err.textContent = 'Please enter a property address.'; err.classList.add('show'); return; }
+  if (!unitType) { err.textContent = 'Please select a unit type.'; err.classList.add('show'); return; }
+  if (!monthlyRent || monthlyRent <= 0) { err.textContent = 'Please enter a valid monthly rent.'; err.classList.add('show'); return; }
+  const btn = document.getElementById('pay-btn');
+  btn.disabled = true; btn.textContent = 'Processing...';
+  try {
+    const piData = await apiCall('POST', '/api/properties/payment-intent', {});
+    const result = await stripeInst.confirmCardPayment(piData.clientSecret, { payment_method: { card: cardEl } });
+    if (result.error) { err.textContent = result.error.message; err.classList.add('show'); btn.disabled = false; btn.textContent = 'Pay $5 & add property'; return; }
+    const data = await apiCall('POST', '/api/properties/paid', { address, unitType, monthlyRent, paymentIntentId: result.paymentIntent.id });
+    document.getElementById('paymentModal').classList.remove('open');
+    await loadDashboard();
+    if (data.property) selectProperty(data.property.id);
+  } catch(e) {
+    err.textContent = e.message; err.classList.add('show');
+    btn.disabled = false; btn.textContent = 'Pay $5 & add property';
+  }
+}
+
 function tryAddProperty() {
-  if (properties.length >= FREE_LIMIT) { document.getElementById('upgradeModal').classList.add('open'); return; }
+  const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+  if (!landlord.emailVerified) {
+    document.getElementById('verifyModal').classList.add('open');
+    return;
+  }
+  if (properties.length >= FREE_LIMIT) {
+    initStripe();
+    document.getElementById('paymentModal').classList.add('open');
+    return;
+  }
   document.getElementById('add-error').classList.remove('show');
-  document.getElementById('add-cost-notice').style.display = 'none';
   document.getElementById('addModal').classList.add('open');
 }
 
@@ -773,77 +870,7 @@ async function confirmAddProperty() {
   try {
     const data = await apiCall('POST', '/api/properties', {address, unitType, monthlyRent, idealTenant, petsAllowed});
     document.getElementById('addModal').classList.remove('open');
-    await 
-function toggleSidebar() {
-  document.querySelector('.sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('open');
-}
-
-async function resendVerificationFromModal() {
-  const btn = document.getElementById('resend-verify-btn');
-  btn.disabled = true; btn.textContent = 'Sending...';
-  try {
-    const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
-    await apiCall('POST', '/api/auth/resend-verification', { email: landlord.email });
-    btn.textContent = 'Sent! Check your inbox.';
-    setTimeout(() => { btn.disabled = false; btn.textContent = 'Resend verification email'; }, 3000);
-  } catch(e) {
-    btn.textContent = 'Error — try again';
-    btn.disabled = false;
-  }
-}
-
-
-// Stripe payment
-let stripeInstance, cardElement;
-function initStripePayment() {
-  if (stripeInstance) return;
-  stripeInstance = Stripe('pk_live_51TAyNhGpmibFVGSwiRUrddd5pLs94yZUmqbM1mS0ofVGaV9GaPXJdSePdcUulXIpz2k93zC62g0uWjchAIxDg6KD00de8B2C87');
-  const elements = stripeInstance.elements();
-  cardElement = elements.create('card', {
-    style: { base: { fontFamily: '"DM Sans", sans-serif', fontSize: '15px', color: '#0e1e3a', '::placeholder': { color: '#c0bdb8' } } }
-  });
-  cardElement.mount('#card-element');
-  cardElement.on('change', e => {
-    document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
-  });
-}
-
-async function confirmPayment() {
-  const address = document.getElementById('pay-address').value.trim();
-  const unitType = document.getElementById('pay-type').value;
-  const monthlyRent = parseInt(document.getElementById('pay-rent').value) * 100;
-  const err = document.getElementById('pay-error');
-  err.classList.remove('show');
-  if (!address) { err.textContent='Please enter a property address.'; err.classList.add('show'); return; }
-  if (!unitType) { err.textContent='Please select a unit type.'; err.classList.add('show'); return; }
-  if (!monthlyRent||monthlyRent<=0) { err.textContent='Please enter a valid monthly rent.'; err.classList.add('show'); return; }
-  const btn = document.getElementById('pay-btn');
-  btn.disabled=true; btn.textContent='Processing...';
-  try {
-    const piData = await apiCall('POST', '/api/properties/payment-intent', {});
-    const result = await stripeInstance.confirmCardPayment(piData.clientSecret, {
-      payment_method: { card: cardElement }
-    });
-    if (result.error) { err.textContent=result.error.message; err.classList.add('show'); btn.disabled=false; btn.textContent='Pay $5 & add property'; return; }
-    const data = await apiCall('POST', '/api/properties/paid', { address, unitType, monthlyRent, paymentIntentId: result.paymentIntent.id });
-    document.getElementById('paymentModal').classList.remove('open');
     await loadDashboard();
-    if (data.property) selectProperty(data.property.id);
-  } catch(e) {
-    err.textContent=e.message; err.classList.add('show');
-    btn.disabled=false; btn.textContent='Pay $5 & add property';
-  }
-}
-
-function tryAddProperty() {
-  const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
-  if (!landlord.emailVerified) { document.getElementById('verifyModal').classList.add('open'); return; }
-  if (properties.length >= FREE_LIMIT) { initStripePayment(); document.getElementById('paymentModal').classList.add('open'); return; }
-  document.getElementById('add-error').classList.remove('show');
-  document.getElementById('addModal').classList.add('open');
-}
-loadDashboard();
     if (data.property) selectProperty(data.property.id);
   } catch(e) {
     err.textContent = e.message; err.classList.add('show');
@@ -864,4 +891,24 @@ function copyLink() {
 }
 
 function switchView(viewId, navEl) {
-  document.querySelectorAll('.view').forEach(v=>v
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+viewId).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(navEl) navEl.classList.add('active');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+const _landlordData = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+if (_landlordData && !_landlordData.emailVerified) {
+  const banner = document.getElementById('verify-banner');
+  if (banner) banner.style.display = 'flex';
+}
+
+loadDashboard();
+</script>
+<script src="https://js.stripe.com/v3/"></script>
+</body>
+</html>
