@@ -298,18 +298,24 @@ async function submitAll() {
     document.getElementById('success-state').style.display = 'block';
   } else {
     btn.disabled = false;
-    btn.textContent = 'Upload all 3 documents';
+    btn.textContent = 'Upload documents';
   }
 }
 
-// Load page
-if (!appId) {
-  document.getElementById('loading-state').style.display = 'none';
-  document.getElementById('not-found-state').style.display = 'block';
-} else {
-  document.getElementById('loading-state').style.display = 'none';
-  document.getElementById('app-state').style.display = 'block';
-}
+// Load page - runs immediately when script loads
+(function() {
+  const loadingEl = document.getElementById('loading-state');
+  const notFoundEl = document.getElementById('not-found-state');
+  const appEl = document.getElementById('app-state');
+  
+  if (loadingEl) loadingEl.style.display = 'none';
+  
+  if (!appId) {
+    if (notFoundEl) notFoundEl.style.display = 'block';
+  } else {
+    if (appEl) appEl.style.display = 'block';
+  }
+})();
 </script>
 </body>
 </html>
