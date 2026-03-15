@@ -93,7 +93,7 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
   <div class="main">
     <div class="info-card">
       <div class="info-row"><span class="info-label">Status</span><span class="info-value" style="color:var(--green);">Initially approved &#x2713;</span></div>
-      <div class="info-row"><span class="info-label">Required documents</span><span class="info-value">3 of 3</span></div>
+      <div class="info-row"><span class="info-label">Required documents</span><span class="info-value">2 minimum (up to 4)</span></div>
       <div class="info-row"><span class="info-label">Deadline</span><span class="info-value">Within 5 days</span></div>
     </div>
 
@@ -102,7 +102,7 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
       <div class="doc-card" id="card-PAYSTUB">
         <div class="doc-header">
           <div class="doc-icon" id="icon-PAYSTUB">&#x1F4B0;</div>
-          <div><div class="doc-title">Pay stubs / pay slips</div><div class="doc-sub">Last 2 months &middot; PDF, JPG, or PNG &middot; Max 10MB</div></div>
+          <div><div class="doc-title">Pay stubs / pay slips</div><div class="doc-sub">Last 2 months &middot; PDF, JPG, or PNG &middot; Max 10MB &middot; Required</div></div>
           <span class="doc-status status-pending" id="status-PAYSTUB">Pending</span>
         </div>
         <div class="upload-zone" id="zone-PAYSTUB">
@@ -120,7 +120,7 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
       <div class="doc-card" id="card-GOVERNMENT_ID">
         <div class="doc-header">
           <div class="doc-icon" id="icon-GOVERNMENT_ID">&#x1FAA6;</div>
-          <div><div class="doc-title">Government-issued photo ID</div><div class="doc-sub">Driver&#x27;s licence, passport, or provincial ID &middot; Max 10MB</div></div>
+          <div><div class="doc-title">Government-issued photo ID</div><div class="doc-sub">Driver's licence, passport, or provincial ID &middot; Max 10MB &middot; Required</div></div>
           <span class="doc-status status-pending" id="status-GOVERNMENT_ID">Pending</span>
         </div>
         <div class="upload-zone" id="zone-GOVERNMENT_ID">
@@ -138,8 +138,8 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
       <div class="doc-card" id="card-BANK_STATEMENT">
         <div class="doc-header">
           <div class="doc-icon" id="icon-BANK_STATEMENT">&#x1F3E6;</div>
-          <div><div class="doc-title">Bank statements</div><div class="doc-sub">Last 3 months &middot; PDF, JPG, or PNG &middot; Max 10MB</div></div>
-          <span class="doc-status status-pending" id="status-BANK_STATEMENT">Pending</span>
+          <div><div class="doc-title">Bank statements</div><div class="doc-sub">Last 3 months &middot; PDF, JPG, or PNG &middot; Max 10MB &middot; Optional</div></div>
+          <span class="doc-status status-pending" id="status-BANK_STATEMENT">Optional</span>
         </div>
         <div class="upload-zone" id="zone-BANK_STATEMENT">
           <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'BANK_STATEMENT')"/>
@@ -173,8 +173,8 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
     </div>
 
     <div id="submit-area">
-      <button class="btn-submit" id="submit-btn" onclick="submitAll()" disabled>Upload all 3 documents</button>
-      <div class="submit-note">All 3 documents must be selected before uploading. Your landlord will be notified automatically.</div>
+      <button class="btn-submit" id="submit-btn" onclick="submitAll()" disabled>Select at least 2 documents</button>
+      <div class="submit-note">Pay stubs and Photo ID are required. Bank statements and additional documents are optional. Your landlord will be notified automatically.</div>
     </div>
 
     <div id="success-state" style="display:none;">
@@ -214,9 +214,9 @@ function handleFile(e, type) {
 }
 
 function checkReady() {
-  const allReady = files.PAYSTUB !== null && files.GOVERNMENT_ID !== null && files.BANK_STATEMENT !== null;
+  const allReady = files.PAYSTUB !== null && files.GOVERNMENT_ID !== null; // Min 2 required
   document.getElementById('submit-btn').disabled = !allReady;
-  if (allReady) document.getElementById('submit-btn').textContent = 'Upload all 3 documents';
+  if (allReady) const readyCount = Object.values(files).filter(f=>f!==null).length; document.getElementById('submit-btn').textContent = `Upload ${readyCount} document${readyCount!==1?'s':''}`;
 }
 
 async function uploadOne(file, type) {
