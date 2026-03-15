@@ -149,8 +149,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f3f1ec;color:
 .btn-final:hover{opacity:0.85;}
 .btn-decline{background:transparent;color:var(--red);border:1px solid rgba(192,57,43,0.25)!important;}
 .btn-decline:hover{background:var(--red-bg);}
-.btn-waitlist{background:transparent;color:var(--text-mid);border:1px solid var(--border)!important;}
-.btn-waitlist:hover{background:#f5f3ef;}
+
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,30,58,0.55);z-index:200;align-items:center;justify-content:center;}
@@ -696,7 +695,7 @@ function selectApplicant(i) {
   if (a.status === 'PENDING') {
     actionsHTML = `<div class="action-row">
       <button class="btn-action btn-initial" onclick="updateStatus('INITIAL_APPROVED')">Initial approval</button>
-      <button class="btn-action btn-waitlist" onclick="updateStatus('WAITLISTED')">Waitlist</button>
+      
       <button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button>
     </div>`;
   } else if (a.status === 'INITIAL_APPROVED') {
