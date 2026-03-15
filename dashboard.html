@@ -451,7 +451,7 @@ select.form-input{cursor:pointer;}
       <button class="btn-gold" style="flex:1;justify-content:center;" id="pay-btn" onclick="confirmPayment()">Pay $5 &amp; add property</button>
       <button class="modal-close" style="flex:1;margin-top:0;" onclick="document.getElementById('paymentModal').classList.remove('open')">Cancel</button>
     </div>
-    <div style="text-align:center;font-size:0.7rem;color:var(--text-light);margin-top:0.75rem;">&#x1F512; Secure payment via Stripe</div>
+    <div style="text-align:center;font-size:0.7rem;color:var(--text-light);margin-top:0.75rem;">&#x1F512; Secure payment via Stripe &middot; CAD &middot; All cards accepted</div>
   </div>
 </div>
 
@@ -995,7 +995,10 @@ function initStripe() {
   if (stripeInst) return;
   stripeInst = Stripe('pk_live_51TAyNhGpmibFVGSwiRUrddd5pLs94yZUmqbM1mS0ofVGaV9GaPXJdSePdcUulXIpz2k93zC62g0uWjchAIxDg6KD00de8B2C87');
   const elements = stripeInst.elements();
-  cardEl = elements.create('card', { style: { base: { fontFamily: '"DM Sans",sans-serif', fontSize: '15px', color: '#0e1e3a' } } });
+  cardEl = elements.create('card', { 
+    hidePostalCode: true,
+    style: { base: { fontFamily: '"DM Sans",sans-serif', fontSize: '15px', color: '#0e1e3a', '::placeholder': { color: '#c0bdb8' } } }
+  });
   setTimeout(() => { cardEl.mount('#card-element'); }, 100);
   cardEl.on('change', e => { document.getElementById('card-errors').textContent = e.error ? e.error.message : ''; });
 }

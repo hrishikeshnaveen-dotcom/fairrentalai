@@ -193,6 +193,7 @@ const params = new URLSearchParams(window.location.search);
 const appId = params.get('id') || params.get('applicationId');
 
 const files = { PAYSTUB: null, GOVERNMENT_ID: null, BANK_STATEMENT: null, OTHER: null };
+const uploaded = { PAYSTUB: false, GOVERNMENT_ID: false, BANK_STATEMENT: false, OTHER: false };
 
 function fmt(bytes) {
   if (bytes < 1024*1024) return (bytes/1024).toFixed(0) + ' KB';
@@ -265,6 +266,7 @@ async function uploadOne(file, type) {
   if (!confirmRes.ok) throw new Error(confirmData.error || 'Failed to confirm upload');
 
   // Mark as done
+  uploaded[type] = true;
   document.getElementById('card-'+type).classList.add('done');
   document.getElementById('icon-'+type).classList.add('done');
   document.getElementById('icon-'+type).textContent = '\u2713';
@@ -300,13 +302,16 @@ async function submitAll() {
     }
   }
 
-  if (lastResult && lastResult.allUploaded) {
+  // Show success if we uploaded the required docs (PAYSTUB + GOVERNMENT_ID)
+  const hasRequired = uploaded['PAYSTUB'] && uploaded['GOVERNMENT_ID'];
+  if (hasRequired) {
     document.getElementById('docs-area').style.display = 'none';
     document.getElementById('submit-area').style.display = 'none';
     document.getElementById('success-state').style.display = 'block';
   } else {
     btn.disabled = false;
     btn.textContent = 'Upload documents';
+    alert('Please upload at least your Pay stubs and Photo ID.');
   }
 }
 
