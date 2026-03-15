@@ -423,7 +423,7 @@ select.form-input{cursor:pointer;}
     </div>
     <div style="background:#fdf8f0;border:1px solid rgba(201,150,58,0.2);border-radius:10px;padding:1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;">
       <div style="font-size:0.85rem;color:var(--navy);">One additional property listing</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);">$5 <span style="font-size:0.72rem;color:var(--text-light);font-family:'DM Sans',sans-serif;">one-time</span></div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);">$5 CAD <span style="font-size:0.72rem;color:var(--text-light);font-family:'DM Sans',sans-serif;">one-time</span></div>
     </div>
     <div class="error-banner" id="pay-error"></div>
     <div class="form-group"><label class="form-label">Property address *</label><input class="form-input" type="text" id="pay-address" placeholder="e.g. 45 Oak Ave, Unit 3, Calgary AB"/></div>
@@ -431,6 +431,7 @@ select.form-input{cursor:pointer;}
       <div class="form-group"><label class="form-label">Unit type *</label><select class="form-input" id="pay-type"><option value="">Select...</option><option>Studio</option><option>1 bed / 1 bath</option><option>2 bed / 1 bath</option><option>2 bed / 2 bath</option><option>3 bed / 2 bath</option><option>House</option></select></div>
       <div class="form-group"><label class="form-label">Monthly rent ($) *</label><input class="form-input" type="number" id="pay-rent" placeholder="2200"/></div>
     </div>
+    <div class="form-group"><label class="form-label">Available from (move-in date)</label><input class="form-input" type="date" id="pay-available"/></div>
     <div class="form-group">
       <label class="form-label">Card details</label>
       <div id="saved-card-info" style="display:none;background:#f5f3ef;border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between;">
@@ -509,6 +510,7 @@ select.form-input{cursor:pointer;}
       <div class="form-group"><label class="form-label">Ideal tenant</label><select class="form-input" id="add-tenant"><option value="">Any</option><option>Single</option><option>Couple</option><option>Small family</option></select></div>
       <div class="form-group"><label class="form-label">Pets allowed?</label><select class="form-input" id="add-pets"><option value="no_pets">No pets</option><option value="cats">Cats only</option><option value="small_dogs">Small dogs</option><option value="any_pets">Any pets</option></select></div>
     </div>
+    <div class="form-group"><label class="form-label">Available from (move-in date)</label><input class="form-input" type="date" id="add-available"/></div>
     <div id="add-cost-notice" style="display:none;background:var(--amber-bg);border:1px solid rgba(176,125,42,0.25);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:var(--amber);">This property is beyond your 5 free — billed at <strong>$5/month</strong>.</div>
     <div style="display:flex;gap:8px;margin-top:0.5rem;">
       <button class="btn-gold" style="flex:1;justify-content:center;" id="add-confirm-btn" onclick="confirmAddProperty()">Create & get link</button>
@@ -533,7 +535,7 @@ select.form-input{cursor:pointer;}
     <div class="upgrade-hero">
       <div class="upgrade-hero-title">Grow beyond 5 properties</div>
       <div class="upgrade-hero-sub">Your first 5 are always free. Add more for $5 each per month.</div>
-      <div class="upgrade-price-row"><div class="upgrade-price">$5</div><div class="upgrade-price-label">per extra property / month</div></div>
+      <div class="upgrade-price-row"><div class="upgrade-price">$5</div><div class="upgrade-price-label">CAD one-time per extra property</div></div>
     </div>
     <div class="upgrade-features">
       <div class="upgrade-feature"><div class="ucheck"></div>No contract — cancel anytime</div>
@@ -668,6 +670,7 @@ function renderProperties() {
       <div class="prop-meta">
         <div class="prop-meta-item"><strong>${count}</strong> applicants</div>
         <div class="prop-meta-item" style="font-size:0.72rem;color:var(--text-light);">fairrentalai.com/apply.html?token=${p.applyToken}</div>
+        ${p.availableDate ? `<div class="prop-meta-item">Available: <strong>${fmtDate(p.availableDate)}</strong></div>` : ''}
       </div>
       <div class="prop-bar-row">
         <div class="prop-bar-label"><span>Applicant capacity</span><span>${count} / ${MAX_APPS}</span></div>
@@ -901,13 +904,21 @@ function updateStats() {
 
 function updateUsageUI() {
   const count = properties.length;
-  const pct = Math.min(100, Math.round((count/FREE_LIMIT)*100));
+  // Effective limit increases by 1 for each paid property beyond 5
+  const paidExtra = Math.max(0, count - FREE_LIMIT);
+  const effectiveLimit = FREE_LIMIT + paidExtra;
+  const pct = Math.min(100, Math.round((count/effectiveLimit)*100));
   const slots = Math.max(0, FREE_LIMIT-count);
-  const barColor = count>=FREE_LIMIT?'var(--red)':count>=4?'var(--amber)':'var(--gold)';
-  document.getElementById('sb-usage-count').innerHTML = `${count} <span>of ${FREE_LIMIT} free</span>`;
+  const barColor = count>=FREE_LIMIT?'var(--amber)':'var(--gold)';
+  const freeUsed = Math.min(count, FREE_LIMIT);
+  document.getElementById('sb-usage-count').innerHTML = count > FREE_LIMIT 
+    ? `${count} <span>${FREE_LIMIT} free + ${paidExtra} paid</span>`
+    : `${count} <span>of ${FREE_LIMIT} free</span>`;
   document.getElementById('sb-usage-bar').style.width = pct+'%';
   document.getElementById('sb-usage-bar').style.background = barColor;
-  document.getElementById('sb-usage-note').innerHTML = count>=FREE_LIMIT?`<strong style="color:#e57373;">Free limit reached</strong>`:`<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
+  document.getElementById('sb-usage-note').innerHTML = count>=FREE_LIMIT
+    ? `<strong style="color:var(--gold-light);">$5 CAD per extra property</strong>`
+    : `<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
 }
 
 function showNewCard() {
@@ -999,7 +1010,8 @@ async function confirmPayment() {
         localStorage.setItem('fra_saved_pm', JSON.stringify({ id: pm, saved: true }));
       } catch(e) {}
     }
-    const data = await apiCall('POST', '/api/properties/paid', { address, unitType, monthlyRent, paymentIntentId: result.paymentIntent.id });
+    const availableDate = document.getElementById('pay-available').value || null;
+    const data = await apiCall('POST', '/api/properties/paid', { address, unitType, monthlyRent, availableDate, paymentIntentId: result.paymentIntent.id });
     document.getElementById('paymentModal').classList.remove('open');
     await loadDashboard();
     if (data.property) selectProperty(data.property.id);
@@ -1039,7 +1051,8 @@ async function confirmAddProperty() {
   const btn = document.getElementById('add-confirm-btn');
   btn.disabled = true; btn.textContent = 'Creating...';
   try {
-    const data = await apiCall('POST', '/api/properties', {address, unitType, monthlyRent, idealTenant, petsAllowed});
+    const availableDate = document.getElementById('add-available').value || null;
+    const data = await apiCall('POST', '/api/properties', {address, unitType, monthlyRent, idealTenant, petsAllowed, availableDate});
     document.getElementById('addModal').classList.remove('open');
     await loadDashboard();
     if (data.property) selectProperty(data.property.id);

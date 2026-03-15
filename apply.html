@@ -330,16 +330,29 @@ const selections = {household:null, pets:'no', eviction:'no'};
 async function loadProperty() {
   if (!token) { showNotFound(); return; }
   try {
-    // We'll just show the form — property details will come from the token on submit
-    // For now show a generic header
+    // Check property status before showing form
+    const res = await fetch(API + '/api/apply/property/' + token);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.status === 'CLOSED') {
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('closed-state').style.display = 'block';
+        return;
+      }
+      document.getElementById('hero-unit').textContent = data.unitType || 'this rental unit';
+      document.getElementById('hero-prop-name').textContent = data.address || 'Application form';
+      document.getElementById('hero-prop-addr').textContent = data.monthlyRent ? '$' + (data.monthlyRent/100).toLocaleString() + '/mo' : 'Powered by FairRentalAI';
+    } else {
+      document.getElementById('hero-unit').textContent = 'this rental unit';
+      document.getElementById('hero-prop-name').textContent = 'Application form';
+      document.getElementById('hero-prop-addr').textContent = 'Powered by FairRentalAI';
+    }
     document.getElementById('loading-state').style.display = 'none';
     document.getElementById('app-state').style.display = 'block';
-    document.getElementById('hero-unit').textContent = 'this rental unit';
-    document.getElementById('hero-prop-name').textContent = 'Application form';
-    document.getElementById('hero-prop-addr').textContent = 'Powered by FairRentalAI';
     document.getElementById('income-sub').textContent = 'This helps us assess your ability to pay rent. Ideal income is 3× the monthly rent.';
   } catch(e) {
-    showNotFound();
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('app-state').style.display = 'block';
   }
 }
 
@@ -455,7 +468,17 @@ async function submitApp() {
       body: JSON.stringify(formData)
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Submission failed');
+    if (!res.ok) {
+      // Handle closed property specially
+      if (res.status === 410 || data.error === 'PROPERTY_CLOSED') {
+        // Show closed page
+        document.getElementById('app-state').style.display = 'none';
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('closed-state').style.display = 'block';
+        return;
+      }
+      throw new Error(data.message || data.error || 'Submission failed');
+    }
     document.getElementById('success-email').textContent = formData.email;
     showStep(5);
     document.getElementById('progress-wrap').style.opacity='0.4';
@@ -473,5 +496,19 @@ selections.eviction='no';
 
 loadProperty();
 </script>
+
+<div id="closed-state" style="display:none;">
+  <nav class="nav">
+    <div class="nav-logo">Fair<span>RentalAI</span></div>
+    <div class="nav-secure">Secure &amp; encrypted</div>
+  </nav>
+  <div style="max-width:560px;margin:5rem auto;padding:2rem;text-align:center;">
+    <div style="font-size:3rem;margin-bottom:1.5rem;">🔒</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#0e1e3a;margin-bottom:1rem;">This listing is no longer available</h2>
+    <p style="color:#4a5568;line-height:1.7;margin-bottom:2rem;">The landlord has already found a tenant for this property and is no longer accepting applications. Thank you for your interest.</p>
+    <a href="/index.html" style="display:inline-block;background:#c9963a;color:#0e1e3a;padding:0.75rem 2rem;border-radius:8px;text-decoration:none;font-weight:500;">Return to FairRentalAI</a>
+  </div>
+</div>
+
 </body>
 </html>
