@@ -98,7 +98,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;di
 
 <script>
 const API = 'https://tenantiq-api-production.up.railway.app';
-if (localStorage.getItem('fra_token')) window.location.href = '/dashboard.html';
+// Only redirect if token exists AND user data is valid
+const _existingToken = localStorage.getItem('fra_token');
+const _existingUser = localStorage.getItem('fra_landlord');
+if (_existingToken && _existingUser) {
+  try {
+    const _parsed = JSON.parse(_existingUser);
+    if (_parsed && _parsed.id) {
+      window.location.href = '/dashboard.html';
+    }
+  } catch(e) {
+    localStorage.removeItem('fra_token');
+    localStorage.removeItem('fra_landlord');
+  }
+}
 
 function showTab(tab) {
   ['login','register','forgot'].forEach(t => {

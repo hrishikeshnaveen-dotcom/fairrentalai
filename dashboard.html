@@ -595,26 +595,28 @@ const statusChip = {PENDING:'chip-pending',INITIAL_APPROVED:'chip-initial',DOCS_
 
 async function loadDashboard() {
   try {
-    // Always refresh landlord from server to get latest emailVerified
+    // Show stored data immediately so UI doesn't look stuck
+    const stored = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+    if (stored.name) {
+      document.getElementById('user-name').textContent = stored.name;
+      document.getElementById('user-email').textContent = stored.email || '';
+      document.getElementById('user-initials').textContent = (stored.name||'L').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+    }
+    
+    // Refresh landlord from server in background
     try {
       const meData = await apiCall('GET', '/api/auth/me');
       if (meData && meData.landlord) {
         const updated = meData.landlord;
         localStorage.setItem('fra_landlord', JSON.stringify(updated));
-        // Update UI
         document.getElementById('user-name').textContent = updated.name || 'Landlord';
         document.getElementById('user-email').textContent = updated.email || '';
         document.getElementById('user-initials').textContent = (updated.name||'L').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-        // Show/hide banner based on real server data
         const banner = document.getElementById('verify-banner');
-        if (banner) {
-          banner.style.display = updated.emailVerified ? 'none' : 'flex';
-        }
+        if (banner) banner.style.display = updated.emailVerified ? 'none' : 'flex';
       }
     } catch(e) { 
-      console.log('Auth refresh error:', e.message);
-      // Fall back to localStorage
-      const stored = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+      console.log('Auth refresh skipped:', e.message);
       const banner = document.getElementById('verify-banner');
       if (banner) banner.style.display = stored.emailVerified ? 'none' : 'flex';
     }
