@@ -151,6 +151,25 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
         <div id="file-info-BANK_STATEMENT"></div>
         <div class="err-text" id="err-BANK_STATEMENT"></div>
       </div>
+
+      <!-- OTHER -->
+      <div class="doc-card" id="card-OTHER">
+        <div class="doc-header">
+          <div class="doc-icon" id="icon-OTHER">&#x1F4C2;</div>
+          <div><div class="doc-title">Additional documents</div><div class="doc-sub">Any other documents requested by your landlord &middot; Max 10MB</div></div>
+          <span class="doc-status status-pending" id="status-OTHER">Optional</span>
+        </div>
+        <div class="upload-zone" id="zone-OTHER">
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'OTHER')"/>
+          <div class="upload-zone-icon">&#x1F4CE;</div>
+          <div class="upload-zone-text">Click to upload or drag &amp; drop</div>
+          <div class="upload-zone-sub">PDF, JPG, PNG up to 10MB &middot; Optional</div>
+        </div>
+        <div class="progress-bar-bg" id="progress-bg-OTHER"><div class="progress-bar-fill" id="progress-OTHER" style="width:0%"></div></div>
+        <div id="file-info-OTHER"></div>
+        <div class="err-text" id="err-OTHER"></div>
+      </div>
+
     </div>
 
     <div id="submit-area">
@@ -173,7 +192,7 @@ const API = 'https://tenantiq-api-production.up.railway.app';
 const params = new URLSearchParams(window.location.search);
 const appId = params.get('id') || params.get('applicationId');
 
-const files = { PAYSTUB: null, GOVERNMENT_ID: null, BANK_STATEMENT: null };
+const files = { PAYSTUB: null, GOVERNMENT_ID: null, BANK_STATEMENT: null, OTHER: null };
 
 function fmt(bytes) {
   if (bytes < 1024*1024) return (bytes/1024).toFixed(0) + ' KB';
@@ -195,7 +214,7 @@ function handleFile(e, type) {
 }
 
 function checkReady() {
-  const allReady = Object.values(files).every(f => f !== null);
+  const allReady = files.PAYSTUB !== null && files.GOVERNMENT_ID !== null && files.BANK_STATEMENT !== null;
   document.getElementById('submit-btn').disabled = !allReady;
   if (allReady) document.getElementById('submit-btn').textContent = 'Upload all 3 documents';
 }
@@ -252,11 +271,11 @@ async function submitAll() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   
-  const types = ['PAYSTUB', 'GOVERNMENT_ID', 'BANK_STATEMENT'];
+  const types = ['PAYSTUB', 'GOVERNMENT_ID', 'BANK_STATEMENT', 'OTHER'];
   let lastResult = null;
 
   for (const type of types) {
-    if (!files[type]) continue;
+    if (!files[type]) continue; // Skip optional OTHER if not provided
     const err = document.getElementById('err-'+type);
     try {
       btn.textContent = 'Uploading ' + type.toLowerCase().replace('_', ' ') + '...';

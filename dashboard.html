@@ -695,11 +695,11 @@ function selectApplicant(i) {
   const docs = a.documents || [];
   let docsHTML = '';
   if (a.status === 'DOCS_RECEIVED' || a.status === 'FINALLY_APPROVED' || docs.length > 0) {
-    const docTypes = {PAYSTUB:'Pay stubs',GOVERNMENT_ID:'Photo ID',BANK_STATEMENT:'Bank statements'};
+    const docTypes = {PAYSTUB:'Pay stubs',GOVERNMENT_ID:'Photo ID',BANK_STATEMENT:'Bank statements',OTHER:'Additional documents'};
     const docItems = docs.map(doc => `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);">
         <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:1rem;">${doc.docType==='PAYSTUB'?'💰':doc.docType==='GOVERNMENT_ID'?'🪪':'🏦'}</span>
+          <span style="font-size:1rem;">${doc.docType==='PAYSTUB'?'💰':doc.docType==='GOVERNMENT_ID'?'🪪':doc.docType==='BANK_STATEMENT'?'🏦':'📂'}</span>
           <div>
             <div style="font-size:0.78rem;font-weight:500;color:var(--navy);">${docTypes[doc.docType]||doc.docType}</div>
             <div style="font-size:0.68rem;color:var(--text-light);">Uploaded ${fmtDate(doc.uploadedAt)}</div>
