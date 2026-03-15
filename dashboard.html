@@ -292,7 +292,7 @@ select.form-input{cursor:pointer;}
   <!-- Email verify banner -->
   <div id="verify-banner" style="display:none;background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
     <div style="font-size:0.8rem;color:#b07d2a;"><strong>Please verify your email</strong> &mdash; check your inbox for a link from info@fairrentalai.com</div>
-    <button onclick="document.getElementById('verifyModal').classList.add('open')" style="background:#b07d2a;color:white;border:none;border-radius:6px;padding:0.35rem 0.85rem;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Verify email</button>
+    <button onclick="document.getElementById('verifyModal').classList.add('open');resendVerifyEmail();" style="background:#b07d2a;color:white;border:none;border-radius:6px;padding:0.35rem 0.85rem;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Verify email</button>
   </div>
 
   <div class="view active" id="view-dashboard">
@@ -448,6 +448,35 @@ select.form-input{cursor:pointer;}
       <button class="modal-close" style="flex:1;margin-top:0;" onclick="document.getElementById('paymentModal').classList.remove('open')">Cancel</button>
     </div>
     <div style="text-align:center;font-size:0.7rem;color:var(--text-light);margin-top:0.75rem;">&#x1F512; Secure payment via Stripe</div>
+  </div>
+</div>
+
+
+<!-- FINAL APPROVAL MODAL -->
+<div class="modal-overlay" id="finalApprovalModal">
+  <div class="modal" style="width:520px;">
+    <div style="background:var(--navy);margin:-2rem -2rem 1.5rem;padding:1.5rem 2rem;border-radius:14px 14px 0 0;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;">Confirm final approval</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px;">Please read before proceeding</div>
+    </div>
+    <div id="final-approval-tenant-name" style="font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy);margin-bottom:1rem;"></div>
+    <div style="background:#eaf6f1;border:1px solid rgba(58,154,110,0.25);border-radius:10px;padding:1rem;margin-bottom:1rem;">
+      <div style="font-size:0.82rem;color:var(--green);font-weight:500;margin-bottom:0.4rem;">What happens when you give final approval:</div>
+      <ul style="font-size:0.8rem;color:var(--text-mid);line-height:1.8;padding-left:1.2rem;">
+        <li>Tenant receives a congratulations email</li>
+        <li>All other applicants are notified the listing is closed</li>
+        <li>The application link for this property is <strong>deactivated</strong></li>
+      </ul>
+    </div>
+    <div style="background:#fdf4e3;border:1px solid rgba(176,125,42,0.25);border-radius:10px;padding:1rem;margin-bottom:1rem;">
+      <div style="font-size:0.82rem;color:var(--amber);font-weight:500;margin-bottom:0.4rem;">Important — Document retention:</div>
+      <div style="font-size:0.8rem;color:var(--text-mid);line-height:1.65;">Uploaded documents will be <strong>permanently deleted in 30 days</strong>. Please download any documents you need to keep for your records before then.</div>
+    </div>
+    <div id="final-docs-download" style="margin-bottom:1rem;"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-gold" style="flex:1;justify-content:center;background:var(--green);color:white;" id="final-confirm-btn" onclick="doFinalApproval()">Yes, give final approval</button>
+      <button class="modal-close" style="flex:1;margin-top:0;" onclick="document.getElementById('finalApprovalModal').classList.remove('open')">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -748,7 +777,7 @@ function selectApplicant(i) {
     <div class="action-row"><button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button></div>`;
   } else if (a.status === 'DOCS_RECEIVED') {
     actionsHTML = `<div class="action-row">
-      <button class="btn-action btn-final" onclick="updateStatus('FINALLY_APPROVED')">Give final approval</button>
+      <button class="btn-action btn-final" onclick="showFinalApprovalModal()">Give final approval</button>
       <button class="btn-action btn-decline" onclick="updateStatus('DECLINED')">Decline</button>
     </div>`;
   } else if (a.status === 'FINALLY_APPROVED') {
@@ -978,6 +1007,47 @@ async function viewDocument(docId) {
     window.open(data.downloadUrl, '_blank');
   } catch(e) {
     alert('Error loading document: ' + e.message);
+  }
+}
+
+
+function showFinalApprovalModal() {
+  const a = currentApplicants[currentAppIdx];
+  if (!a) return;
+  document.getElementById('final-approval-tenant-name').textContent = 
+    'Give final approval to ' + a.firstName + ' ' + a.lastName + '?';
+  
+  // Show download buttons for their docs
+  const docs = a.documents || [];
+  if (docs.length > 0) {
+    const docTypes = {PAYSTUB:'Pay stubs',GOVERNMENT_ID:'Photo ID',BANK_STATEMENT:'Bank statements',OTHER:'Other docs'};
+    const btns = docs.map(doc => 
+      '<button onclick="viewDocument(\'' + doc.id + '\')" style="background:var(--navy);color:white;border:none;border-radius:6px;padding:0.4rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;margin:0 4px 4px 0;">' +
+      '&#x2B07; Download ' + (docTypes[doc.docType]||doc.docType) + '</button>'
+    ).join('');
+    document.getElementById('final-docs-download').innerHTML = 
+      '<div style="font-size:0.78rem;font-weight:500;color:var(--navy);margin-bottom:6px;">Download documents before approving:</div>' + btns;
+  } else {
+    document.getElementById('final-docs-download').innerHTML = '';
+  }
+  document.getElementById('finalApprovalModal').classList.add('open');
+}
+
+async function doFinalApproval() {
+  const btn = document.getElementById('final-confirm-btn');
+  btn.disabled = true; btn.textContent = 'Processing...';
+  try {
+    await updateStatus('FINALLY_APPROVED');
+    document.getElementById('finalApprovalModal').classList.remove('open');
+    
+    // Close the property application link
+    const prop = properties.find(p => p.id === currentPropId);
+    if (prop) {
+      await apiCall('PUT', '/api/properties/' + currentPropId, { status: 'CLOSED' });
+      await loadDashboard();
+    }
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Yes, give final approval';
   }
 }
 

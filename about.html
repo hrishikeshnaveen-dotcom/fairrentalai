@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FairRentalAI — About Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0e1e3a;--gold:#c9963a;--gold-light:#e8b55a;--cream:#faf7f2;--white:#fff;--border:rgba(14,30,58,0.1);--text-mid:#4a5568;--text-light:#8a9ab5;--green:#3a9a6e;--green-bg:#eaf6f1;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--navy);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 6%;background:rgba(14,30,58,0.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,150,58,0.2);}
+.logo{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+.logo span{color:var(--gold);}
+.nav-links{display:flex;gap:1.5rem;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.875rem;}
+.nav-links a:hover{color:white;}
+.nav-cta{background:var(--gold)!important;color:var(--navy)!important;padding:0.5rem 1.25rem;border-radius:6px;font-weight:500!important;}
+.hero{background:var(--navy);padding:8rem 6% 5rem;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 50%,rgba(201,150,58,0.08),transparent 60%);}
+.hero-content{max-width:640px;position:relative;z-index:2;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,150,58,0.15);border:1px solid rgba(201,150,58,0.3);color:var(--gold-light);font-size:0.75rem;padding:5px 14px;border-radius:100px;margin-bottom:1.5rem;letter-spacing:0.06em;text-transform:uppercase;}
+h1{font-family:"Playfair Display",serif;font-size:clamp(2.2rem,4vw,3.2rem);color:white;margin-bottom:1.25rem;line-height:1.15;}
+h1 em{color:var(--gold);font-style:normal;}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,0.6);line-height:1.75;max-width:520px;}
+.section{padding:5rem 6%;}
+.section-label{font-size:0.72rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.6rem;}
+.section-title{font-family:"Playfair Display",serif;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--navy);margin-bottom:1rem;line-height:1.2;}
+.section-sub{font-size:0.95rem;color:var(--text-mid);line-height:1.75;max-width:620px;}
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem;}
+.mission-card{background:white;border:1px solid var(--border);border-radius:14px;padding:2rem;}
+.mission-icon{font-size:1.6rem;margin-bottom:0.75rem;}
+.mission-title{font-family:"Playfair Display",serif;font-size:1.1rem;color:var(--navy);margin-bottom:0.5rem;}
+.mission-desc{font-size:0.875rem;color:var(--text-mid);line-height:1.7;}
+.tech-section{background:var(--navy);padding:5rem 6%;}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.25rem;margin-top:2.5rem;}
+.tech-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,150,58,0.18);border-radius:12px;padding:1.4rem;}
+.tech-logo{font-size:1.4rem;margin-bottom:0.6rem;}
+.tech-name{font-size:0.9rem;font-weight:500;color:white;margin-bottom:0.35rem;}
+.tech-desc{font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;}
+.values-section{padding:5rem 6%;background:white;}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem;}
+.value-card{text-align:center;padding:2rem 1.5rem;}
+.value-num{font-family:"Playfair Display",serif;font-size:3rem;font-weight:700;color:var(--gold);opacity:0.3;margin-bottom:0.5rem;}
+.value-title{font-size:1rem;font-weight:500;color:var(--navy);margin-bottom:0.5rem;}
+.value-desc{font-size:0.85rem;color:var(--text-mid);line-height:1.65;}
+.serving-section{padding:5rem 6%;text-align:center;}
+.flag-row{display:flex;gap:2rem;justify-content:center;margin-top:2rem;flex-wrap:wrap;}
+.flag-card{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--border);border-radius:12px;padding:1rem 1.75rem;}
+.flag-emoji{font-size:2rem;}
+.flag-title{font-size:0.9rem;font-weight:500;color:var(--navy);}
+.flag-sub{font-size:0.75rem;color:var(--text-light);}
+.cta-section{padding:5rem 6%;text-align:center;background:var(--cream);}
+.cta-box{max-width:600px;margin:0 auto;background:var(--navy);border-radius:22px;padding:3rem 2.5rem;}
+.cta-box h2{font-family:"Playfair Display",serif;font-size:1.8rem;color:white;margin-bottom:0.75rem;}
+.cta-box p{color:rgba(255,255,255,0.5);margin-bottom:1.75rem;line-height:1.7;font-size:0.9rem;}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-weight:500;font-size:0.9rem;padding:0.85rem 1.75rem;border-radius:8px;text-decoration:none;}
+.btn-gold:hover{background:var(--gold-light);}
+footer{background:var(--navy);padding:2rem 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(201,150,58,0.15);}
+.footer-logo{font-family:"Playfair Display",serif;font-size:1.1rem;color:white;text-decoration:none;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.footer-links a{color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;}
+.footer-links a:hover{color:rgba(255,255,255,0.7);}
+.footer-copy{color:rgba(255,255,255,0.22);font-size:0.72rem;}
+@media(max-width:768px){.mission-grid,.values-grid{grid-template-columns:1fr;}.nav-links a:not(.nav-cta){display:none;}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index.html">Fair<span>RentalAI</span></a>
+  <div class="nav-links">
+    <a href="/index.html">Home</a>
+    <a href="/index.html#pricing">Pricing</a>
+    <a href="/index.html#help">Help</a>
+    <a href="/login.html">Log in</a>
+    <a href="/login.html" class="nav-cta">Get started free</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">About FairRentalAI</div>
+    <h1>Rental screening that&#x2019;s<br/><em>fair by design.</em></h1>
+    <p>We built FairRentalAI because finding a tenant should be about fit &mdash; not gut feeling. Our platform uses AI to give every applicant a fair, objective evaluation based on what actually matters.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">Our mission</div>
+  <div class="section-title">Removing bias from<br/>rental decisions.</div>
+  <p class="section-sub">Traditional rental screening is inconsistent, time-consuming, and often unconsciously biased. We built FairRentalAI to fix that &mdash; giving landlords better data and tenants a fairer chance.</p>
+  <div class="mission-grid">
+    <div class="mission-card">
+      <div class="mission-icon">&#x2696;&#xFE0F;</div>
+      <div class="mission-title">Fairness first</div>
+      <div class="mission-desc">Every applicant is scored on the same objective criteria &mdash; income, employment, rental history, and household fit. We never consider name, photo, ethnicity, or any personal characteristic.</div>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">&#x1F4CA;</div>
+      <div class="mission-title">Data-driven decisions</div>
+      <div class="mission-desc">Landlords deserve better than gut instinct. Our AI synthesizes every data point and explains its reasoning, so you can make confident, defensible decisions.</div>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">&#x1F3E0;</div>
+      <div class="mission-title">Better outcomes for everyone</div>
+      <div class="mission-desc">When screening is fair and efficient, landlords find better-matched tenants and tenants get a genuine shot based on their actual qualifications.</div>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">&#x1F512;</div>
+      <div class="mission-title">Privacy &amp; security</div>
+      <div class="mission-desc">All documents are encrypted at rest and in transit. Tenant documents are automatically deleted within 30 days of lease signing. We never sell your data.</div>
+    </div>
+  </div>
+</section>
+
+<section class="tech-section">
+  <div style="position:relative;z-index:2;">
+    <div class="section-label" style="color:var(--gold);">Technology</div>
+    <div class="section-title" style="color:white;">Built on world-class<br/>infrastructure.</div>
+    <p class="section-sub" style="color:rgba(255,255,255,0.55);">FairRentalAI is powered by the same enterprise-grade technology used by the world&#x2019;s leading companies.</p>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-logo">&#x1F916;</div>
+        <div class="tech-name">Claude AI (Anthropic)</div>
+        <div class="tech-desc">Our AI scoring engine is powered by Anthropic&#x2019;s Claude &mdash; one of the most capable and safety-focused AI models in the world.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">&#x2601;&#xFE0F;</div>
+        <div class="tech-name">Cloudflare R2</div>
+        <div class="tech-desc">All tenant documents are stored in Cloudflare&#x2019;s encrypted, globally distributed object storage. Private by default, never publicly accessible.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">&#x1F4B3;</div>
+        <div class="tech-name">Stripe</div>
+        <div class="tech-desc">Payments are processed by Stripe &mdash; the same payment infrastructure used by Amazon, Google, and millions of businesses worldwide.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">&#x1F4E7;</div>
+        <div class="tech-name">SendGrid (Twilio)</div>
+        <div class="tech-desc">All transactional emails are sent via Twilio SendGrid, ensuring reliable, authenticated delivery to landlords and tenants.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">&#x1F5C4;&#xFE0F;</div>
+        <div class="tech-name">PostgreSQL</div>
+        <div class="tech-desc">Your data is stored in a secure, fully-managed PostgreSQL database with automatic backups and enterprise-grade reliability.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">&#x1F310;</div>
+        <div class="tech-name">Vercel &amp; Railway</div>
+        <div class="tech-desc">Our platform runs on Vercel&#x2019;s global edge network and Railway&#x2019;s managed infrastructure for maximum speed and reliability.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="values-section">
+  <div class="section-label">Our values</div>
+  <div class="section-title">What we stand for.</div>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-num">01</div>
+      <div class="value-title">Transparency</div>
+      <div class="value-desc">Every AI score comes with an explanation. We never make decisions in a black box &mdash; landlords always understand why an applicant was ranked where they were.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">02</div>
+      <div class="value-title">Privacy by default</div>
+      <div class="value-desc">Tenant data is never sold or shared. Documents are deleted automatically. We collect only what&#x2019;s needed to provide the service.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">03</div>
+      <div class="value-title">Accessible to all</div>
+      <div class="value-desc">Professional-grade screening shouldn&#x2019;t be limited to big property management companies. FairRentalAI is built for individual landlords too.</div>
+    </div>
+  </div>
+</section>
+
+<section class="serving-section">
+  <div class="section-label">Where we operate</div>
+  <div class="section-title">Proudly serving landlords<br/>across North America.</div>
+  <p class="section-sub" style="margin:0 auto 0;color:var(--text-mid);">FairRentalAI is built for landlords in Canada and the United States, with pricing in CAD and USD support coming soon.</p>
+  <div class="flag-row">
+    <div class="flag-card">
+      <div class="flag-emoji">&#x1F1E8;&#x1F1E6;</div>
+      <div><div class="flag-title">Canada</div><div class="flag-sub">Full service available &middot; CAD pricing</div></div>
+    </div>
+    <div class="flag-card">
+      <div class="flag-emoji">&#x1F1FA;&#x1F1F8;</div>
+      <div><div class="flag-title">United States</div><div class="flag-sub">Now available &middot; USD support coming soon</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>Start screening fairly.</h2>
+    <p>Join landlords across Canada and the US using FairRentalAI to find better tenants with zero bias. Free to start &mdash; no credit card required.</p>
+    <a href="/login.html" class="btn-gold">Create free account &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <a class="footer-logo" href="/index.html">Fair<span>RentalAI</span></a>
+  <div class="footer-links">
+    <a href="/index.html">Home</a>
+    <a href="/about.html">About</a>
+    <a href="/index.html#pricing">Pricing</a>
+    <a href="/index.html#help">Help</a>
+    <a href="mailto:info@fairrentalai.com" target="_blank">info@fairrentalai.com</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 FairRentalAI. All rights reserved.</div>
+</footer>
+</body>
+</html>
