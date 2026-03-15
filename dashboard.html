@@ -423,7 +423,7 @@ select.form-input{cursor:pointer;}
     </div>
     <div style="background:#fdf8f0;border:1px solid rgba(201,150,58,0.2);border-radius:10px;padding:1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;">
       <div style="font-size:0.85rem;color:var(--navy);">One additional property listing</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);">$5 CAD <span style="font-size:0.72rem;color:var(--text-light);font-family:'DM Sans',sans-serif;">one-time</span></div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);" id="price-display">$5.00 CAD <span style="font-size:0.72rem;color:var(--text-light);font-family:'DM Sans',sans-serif;">one-time</span></div>
     </div>
     <div class="error-banner" id="pay-error"></div>
     <div class="form-group"><label class="form-label">Property address *</label><input class="form-input" type="text" id="pay-address" placeholder="e.g. 45 Oak Ave, Unit 3, Calgary AB"/></div>
@@ -432,6 +432,14 @@ select.form-input{cursor:pointer;}
       <div class="form-group"><label class="form-label">Monthly rent ($) *</label><input class="form-input" type="number" id="pay-rent" placeholder="2200"/></div>
     </div>
     <div class="form-group"><label class="form-label">Available from (move-in date)</label><input class="form-input" type="date" id="pay-available"/></div>
+    <div class="form-group">
+      <label class="form-label">Your country</label>
+      <select class="form-input" id="pay-country" onchange="updatePriceDisplay()">
+        <option value="CA">Canada — $5.00 CAD</option>
+        <option value="US">United States — $5.00 USD</option>
+        <option value="OTHER">Other — $5.00 USD</option>
+      </select>
+    </div>
     <div class="form-group">
       <label class="form-label">Card details</label>
       <div id="saved-card-info" style="display:none;background:#f5f3ef;border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between;">
@@ -451,7 +459,7 @@ select.form-input{cursor:pointer;}
       <button class="btn-gold" style="flex:1;justify-content:center;" id="pay-btn" onclick="confirmPayment()">Pay $5 &amp; add property</button>
       <button class="modal-close" style="flex:1;margin-top:0;" onclick="document.getElementById('paymentModal').classList.remove('open')">Cancel</button>
     </div>
-    <div style="text-align:center;font-size:0.7rem;color:var(--text-light);margin-top:0.75rem;">&#x1F512; Secure payment via Stripe &middot; CAD &middot; All cards accepted</div>
+    <div style="text-align:center;font-size:0.7rem;color:var(--text-light);margin-top:0.75rem;">&#x1F512; Secure via Stripe &middot; CAD for Canada &middot; USD for USA &amp; worldwide</div>
   </div>
 </div>
 
@@ -1003,6 +1011,15 @@ function initStripe() {
   cardEl.on('change', e => { document.getElementById('card-errors').textContent = e.error ? e.error.message : ''; });
 }
 
+function updatePriceDisplay() {
+  const country = document.getElementById('pay-country')?.value || 'CA';
+  const display = document.getElementById('price-display');
+  if (display) {
+    const price = country === 'CA' ? '$5.00 CAD' : '$5.00 USD';
+    display.innerHTML = price + ' <span style="font-size:0.72rem;color:var(--text-light);font-family:\'DM Sans\',sans-serif;">one-time</span>';
+  }
+}
+
 async function confirmPayment() {
   // Check if we have a saved payment method
   const savedPM = localStorage.getItem('fra_saved_pm_last4');
@@ -1018,7 +1035,8 @@ async function confirmPayment() {
   const btn = document.getElementById('pay-btn');
   btn.disabled = true; btn.textContent = 'Processing...';
   try {
-    const piData = await apiCall('POST', '/api/properties/payment-intent', {});
+    const country = document.getElementById('pay-country')?.value || 'CA';
+    const piData = await apiCall('POST', '/api/properties/payment-intent', { country });
     const result = await stripeInst.confirmCardPayment(piData.clientSecret, { payment_method: { card: cardEl } });
     if (result.error) { err.textContent = result.error.message; err.classList.add('show'); btn.disabled = false; btn.textContent = 'Pay $5 & add property'; return; }
     // Save payment method info for display
