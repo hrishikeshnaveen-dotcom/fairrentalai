@@ -1099,24 +1099,32 @@ async function confirmAddProperty() {
 
 async function viewDocument(docId) {
   try {
-    // Use download endpoint which proxies through our backend (avoids R2 CORS)
-    const downloadUrl = API + `/api/documents/${docId}/download`;
-    const token = localStorage.getItem('fra_token');
-    
-    // Fetch as blob and open
-    const res = await fetch(downloadUrl, {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Download failed');
+    // Get a short-lived signed URL from backend
+    const data = await apiCall('GET', `/api/documents/${docId}/view`);
+    if (data.downloadUrl) {
+      // Open directly - works on mobile and desktop
+      window.open(data.downloadUrl, '_blank');
+    } else {
+      throw new Error('No download URL received');
     }
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
   } catch(e) {
-    alert('Error loading document: ' + e.message);
+    // Fallback: try download endpoint
+    try {
+      const token = localStorage.getItem('fra_token');
+      const res = await fetch(API + `/api/documents/${docId}/download`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (!res.ok) throw new Error('Download failed');
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    } catch(e2) {
+      alert('Error loading document: ' + e2.message);
+    }
   }
 }
 
