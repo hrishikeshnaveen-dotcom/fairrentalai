@@ -265,9 +265,10 @@ async function uploadFile(file, docType) {
       }
     };
     xhr.onload = () => { if (xhr.status === 200 || xhr.status === 204) resolve(); else reject(new Error('Upload failed: ' + xhr.status)); };
-    xhr.onerror = () => reject(new Error('Network error during upload'));
+    xhr.onerror = () => reject(new Error('Network error during upload. Please check your connection and try again.'));
+    xhr.onabort = () => reject(new Error('Upload was cancelled.'));
     xhr.open('PUT', uploadUrl);
-    xhr.setRequestHeader('Content-Type', file.type);
+    // Don't set Content-Type - let R2 use the pre-signed URL's content type
     xhr.send(file);
   });
 

@@ -691,6 +691,46 @@ function selectApplicant(i) {
   const strengths = (tags.strengths||[]).map(s=>`<span class="tag tag-green">${s}</span>`).join('');
   const concerns = (tags.concerns||[]).map(c=>`<span class="tag tag-red">${c}</span>`).join('');
 
+  // Build documents section
+  const docs = a.documents || [];
+  let docsHTML = '';
+  if (a.status === 'DOCS_RECEIVED' || a.status === 'FINALLY_APPROVED' || docs.length > 0) {
+    const docTypes = {PAYSTUB:'Pay stubs',GOVERNMENT_ID:'Photo ID',BANK_STATEMENT:'Bank statements'};
+    const docItems = docs.map(doc => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1rem;">${doc.docType==='PAYSTUB'?'💰':doc.docType==='GOVERNMENT_ID'?'🪪':'🏦'}</span>
+          <div>
+            <div style="font-size:0.78rem;font-weight:500;color:var(--navy);">${docTypes[doc.docType]||doc.docType}</div>
+            <div style="font-size:0.68rem;color:var(--text-light);">Uploaded ${fmtDate(doc.uploadedAt)}</div>
+          </div>
+        </div>
+        <button onclick="viewDocument('${doc.id}')" style="background:var(--navy);color:white;border:none;border-radius:6px;padding:0.35rem 0.75rem;font-size:0.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;">View</button>
+      </div>`).join('');
+    
+    const aiComingSoon = (a.status === 'DOCS_RECEIVED' || a.status === 'FINALLY_APPROVED') ? `
+      <div style="background:linear-gradient(135deg,#0e1e3a,#162d56);border-radius:8px;padding:0.85rem 1rem;margin-top:0.75rem;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.1rem;">🤖</span>
+        <div>
+          <div style="font-size:0.78rem;font-weight:500;color:white;">AI Document Analysis</div>
+          <div style="font-size:0.68rem;color:rgba(255,255,255,0.5);">Automatic verification of income, ID &amp; bank statements — <strong style="color:var(--gold-light);">coming soon</strong></div>
+        </div>
+        <span style="margin-left:auto;background:rgba(201,150,58,0.2);color:var(--gold-light);font-size:0.62rem;padding:2px 8px;border-radius:100px;white-space:nowrap;">Coming soon</span>
+      </div>` : '';
+
+    docsHTML = docs.length > 0 ? `
+      <div class="detail-section">
+        <div class="detail-section-title">Uploaded documents (${docs.length}/3)</div>
+        ${docItems}
+        ${aiComingSoon}
+      </div>` : `
+      <div class="detail-section">
+        <div class="detail-section-title">Documents</div>
+        <div style="font-size:0.78rem;color:var(--text-light);">No documents uploaded yet.</div>
+        ${aiComingSoon}
+      </div>`;
+  }
+
   let actionsHTML = '';
   if (a.status === 'PENDING') {
     actionsHTML = `<div class="action-row">
@@ -738,6 +778,7 @@ function selectApplicant(i) {
     </div>
     ${strengths||concerns?`<div class="detail-section"><div class="detail-section-title">Strengths & concerns</div><div>${strengths}${concerns}</div></div>`:''}
     ${a.notes?`<div class="detail-section"><div class="detail-section-title">Notes from applicant</div><div style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;">${a.notes}</div></div>`:''}
+    ${docsHTML}
     ${actionsHTML}`;
 
   renderApplicants();
@@ -929,6 +970,15 @@ async function confirmAddProperty() {
   } catch(e) {
     err.textContent = e.message; err.classList.add('show');
   } finally { btn.disabled = false; btn.textContent = 'Create & get link'; }
+}
+
+async function viewDocument(docId) {
+  try {
+    const data = await apiCall('GET', `/api/documents/${docId}/view`);
+    window.open(data.downloadUrl, '_blank');
+  } catch(e) {
+    alert('Error loading document: ' + e.message);
+  }
 }
 
 function showShareLink() {
