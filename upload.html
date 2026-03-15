@@ -8,28 +8,27 @@
 <style>
 :root{--navy:#0e1e3a;--gold:#c9963a;--gold-light:#e8b55a;--cream:#faf7f2;--white:#fff;--border:rgba(14,30,58,0.12);--green:#3a9a6e;--green-bg:#eaf6f1;--red:#c0392b;--red-bg:#fdf0ee;--text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);min-height:100vh;}
 nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Playfair Display',serif;font-size:1.25rem;color:white;font-weight:700;}
+.logo{font-family:"Playfair Display",serif;font-size:1.25rem;color:white;font-weight:700;}
 .logo span{color:var(--gold);}
-.secure{font-size:0.75rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px;}
+.secure{font-size:0.75rem;color:rgba(255,255,255,0.4);}
 .hero{background:var(--navy);padding:2.5rem 5% 3rem;position:relative;}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:var(--cream);border-radius:40px 40px 0 0;}
+.hero::after{content:"";position:absolute;bottom:0;left:0;right:0;height:40px;background:var(--cream);border-radius:40px 40px 0 0;}
 .hero-inner{max-width:640px;margin:0 auto;position:relative;z-index:2;}
 .hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(201,150,58,0.15);border:1px solid rgba(201,150,58,0.3);color:var(--gold-light);font-size:0.75rem;padding:4px 12px;border-radius:100px;margin-bottom:1rem;}
-.hero h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:white;margin-bottom:0.6rem;}
+h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bottom:0.6rem;}
 .hero p{font-size:0.9rem;color:rgba(255,255,255,0.55);line-height:1.7;}
 .main{max-width:640px;margin:0 auto;padding:2rem 1.5rem 4rem;}
 .info-card{background:white;border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;}
-.info-row{display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;padding:0.35rem 0;border-bottom:1px solid #f5f2ee;}
+.info-row{display:flex;justify-content:space-between;font-size:0.82rem;padding:0.35rem 0;border-bottom:1px solid #f5f2ee;}
 .info-row:last-child{border-bottom:none;}
 .info-label{color:var(--text-light);}
 .info-value{font-weight:500;color:var(--navy);}
 .doc-card{background:white;border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1rem;transition:border-color 0.2s;}
-.doc-card.uploading{border-color:var(--gold);}
 .doc-card.done{border-color:var(--green);background:#fafffe;}
 .doc-header{display:flex;align-items:center;gap:12px;margin-bottom:0.75rem;}
-.doc-icon{width:40px;height:40px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.doc-icon{width:40px;height:40px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:background 0.2s;}
 .doc-icon.done{background:var(--green-bg);}
 .doc-title{font-size:0.9rem;font-weight:500;color:var(--navy);}
 .doc-sub{font-size:0.75rem;color:var(--text-light);margin-top:2px;}
@@ -38,42 +37,37 @@ nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justi
 .status-uploading{background:rgba(201,150,58,0.15);color:var(--gold);}
 .status-done{background:var(--green-bg);color:var(--green);}
 .status-error{background:var(--red-bg);color:var(--red);}
-.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--gold);background:#fdf8f0;}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.upload-zone:hover{border-color:var(--gold);background:#fdf8f0;}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .upload-zone-icon{font-size:1.5rem;margin-bottom:0.5rem;}
 .upload-zone-text{font-size:0.82rem;color:var(--text-mid);}
 .upload-zone-sub{font-size:0.72rem;color:var(--text-light);margin-top:4px;}
-.progress-bar-bg{height:6px;background:#f0ede8;border-radius:3px;overflow:hidden;margin-top:0.75rem;}
-.progress-bar-fill{height:6px;background:var(--gold);border-radius:3px;transition:width 0.3s ease;}
+.progress-bar-bg{height:6px;background:#f0ede8;border-radius:3px;overflow:hidden;margin-top:0.75rem;display:none;}
+.progress-bar-fill{height:6px;background:var(--gold);border-radius:3px;transition:width 0.3s;}
 .file-info{display:flex;align-items:center;gap:10px;background:#f5f3ef;border-radius:8px;padding:0.6rem 0.85rem;margin-top:0.75rem;}
-.file-info-name{font-size:0.78rem;color:var(--navy);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.file-info-size{font-size:0.72rem;color:var(--text-light);}
+.file-name{font-size:0.78rem;color:var(--navy);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.file-size{font-size:0.72rem;color:var(--text-light);}
 .err-text{font-size:0.75rem;color:var(--red);margin-top:6px;}
-.submit-section{margin-top:2rem;}
-.btn-submit{width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:12px;padding:0.9rem;font-size:1rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s,transform 0.15s;}
-.btn-submit:hover:not(:disabled){background:var(--gold-light);transform:translateY(-1px);}
+.btn-submit{width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:12px;padding:0.9rem;font-size:1rem;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:background 0.2s;margin-top:1.5rem;}
+.btn-submit:hover:not(:disabled){background:var(--gold-light);}
 .btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
 .submit-note{text-align:center;font-size:0.75rem;color:var(--text-light);margin-top:0.75rem;}
 .success-wrap{text-align:center;padding:3rem 1rem;}
 .success-icon{width:80px;height:80px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2rem;animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1);}
 @keyframes pop{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
-.success-title{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--navy);margin-bottom:0.75rem;}
+.success-title{font-family:"Playfair Display",serif;font-size:1.8rem;color:var(--navy);margin-bottom:0.75rem;}
 .success-sub{font-size:0.9rem;color:var(--text-mid);line-height:1.7;max-width:420px;margin:0 auto;}
 .loading-wrap{text-align:center;padding:4rem;color:var(--text-light);}
 .spinner{width:24px;height:24px;border:2px solid #e0ddd8;border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 1rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.not-found{text-align:center;padding:4rem 2rem;}
-.not-found-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:1rem;}
-
-/* Mobile */
-@media(max-width:600px){.hero{padding:2rem 4% 3rem;}.main{padding:1.5rem 1rem 3rem;}.doc-card{padding:1.1rem;}}
+@media(max-width:600px){.hero{padding:2rem 4% 3rem;}.main{padding:1.5rem 1rem 3rem;}}
 </style>
 </head>
 <body>
 <nav>
   <div class="logo">Fair<span>RentalAI</span></div>
-  <div class="secure">🔒 Secure upload</div>
+  <div class="secure">&#x1F512; Secure upload</div>
 </nav>
 
 <div id="loading-state">
@@ -82,11 +76,9 @@ nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justi
 </div>
 
 <div id="not-found-state" style="display:none;">
-  <div class="main" style="padding-top:3rem;">
-    <div class="not-found">
-      <div class="not-found-title">Link not found</div>
-      <p style="color:var(--text-mid);font-size:0.9rem;">This upload link is invalid or has expired.<br/><br/><a href="/index.html" style="color:var(--gold);">Return to FairRentalAI.com</a></p>
-    </div>
+  <div class="main" style="padding-top:3rem;text-align:center;">
+    <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:1rem;">Link not found</div>
+    <p style="color:var(--text-mid);font-size:0.9rem;">This upload link is invalid or has expired.<br/><br/><a href="/index.html" style="color:var(--gold);">Return to FairRentalAI.com</a></p>
   </div>
 </div>
 
@@ -95,32 +87,31 @@ nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justi
     <div class="hero-inner">
       <div class="hero-badge">Document upload</div>
       <h1>Upload your documents</h1>
-      <p>Please upload the following documents to complete your application. All files are encrypted and securely stored.</p>
+      <p>Please upload all 3 documents to complete your application. Files are encrypted and only accessible to your landlord.</p>
     </div>
   </div>
-
   <div class="main">
-    <div class="info-card" id="app-info">
-      <div class="info-row"><span class="info-label">Applicant</span><span class="info-value" id="info-name">—</span></div>
-      <div class="info-row"><span class="info-label">Property</span><span class="info-value" id="info-property">—</span></div>
-      <div class="info-row"><span class="info-label">Status</span><span class="info-value" id="info-status">—</span></div>
+    <div class="info-card">
+      <div class="info-row"><span class="info-label">Status</span><span class="info-value" style="color:var(--green);">Initially approved &#x2713;</span></div>
+      <div class="info-row"><span class="info-label">Required documents</span><span class="info-value">3 of 3</span></div>
+      <div class="info-row"><span class="info-label">Deadline</span><span class="info-value">Within 5 days</span></div>
     </div>
 
     <div id="docs-area">
       <!-- PAYSTUB -->
       <div class="doc-card" id="card-PAYSTUB">
         <div class="doc-header">
-          <div class="doc-icon" id="icon-PAYSTUB">💰</div>
-          <div><div class="doc-title">Pay stubs / pay slips</div><div class="doc-sub">Last 2 months · PDF, JPG, or PNG · Max 10MB</div></div>
+          <div class="doc-icon" id="icon-PAYSTUB">&#x1F4B0;</div>
+          <div><div class="doc-title">Pay stubs / pay slips</div><div class="doc-sub">Last 2 months &middot; PDF, JPG, or PNG &middot; Max 10MB</div></div>
           <span class="doc-status status-pending" id="status-PAYSTUB">Pending</span>
         </div>
-        <div class="upload-zone" id="zone-PAYSTUB" ondragover="e=>e.preventDefault()" ondrop="handleDrop(event,'PAYSTUB')">
-          <input type="file" id="file-PAYSTUB" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'PAYSTUB')"/>
-          <div class="upload-zone-icon">📎</div>
-          <div class="upload-zone-text">Click to upload or drag & drop</div>
+        <div class="upload-zone" id="zone-PAYSTUB">
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'PAYSTUB')"/>
+          <div class="upload-zone-icon">&#x1F4CE;</div>
+          <div class="upload-zone-text">Click to upload or drag &amp; drop</div>
           <div class="upload-zone-sub">PDF, JPG, PNG up to 10MB</div>
         </div>
-        <div class="progress-bar-bg" style="display:none;" id="progress-bg-PAYSTUB"><div class="progress-bar-fill" id="progress-PAYSTUB" style="width:0%"></div></div>
+        <div class="progress-bar-bg" id="progress-bg-PAYSTUB"><div class="progress-bar-fill" id="progress-PAYSTUB" style="width:0%"></div></div>
         <div id="file-info-PAYSTUB"></div>
         <div class="err-text" id="err-PAYSTUB"></div>
       </div>
@@ -128,17 +119,17 @@ nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justi
       <!-- GOVERNMENT_ID -->
       <div class="doc-card" id="card-GOVERNMENT_ID">
         <div class="doc-header">
-          <div class="doc-icon" id="icon-GOVERNMENT_ID">🪪</div>
-          <div><div class="doc-title">Government-issued photo ID</div><div class="doc-sub">Driver's licence, passport, or provincial ID · Max 10MB</div></div>
+          <div class="doc-icon" id="icon-GOVERNMENT_ID">&#x1FAA6;</div>
+          <div><div class="doc-title">Government-issued photo ID</div><div class="doc-sub">Driver&#x27;s licence, passport, or provincial ID &middot; Max 10MB</div></div>
           <span class="doc-status status-pending" id="status-GOVERNMENT_ID">Pending</span>
         </div>
-        <div class="upload-zone" id="zone-GOVERNMENT_ID" ondragover="e=>e.preventDefault()" ondrop="handleDrop(event,'GOVERNMENT_ID')">
-          <input type="file" id="file-GOVERNMENT_ID" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'GOVERNMENT_ID')"/>
-          <div class="upload-zone-icon">📎</div>
-          <div class="upload-zone-text">Click to upload or drag & drop</div>
+        <div class="upload-zone" id="zone-GOVERNMENT_ID">
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'GOVERNMENT_ID')"/>
+          <div class="upload-zone-icon">&#x1F4CE;</div>
+          <div class="upload-zone-text">Click to upload or drag &amp; drop</div>
           <div class="upload-zone-sub">PDF, JPG, PNG up to 10MB</div>
         </div>
-        <div class="progress-bar-bg" style="display:none;" id="progress-bg-GOVERNMENT_ID"><div class="progress-bar-fill" id="progress-GOVERNMENT_ID" style="width:0%"></div></div>
+        <div class="progress-bar-bg" id="progress-bg-GOVERNMENT_ID"><div class="progress-bar-fill" id="progress-GOVERNMENT_ID" style="width:0%"></div></div>
         <div id="file-info-GOVERNMENT_ID"></div>
         <div class="err-text" id="err-GOVERNMENT_ID"></div>
       </div>
@@ -146,32 +137,32 @@ nav{background:var(--navy);padding:1rem 5%;display:flex;align-items:center;justi
       <!-- BANK_STATEMENT -->
       <div class="doc-card" id="card-BANK_STATEMENT">
         <div class="doc-header">
-          <div class="doc-icon" id="icon-BANK_STATEMENT">🏦</div>
-          <div><div class="doc-title">Bank statements</div><div class="doc-sub">Last 3 months · PDF, JPG, or PNG · Max 10MB</div></div>
+          <div class="doc-icon" id="icon-BANK_STATEMENT">&#x1F3E6;</div>
+          <div><div class="doc-title">Bank statements</div><div class="doc-sub">Last 3 months &middot; PDF, JPG, or PNG &middot; Max 10MB</div></div>
           <span class="doc-status status-pending" id="status-BANK_STATEMENT">Pending</span>
         </div>
-        <div class="upload-zone" id="zone-BANK_STATEMENT" ondragover="e=>e.preventDefault()" ondrop="handleDrop(event,'BANK_STATEMENT')">
-          <input type="file" id="file-BANK_STATEMENT" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'BANK_STATEMENT')"/>
-          <div class="upload-zone-icon">📎</div>
-          <div class="upload-zone-text">Click to upload or drag & drop</div>
+        <div class="upload-zone" id="zone-BANK_STATEMENT">
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'BANK_STATEMENT')"/>
+          <div class="upload-zone-icon">&#x1F4CE;</div>
+          <div class="upload-zone-text">Click to upload or drag &amp; drop</div>
           <div class="upload-zone-sub">PDF, JPG, PNG up to 10MB</div>
         </div>
-        <div class="progress-bar-bg" style="display:none;" id="progress-bg-BANK_STATEMENT"><div class="progress-bar-fill" id="progress-BANK_STATEMENT" style="width:0%"></div></div>
+        <div class="progress-bar-bg" id="progress-bg-BANK_STATEMENT"><div class="progress-bar-fill" id="progress-BANK_STATEMENT" style="width:0%"></div></div>
         <div id="file-info-BANK_STATEMENT"></div>
         <div class="err-text" id="err-BANK_STATEMENT"></div>
       </div>
     </div>
 
-    <div class="submit-section" id="submit-section">
-      <button class="btn-submit" id="submit-btn" onclick="submitAll()" disabled>Upload all documents</button>
-      <div class="submit-note">All 3 documents must be uploaded to submit. Your landlord will be notified automatically.</div>
+    <div id="submit-area">
+      <button class="btn-submit" id="submit-btn" onclick="submitAll()" disabled>Upload all 3 documents</button>
+      <div class="submit-note">All 3 documents must be selected before uploading. Your landlord will be notified automatically.</div>
     </div>
 
     <div id="success-state" style="display:none;">
       <div class="success-wrap">
-        <div class="success-icon">✓</div>
+        <div class="success-icon">&#x2713;</div>
         <div class="success-title">Documents submitted!</div>
-        <div class="success-sub">All your documents have been received. Your landlord has been notified and will review them shortly. You'll receive an email with the final decision.</div>
+        <div class="success-sub">All your documents have been received. Your landlord has been notified and will review them shortly. You will receive an email with the final decision.</div>
       </div>
     </div>
   </div>
@@ -182,152 +173,124 @@ const API = 'https://tenantiq-api-production.up.railway.app';
 const params = new URLSearchParams(window.location.search);
 const appId = params.get('id') || params.get('applicationId');
 
-const uploads = { PAYSTUB: null, GOVERNMENT_ID: null, BANK_STATEMENT: null };
-const uploaded = { PAYSTUB: false, GOVERNMENT_ID: false, BANK_STATEMENT: false };
+const files = { PAYSTUB: null, GOVERNMENT_ID: null, BANK_STATEMENT: null };
 
-async function loadApp() {
-  if (!appId) { showNotFound(); return; }
-  try {
-    // Show the form — we don't need to pre-load app info for upload
-    document.getElementById('loading-state').style.display = 'none';
-    document.getElementById('app-state').style.display = 'block';
-    document.getElementById('info-name').textContent = 'Your application';
-    document.getElementById('info-property').textContent = 'Rental property';
-    document.getElementById('info-status').textContent = 'Initially approved — awaiting documents';
-  } catch(e) { showNotFound(); }
-}
-
-function showNotFound() {
-  document.getElementById('loading-state').style.display = 'none';
-  document.getElementById('not-found-state').style.display = 'block';
-}
-
-function formatSize(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+function fmt(bytes) {
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(0) + ' KB';
   return (bytes/1024/1024).toFixed(1) + ' MB';
 }
 
-function handleDrop(e, docType) {
-  e.preventDefault();
-  const file = e.dataTransfer?.files?.[0];
-  if (file) processFile(file, docType);
-}
-
-function handleFile(e, docType) {
-  const file = e.target.files?.[0];
-  if (file) processFile(file, docType);
-}
-
-function processFile(file, docType) {
-  const err = document.getElementById('err-'+docType);
+function handleFile(e, type) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const err = document.getElementById('err-'+type);
   err.textContent = '';
-  if (file.size > 10*1024*1024) { err.textContent = 'File too large. Maximum 10MB.'; return; }
-  const allowed = ['application/pdf','image/jpeg','image/png'];
-  if (!allowed.includes(file.type) && !file.name.match(/\.(pdf|jpg|jpeg|png)$/i)) {
-    err.textContent = 'Only PDF, JPG, or PNG files are allowed.'; return;
-  }
-  uploads[docType] = file;
-  document.getElementById('file-info-'+docType).innerHTML = `<div class="file-info"><span style="font-size:1rem;">📄</span><span class="file-info-name">${file.name}</span><span class="file-info-size">${formatSize(file.size)}</span></div>`;
-  document.getElementById('status-'+docType).textContent = 'Ready';
-  document.getElementById('status-'+docType).className = 'doc-status status-uploading';
-  checkAllReady();
+  if (file.size > 10*1024*1024) { err.textContent = 'File too large. Max 10MB.'; return; }
+  files[type] = file;
+  document.getElementById('file-info-'+type).innerHTML =
+    '<div class="file-info"><span>&#x1F4C4;</span><span class="file-name">'+file.name+'</span><span class="file-size">'+fmt(file.size)+'</span></div>';
+  document.getElementById('status-'+type).textContent = 'Ready';
+  document.getElementById('status-'+type).className = 'doc-status status-uploading';
+  checkReady();
 }
 
-function checkAllReady() {
-  const allReady = Object.values(uploads).every(f => f !== null);
+function checkReady() {
+  const allReady = Object.values(files).every(f => f !== null);
   document.getElementById('submit-btn').disabled = !allReady;
+  if (allReady) document.getElementById('submit-btn').textContent = 'Upload all 3 documents';
 }
 
-async function uploadFile(file, docType) {
-  // Get pre-signed URL
+async function uploadOne(file, type) {
+  // Step 1: Get pre-signed URL from our backend
   const res = await fetch(API + '/api/documents/upload-url', {
     method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ applicationId: appId, docType, fileName: file.name, fileSize: file.size })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ applicationId: appId, docType: type, fileName: file.name, fileSize: file.size })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Failed to get upload URL');
 
-  const { uploadUrl, s3Key } = data;
-
-  // Show progress
-  document.getElementById('progress-bg-'+docType).style.display = 'block';
-  document.getElementById('card-'+docType).classList.add('uploading');
-
-  // Upload directly to S3/R2
-  const xhr = new XMLHttpRequest();
-  await new Promise((resolve, reject) => {
-    xhr.upload.onprogress = e => {
-      if (e.lengthComputable) {
-        const pct = Math.round((e.loaded/e.total)*100);
-        document.getElementById('progress-'+docType).style.width = pct + '%';
-      }
-    };
-    xhr.onload = () => { if (xhr.status === 200 || xhr.status === 204) resolve(); else reject(new Error('Upload failed: ' + xhr.status)); };
-    xhr.onerror = () => reject(new Error('Network error during upload. Please check your connection and try again.'));
-    xhr.onabort = () => reject(new Error('Upload was cancelled.'));
-    xhr.open('PUT', uploadUrl);
-    // Don't set Content-Type - let R2 use the pre-signed URL's content type
-    xhr.send(file);
+  // Step 2: Upload directly to R2 using fetch (more reliable than XHR for CORS)
+  document.getElementById('progress-bg-'+type).style.display = 'block';
+  
+  const uploadRes = await fetch(data.uploadUrl, {
+    method: 'PUT',
+    body: file,
+    headers: { 'Content-Type': file.type || 'application/octet-stream' }
   });
+  
+  if (!uploadRes.ok && uploadRes.status !== 0) {
+    // R2 might return 200 or 204
+    if (uploadRes.status !== 200 && uploadRes.status !== 204) {
+      throw new Error('Upload failed with status ' + uploadRes.status);
+    }
+  }
 
-  // Confirm upload
+  document.getElementById('progress-'+type).style.width = '100%';
+
+  // Step 3: Confirm with our backend
   const confirmRes = await fetch(API + '/api/documents/confirm', {
     method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ applicationId: appId, docType, fileName: file.name, s3Key, fileSizeBytes: file.size })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ applicationId: appId, docType: type, fileName: file.name, s3Key: data.s3Key, fileSizeBytes: file.size })
   });
   const confirmData = await confirmRes.json();
   if (!confirmRes.ok) throw new Error(confirmData.error || 'Failed to confirm upload');
 
   // Mark as done
-  document.getElementById('card-'+docType).classList.remove('uploading');
-  document.getElementById('card-'+docType).classList.add('done');
-  document.getElementById('icon-'+docType).classList.add('done');
-  document.getElementById('icon-'+docType).textContent = '✓';
-  document.getElementById('status-'+docType).textContent = 'Uploaded';
-  document.getElementById('status-'+docType).className = 'doc-status status-done';
-  document.getElementById('progress-'+docType).style.width = '100%';
-  uploaded[docType] = true;
+  document.getElementById('card-'+type).classList.add('done');
+  document.getElementById('icon-'+type).classList.add('done');
+  document.getElementById('icon-'+type).textContent = '\u2713';
+  document.getElementById('status-'+type).textContent = 'Uploaded';
+  document.getElementById('status-'+type).className = 'doc-status status-done';
 
   return confirmData;
 }
 
 async function submitAll() {
+  if (!appId) { alert('Invalid application link. Please use the link from your email.'); return; }
   const btn = document.getElementById('submit-btn');
-  btn.disabled = true; btn.textContent = 'Uploading...';
-
-  const docTypes = ['PAYSTUB','GOVERNMENT_ID','BANK_STATEMENT'];
+  btn.disabled = true;
+  
+  const types = ['PAYSTUB', 'GOVERNMENT_ID', 'BANK_STATEMENT'];
   let lastResult = null;
 
-  for (const docType of docTypes) {
-    if (!uploads[docType]) continue;
-    const err = document.getElementById('err-'+docType);
+  for (const type of types) {
+    if (!files[type]) continue;
+    const err = document.getElementById('err-'+type);
     try {
-      btn.textContent = `Uploading ${docType.toLowerCase().replace('_',' ')}...`;
-      lastResult = await uploadFile(uploads[docType], docType);
+      btn.textContent = 'Uploading ' + type.toLowerCase().replace('_', ' ') + '...';
+      lastResult = await uploadOne(files[type], type);
       err.textContent = '';
     } catch(e) {
-      err.textContent = 'Upload failed: ' + e.message;
-      document.getElementById('status-'+docType).textContent = 'Error';
-      document.getElementById('status-'+docType).className = 'doc-status status-error';
-      btn.disabled = false; btn.textContent = 'Retry upload';
+      err.textContent = 'Error: ' + e.message;
+      document.getElementById('status-'+type).textContent = 'Failed';
+      document.getElementById('status-'+type).className = 'doc-status status-error';
+      btn.disabled = false;
+      btn.textContent = 'Retry upload';
+      console.error('Upload error:', e);
       return;
     }
   }
 
-  // All done
-  if (lastResult?.allUploaded) {
+  if (lastResult && lastResult.allUploaded) {
     document.getElementById('docs-area').style.display = 'none';
-    document.getElementById('submit-section').style.display = 'none';
+    document.getElementById('submit-area').style.display = 'none';
     document.getElementById('success-state').style.display = 'block';
   } else {
-    btn.disabled = false; btn.textContent = 'Upload all documents';
+    btn.disabled = false;
+    btn.textContent = 'Upload all 3 documents';
   }
 }
 
-loadApp();
+// Load page
+if (!appId) {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('not-found-state').style.display = 'block';
+} else {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('app-state').style.display = 'block';
+}
 </script>
 </body>
 </html>
