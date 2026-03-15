@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FairRentalAI — How It Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0e1e3a;--gold:#c9963a;--gold-light:#e8b55a;--cream:#faf7f2;--white:#fff;--border:rgba(14,30,58,0.1);--text-mid:#4a5568;--text-light:#8a9ab5;--green:#3a9a6e;--green-bg:#eaf6f1;--blue:#1a6bbd;--blue-bg:#e8f0fb;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--navy);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 6%;background:rgba(14,30,58,0.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,150,58,0.2);}
+.logo{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+.logo span{color:var(--gold);}
+.nav-links{display:flex;gap:1.5rem;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.875rem;}
+.nav-links a:hover{color:white;}
+.nav-cta{background:var(--gold)!important;color:var(--navy)!important;padding:0.5rem 1.25rem;border-radius:6px;font-weight:500!important;}
+.hero{background:var(--navy);padding:8rem 6% 5rem;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 50%,rgba(201,150,58,0.08),transparent 60%);}
+.hero-content{max-width:640px;position:relative;z-index:2;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,150,58,0.15);border:1px solid rgba(201,150,58,0.3);color:var(--gold-light);font-size:0.75rem;padding:5px 14px;border-radius:100px;margin-bottom:1.5rem;letter-spacing:0.06em;text-transform:uppercase;}
+h1{font-family:"Playfair Display",serif;font-size:clamp(2.2rem,4vw,3rem);color:white;margin-bottom:1.25rem;line-height:1.15;}
+h1 em{color:var(--gold);font-style:normal;}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,0.6);line-height:1.75;max-width:500px;margin-bottom:2rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-weight:500;font-size:0.9rem;padding:0.85rem 1.75rem;border-radius:8px;text-decoration:none;}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:rgba(255,255,255,0.75);font-size:0.9rem;padding:0.85rem 1.75rem;border-radius:8px;text-decoration:none;border:1px solid rgba(255,255,255,0.2);}
+.main{max-width:900px;margin:0 auto;padding:4rem 2rem 6rem;}
+.progress-bar{display:flex;gap:0;margin-bottom:3rem;position:relative;}
+.progress-bar::before{content:"";position:absolute;top:16px;left:0;right:0;height:2px;background:var(--border);z-index:0;}
+.pb-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1;cursor:pointer;}
+.pb-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:500;transition:all 0.3s;border:2px solid var(--border);background:var(--cream);}
+.pb-dot.active{background:var(--navy);color:white;border-color:var(--navy);}
+.pb-dot.done{background:var(--green);color:white;border-color:var(--green);}
+.pb-label{font-size:0.68rem;color:var(--text-light);text-align:center;transition:color 0.3s;}
+.pb-step.active .pb-label{color:var(--navy);font-weight:500;}
+.pb-step.done .pb-label{color:var(--green);}
+.step-card{display:none;animation:fadeIn 0.4s ease;}
+.step-card.active{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.step-num{font-family:"Playfair Display",serif;font-size:3.5rem;font-weight:700;color:rgba(14,30,58,0.08);line-height:1;margin-bottom:0.5rem;}
+.step-title{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem;}
+.step-desc{font-size:0.95rem;color:var(--text-mid);line-height:1.75;margin-bottom:1.5rem;}
+.step-tips{display:flex;flex-direction:column;gap:0.6rem;}
+.tip{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-mid);line-height:1.6;}
+.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:6px;}
+.mockup-card{background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:sticky;top:100px;}
+.mock-header{font-size:0.68rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:1rem;}
+.mock-field{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;color:var(--text-mid);margin-bottom:6px;}
+.mock-btn{display:inline-block;padding:0.6rem 1.25rem;border-radius:8px;font-size:0.82rem;font-weight:500;margin-top:4px;}
+.mock-btn-navy{background:var(--navy);color:white;}
+.mock-btn-gold{background:var(--gold);color:var(--navy);}
+.mock-btn-green{background:var(--green);color:white;}
+.mock-btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-mid);}
+.mock-link{background:#f5f3ef;border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.75rem;color:var(--blue);font-family:monospace;word-break:break-all;margin-bottom:8px;}
+.mock-app-row{display:flex;align-items:center;gap:10px;padding:0.6rem 0.75rem;border-radius:8px;margin-bottom:5px;}
+.mock-app-row.top{background:#eaf6f1;border:1px solid rgba(58,154,110,0.2);}
+.mock-app-row.mid{background:#f5f3ef;}
+.mock-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:500;flex-shrink:0;}
+.av-green{background:rgba(58,154,110,0.2);color:var(--green);}
+.av-blue{background:rgba(26,107,189,0.15);color:var(--blue);}
+.mock-score{margin-left:auto;font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:700;}
+.mock-doc-row{display:flex;align-items:center;gap:8px;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;color:var(--text-mid);}
+.mock-doc-row:last-child{border-bottom:none;}
+.badge{display:inline-block;font-size:0.65rem;font-weight:500;padding:2px 7px;border-radius:4px;margin-left:auto;}
+.badge-green{background:var(--green-bg);color:var(--green);}
+.badge-amber{background:#fdf4e3;color:#b07d2a;}
+.nav-controls{display:flex;gap:1rem;align-items:center;margin-top:3rem;}
+.nav-controls button{font-family:"DM Sans",sans-serif;font-size:0.9rem;padding:0.7rem 1.5rem;border-radius:8px;cursor:pointer;transition:all 0.2s;}
+.btn-prev{background:transparent;border:1px solid var(--border);color:var(--text-mid);}
+.btn-prev:hover{border-color:var(--navy);color:var(--navy);}
+.btn-prev:disabled{opacity:0.3;cursor:not-allowed;}
+.btn-next{background:var(--navy);color:white;border:none;}
+.btn-next:hover{background:#162d56;}
+.step-counter{margin-left:auto;font-size:0.82rem;color:var(--text-light);}
+footer{background:var(--navy);padding:2rem 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(201,150,58,0.15);}
+.footer-logo{font-family:"Playfair Display",serif;font-size:1.1rem;color:white;text-decoration:none;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.footer-links a{color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;}
+.footer-links a:hover{color:rgba(255,255,255,0.7);}
+.footer-copy{color:rgba(255,255,255,0.22);font-size:0.72rem;}
+@media(max-width:768px){.step-card.active{grid-template-columns:1fr;}.nav-links a:not(.nav-cta){display:none;}.progress-bar .pb-label{display:none;}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index.html">Fair<span>RentalAI</span></a>
+  <div class="nav-links">
+    <a href="/index.html#pricing">Pricing</a>
+    <a href="/about.html">About</a>
+    <a href="/index.html#help">Help</a>
+    <a href="/login.html">Log in</a>
+    <a href="/login.html" class="nav-cta">Get started free</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Step-by-step guide</div>
+    <h1>How FairRentalAI<br/><em>works.</em></h1>
+    <p>From creating your first listing to giving final approval — the whole process takes about 10 minutes. Here is exactly how it works.</p>
+    <div class="hero-btns">
+      <a href="/login.html" class="btn-gold">Start for free &rarr;</a>
+      <a href="/index.html" class="btn-outline">Back to home</a>
+    </div>
+  </div>
+</section>
+
+<div class="main">
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progress-bar">
+    <div class="pb-step active" onclick="goToStep(0)"><div class="pb-dot active">1</div><div class="pb-label">Sign up</div></div>
+    <div class="pb-step" onclick="goToStep(1)"><div class="pb-dot">2</div><div class="pb-label">Add property</div></div>
+    <div class="pb-step" onclick="goToStep(2)"><div class="pb-dot">3</div><div class="pb-label">Share link</div></div>
+    <div class="pb-step" onclick="goToStep(3)"><div class="pb-dot">4</div><div class="pb-label">AI ranking</div></div>
+    <div class="pb-step" onclick="goToStep(4)"><div class="pb-dot">5</div><div class="pb-label">Approve</div></div>
+    <div class="pb-step" onclick="goToStep(5)"><div class="pb-dot">6</div><div class="pb-label">Final approval</div></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step-card active" id="step-0">
+    <div>
+      <div class="step-num">01</div>
+      <div class="step-title">Create your free account</div>
+      <div class="step-desc">Sign up at fairrentalai.com in under a minute. Enter your name, email, and password. You will receive a verification email — click the link to activate your account and you are ready to go.</div>
+      <div class="step-tips">
+        <div class="tip"><div class="tip-dot"></div>Your first 5 properties are always free &mdash; no credit card needed</div>
+        <div class="tip"><div class="tip-dot"></div>Email verification takes about 30 seconds</div>
+        <div class="tip"><div class="tip-dot"></div>Works for landlords in Canada and USA</div>
+      </div>
+    </div>
+    <div class="mockup-card">
+      <div class="mock-header">Create account</div>
+      <div class="mock-field">Full name</div>
+      <div class="mock-field">Email address</div>
+      <div class="mock-field">Password</div>
+      <div class="mock-btn mock-btn-navy">Create free account</div>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-top:10px;">Check your inbox and click the verification link.</div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-card" id="step-1">
+    <div>
+      <div class="step-num">02</div>
+      <div class="step-title">Add your property</div>
+      <div class="step-desc">In your dashboard, click "Add property". Fill in the address, unit type, monthly rent, available date, pet policy, and ideal tenant. This only takes about 2 minutes.</div>
+      <div class="step-tips">
+        <div class="tip"><div class="tip-dot"></div>The available date is used in AI scoring to match tenant move-in preferences</div>
+        <div class="tip"><div class="tip-dot"></div>Pet policy and ideal tenant type help the AI score household fit</div>
+        <div class="tip"><div class="tip-dot"></div>Each property gets its own unique application link automatically</div>
+      </div>
+    </div>
+    <div class="mockup-card">
+      <div class="mock-header">Add property</div>
+      <div class="mock-field">45 Oak Ave, Unit 3, Calgary AB</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+        <div class="mock-field">1 bed / 1 bath</div>
+        <div class="mock-field">$2,200/month</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+        <div class="mock-field">Mar 1, 2026</div>
+        <div class="mock-field">No pets</div>
+      </div>
+      <div class="mock-btn mock-btn-gold">Create &amp; get link</div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-card" id="step-2">
+    <div>
+      <div class="step-num">03</div>
+      <div class="step-title">Share your application link</div>
+      <div class="step-desc">Each property gets a unique link. Copy it and paste it into your Kijiji ad, Facebook listing, or anywhere you advertise. Tenants click the link to apply &mdash; no account or login needed.</div>
+      <div class="step-tips">
+        <div class="tip"><div class="tip-dot"></div>Works in any listing platform &mdash; Kijiji, Facebook, Craigslist, email, text</div>
+        <div class="tip"><div class="tip-dot"></div>Up to 200 applicants per property link</div>
+        <div class="tip"><div class="tip-dot"></div>Link closes automatically once you give initial approval to someone</div>
+      </div>
+    </div>
+    <div class="mockup-card">
+      <div class="mock-header">Your application link</div>
+      <div class="mock-link">fairrentalai.com/apply.html?token=de0f0db3...</div>
+      <div style="margin-bottom:10px;">
+        <div class="mock-btn mock-btn-navy">Copy link</div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-light);">Paste this in your Kijiji ad or Facebook listing. Tenants apply directly.</div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step-card" id="step-3">
+    <div>
+      <div class="step-num">04</div>
+      <div class="step-title">AI ranks your applicants</div>
+      <div class="step-desc">As tenants submit applications, FairRentalAI automatically scores each one and ranks them best to worst. The score is based on income, credit, employment, rental history, household fit, and move-in date.</div>
+      <div class="step-tips">
+        <div class="tip"><div class="tip-dot"></div>Scores are 0&ndash;100. Higher = better match for your property</div>
+        <div class="tip"><div class="tip-dot"></div>Every score includes an AI explanation and strengths/concerns</div>
+        <div class="tip"><div class="tip-dot"></div>No name, photo, or personal characteristics are used in scoring</div>
+        <div class="tip"><div class="tip-dot"></div>Results update in real time as new applications come in</div>
+      </div>
+    </div>
+    <div class="mockup-card">
+      <div class="mock-header">Ranked applicants &mdash; 12 total</div>
+      <div class="mock-app-row top">
+        <div class="mock-avatar av-green">SR</div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:500;">Sarah R.</div>
+          <div style="font-size:0.7rem;color:var(--text-light);">$7,200/mo &middot; Credit 760</div>
+        </div>
+        <div class="mock-score" style="color:var(--green);">94</div>
+      </div>
+      <div class="mock-app-row mid">
+        <div class="mock-avatar av-blue">JM</div>
+        <div>
+          <div style="font-size:0.82rem;">James M.</div>
+          <div style="font-size:0.7rem;color:var(--text-light);">$5,800/mo &middot; Credit 710</div>
+        </div>
+        <div class="mock-score" style="color:#b07d2a;">78</div>
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-top:8px;text-align:center;">+ 10 more applicants ranked below</div>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step-card" id="step-4">
+    <div>
+      <div class="step-num">05</div>
+      <div class="step-title">Give initial approval &amp; request documents</div>
+      <div class="step-desc">Click your top applicant and review their full profile. When you are ready, click "Initial approval". The tenant automatically receives an email asking them to upload their documents.</div>
+      <div class="step-tips">
+        <div class="tip"><div class="tip-dot"></div>Required: pay stubs and government photo ID</div>
+        <div class="tip"><div class="tip-dot"></div>Optional: bank statements and any other documents</div>
+        <div class="tip"><div class="tip-dot"></div>The application link closes automatically once you give initial approval</div>
+        <div class="tip"><div class="tip-dot"></div>Contact details (phone, email, references) unlock after initial approval</div>
+      </div>
+    </div>
+    <div class="mockup-card">
+      <div class="mock-header">Documents received</div>
+      <div class="mock-doc-row"><span>&#x1F4B0;</span> Pay stubs <span class="badge badge-green">Uploaded</span></div>
+      <div class="mock-doc-row"><span>&#x1FAA6;</span> Photo ID <span class="badge badge-green">Uploaded</span></div>
+      <div class="mock-doc-row"><span>&#x1F3E6;</span> Bank statements <span class="badge badge-amber">Optional</span></div>
+      <div style="margin-top:12px;">
+        <div class="mock-btn mock-btn-navy" style="margin-right:6px;">View pay stubs</div>
+        <div class="mock-btn mock-btn-outline">View ID</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step-card" id="step-5">
+    <div>
+      <div class="step-num">06</div>
+      <div class="step-title">Give final approval</div>
+      <div class="step-desc">Review the uploaded documents, then click "Give final approval". The tenant receives a congratulations email. All other applicants are automatically notified that the listing is closed. You are done!</div>
+      <div class="step-tips">
+        <div class="tip"><div class="tip-dot"></div>A confirmation box asks you to download documents before approving</div>
+        <div class="tip"><div class="tip-dot"></div>Documents are automatically deleted after 30 days for privacy</div>
+        <div class="tip"><div class="tip-dot"></div>All other applicants receive a polite "listing closed" email automatically</div>
+        <div class="tip"><div class="tip-dot"></div>The whole process from listing to approval takes about 10 minutes</div>
+      </div>
+    </div>
+    <div class="mockup-card">
+      <div style="background:var(--green-bg);border:1px solid rgba(58,154,110,0.25);border-radius:10px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-size:0.85rem;font-weight:500;color:var(--green);margin-bottom:4px;">Tenant confirmed!</div>
+        <div style="font-size:0.78rem;color:var(--text-mid);">Sarah R. receives a congratulations email. All other applicants notified automatically.</div>
+      </div>
+      <div class="mock-btn mock-btn-green">Give final approval</div>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-top:10px;">Documents stored 30 days, then auto-deleted for privacy.</div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-controls">
+    <button class="btn-prev" id="prev-btn" onclick="navigate(-1)" disabled>Back</button>
+    <button class="btn-next" id="next-btn" onclick="navigate(1)">Next step</button>
+    <span class="step-counter" id="counter">Step 1 of 6</span>
+  </div>
+</div>
+
+<footer>
+  <a class="footer-logo" href="/index.html">Fair<span>RentalAI</span></a>
+  <div class="footer-links">
+    <a href="/index.html">Home</a>
+    <a href="/how-it-works.html">How it works</a>
+    <a href="/about.html">About</a>
+    <a href="/index.html#pricing">Pricing</a>
+    <a href="mailto:info@fairrentalai.com" target="_blank">info@fairrentalai.com</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 FairRentalAI. All rights reserved.</div>
+</footer>
+
+<script>
+let cur = 0;
+const total = 6;
+
+function goToStep(n) {
+  document.getElementById('step-' + cur).classList.remove('active');
+  const steps = document.querySelectorAll('.pb-step');
+  steps[cur].classList.remove('active');
+  if (n > cur) steps[cur].classList.add('done');
+  else steps[cur].classList.remove('done');
+  cur = n;
+  document.getElementById('step-' + cur).classList.add('active');
+  steps[cur].classList.add('active');
+  steps[cur].classList.remove('done');
+  // Mark previous steps as done
+  for (let i = 0; i < cur; i++) { steps[i].classList.add('done'); steps[i].classList.remove('active'); const d = steps[i].querySelector('.pb-dot'); d.classList.add('done'); d.classList.remove('active'); d.textContent = '✓'; }
+  for (let i = cur + 1; i < total; i++) { steps[i].classList.remove('done', 'active'); const d = steps[i].querySelector('.pb-dot'); d.classList.remove('done', 'active'); d.textContent = i + 1; }
+  const dot = steps[cur].querySelector('.pb-dot');
+  dot.classList.add('active'); dot.classList.remove('done'); dot.textContent = cur + 1;
+  document.getElementById('prev-btn').disabled = cur === 0;
+  const nextBtn = document.getElementById('next-btn');
+  if (cur === total - 1) { nextBtn.textContent = 'Start free'; nextBtn.style.background = '#c9963a'; nextBtn.style.color = '#0e1e3a'; nextBtn.onclick = function(){ window.location.href = '/login.html'; }; }
+  else { nextBtn.textContent = 'Next step'; nextBtn.style.background = ''; nextBtn.style.color = ''; nextBtn.onclick = function(){ navigate(1); }; }
+  document.getElementById('counter').textContent = 'Step ' + (cur + 1) + ' of ' + total;
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function navigate(dir) { goToStep(Math.max(0, Math.min(total - 1, cur + dir))); }
+</script>
+</body>
+</html>
