@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FAIRRENTALAI"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FAIRRENTALAI');
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FairRentalAI — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -225,6 +233,30 @@ select.form-input{cursor:pointer;}
 }
 @media(max-width:480px){.stats-row{grid-template-columns:1fr!important;}}
 .mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:0.4rem;color:var(--text-dark);}
+
+.onboarding-overlay{position:fixed;inset:0;background:rgba(14,30,58,0.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.onboarding-card{background:white;border-radius:22px;width:100%;max-width:520px;overflow:hidden;animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.onboarding-header{background:var(--navy);padding:2rem 2rem 1.5rem;}
+.onboarding-step-pills{display:flex;gap:6px;margin-bottom:1.25rem;}
+.onboarding-pill{height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.2);transition:background 0.3s;}
+.onboarding-pill.active{background:var(--gold);}
+.onboarding-pill.done{background:rgba(255,255,255,0.5);}
+.onboarding-step-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-light);margin-bottom:0.4rem;}
+.onboarding-title{font-family:"Playfair Display",serif;font-size:1.5rem;color:white;line-height:1.2;}
+.onboarding-body{padding:1.75rem 2rem;}
+.onboarding-desc{font-size:0.9rem;color:var(--text-mid);line-height:1.75;margin-bottom:1.5rem;}
+.onboarding-checklist{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.75rem;}
+.onboarding-check-item{display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text-mid);}
+.onboarding-check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;}
+.check-done{background:var(--green-bg);color:var(--green);}
+.check-todo{background:#f5f3ef;color:var(--text-light);}
+.onboarding-actions{display:flex;gap:8px;}
+.onboarding-actions .btn-gold{flex:1;justify-content:center;padding:0.85rem;}
+.onboarding-skip{background:transparent;border:none;color:var(--text-light);font-size:0.8rem;cursor:pointer;padding:0.85rem;font-family:"DM Sans",sans-serif;}
+.onboarding-skip:hover{color:var(--text-mid);}
+.onboarding-illustration{font-size:3rem;text-align:center;margin-bottom:1rem;}
+
 </style>
 </head>
 <body>
@@ -639,6 +671,8 @@ async function loadDashboard() {
     updateUsageUI();
     // Refresh landlord data in background (non-blocking)
     refreshLandlordInBackground();
+    // Show onboarding for new users
+    if (properties.length === 0) showOnboarding();
   } catch(e) {
     document.getElementById('properties-list').innerHTML = `<div class="empty-state"><div class="empty-state-title">Error loading properties</div><div class="empty-state-desc">${e.message}</div></div>`;
   }
@@ -1136,6 +1170,53 @@ async function doFinalApproval() {
   }
 }
 
+
+// ── ONBOARDING ──
+let obStep = 0;
+const OB_KEY = 'fra_onboarding_done';
+
+function showOnboarding() {
+  if (localStorage.getItem(OB_KEY)) return;
+  document.getElementById('onboardingModal').style.display = 'flex';
+  gtag && gtag('event', 'onboarding_started');
+}
+
+function obUpdateUI() {
+  const titles = ['Welcome to FairRentalAI', 'Add your first property', 'Share your link'];
+  document.getElementById('ob-title').textContent = titles[obStep];
+  document.getElementById('ob-step-label').textContent = `Step ${obStep + 1} of 3`;
+  for (let i = 0; i < 3; i++) {
+    const pill = document.getElementById('ob-pill-' + i);
+    pill.className = 'onboarding-pill' + (i < obStep ? ' done' : i === obStep ? ' active' : '');
+  }
+  for (let i = 0; i < 3; i++) {
+    document.getElementById('ob-content-' + i).style.display = i === obStep ? 'block' : 'none';
+  }
+}
+
+function obNext() {
+  if (obStep < 2) { obStep++; obUpdateUI(); }
+  gtag && gtag('event', 'onboarding_step', { step: obStep });
+}
+
+function obBack() {
+  if (obStep > 0) { obStep--; obUpdateUI(); }
+}
+
+function obDone() {
+  localStorage.setItem(OB_KEY, '1');
+  document.getElementById('onboardingModal').style.display = 'none';
+  gtag && gtag('event', 'onboarding_completed');
+  // Open add property modal to guide them straight there
+  tryAddProperty();
+}
+
+function obSkip() {
+  localStorage.setItem(OB_KEY, '1');
+  document.getElementById('onboardingModal').style.display = 'none';
+  gtag && gtag('event', 'onboarding_skipped');
+}
+
 function showShareLink() {
   const prop = properties.find(p=>p.id===currentPropId);
   if (!prop) return;
@@ -1164,5 +1245,68 @@ initApp();
 async function initApp() { await loadDashboard(); }
 </script>
 <script src="https://js.stripe.com/v3/"></script>
+
+<!-- ONBOARDING MODAL -->
+<div class="onboarding-overlay" id="onboardingModal" style="display:none;">
+  <div class="onboarding-card">
+    <div class="onboarding-header">
+      <div class="onboarding-step-pills">
+        <div class="onboarding-pill active" id="ob-pill-0"></div>
+        <div class="onboarding-pill" id="ob-pill-1"></div>
+        <div class="onboarding-pill" id="ob-pill-2"></div>
+      </div>
+      <div class="onboarding-step-label" id="ob-step-label">Step 1 of 3</div>
+      <div class="onboarding-title" id="ob-title">Welcome to FairRentalAI</div>
+    </div>
+    <div class="onboarding-body">
+      <!-- Step 0 -->
+      <div id="ob-content-0">
+        <div class="onboarding-illustration">&#x1F3E0;</div>
+        <div class="onboarding-desc">You are 3 steps away from screening tenants fairly with AI. Here is a quick overview of how it works.</div>
+        <div class="onboarding-checklist">
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-done">&#x2713;</div>Create your free account</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">2</div>Add your first property</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">3</div>Share your application link</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">4</div>Get AI-ranked applicants</div>
+        </div>
+        <div class="onboarding-actions">
+          <button class="btn-gold" onclick="obNext()">Get started &rarr;</button>
+          <button class="onboarding-skip" onclick="obSkip()">Skip intro</button>
+        </div>
+      </div>
+      <!-- Step 1 -->
+      <div id="ob-content-1" style="display:none;">
+        <div class="onboarding-illustration">&#x1F4CB;</div>
+        <div class="onboarding-desc">Click <strong>"Add property"</strong> in the top right of your dashboard. Fill in your address, rent, unit type and available date. Takes about 2 minutes.</div>
+        <div class="onboarding-checklist">
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F4CD;</div>Property address and unit type</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F4B0;</div>Monthly rent amount</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F4C5;</div>Move-in available date</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F43E;</div>Pet policy</div>
+        </div>
+        <div class="onboarding-actions">
+          <button class="btn-gold" onclick="obNext()">Next &rarr;</button>
+          <button class="onboarding-skip" onclick="obBack()">&#x2190; Back</button>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div id="ob-content-2" style="display:none;">
+        <div class="onboarding-illustration">&#x1F517;</div>
+        <div class="onboarding-desc">Once your property is created, click <strong>"Share link"</strong> and copy your unique application link. Paste it in your Kijiji ad, Facebook listing, or anywhere you advertise.</div>
+        <div class="onboarding-checklist">
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F4F1;</div>Works on any listing platform</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F916;</div>AI scores every applicant automatically</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F4E7;</div>You get notified by email</div>
+          <div class="onboarding-check-item"><div class="onboarding-check-icon check-todo">&#x1F195;</div>First 5 properties are always free</div>
+        </div>
+        <div class="onboarding-actions">
+          <button class="btn-gold" onclick="obDone()">Go to my dashboard &rarr;</button>
+          <button class="onboarding-skip" onclick="obBack()">&#x2190; Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

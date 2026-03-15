@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FAIRRENTALAI"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FAIRRENTALAI');
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FairRentalAI — Landlord Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -136,6 +144,8 @@ async function doLogin() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error||'Login failed');
     localStorage.setItem('fra_token', data.token);
+      if (typeof gtag !== 'undefined') gtag('event', 'login', {method: 'email'});
+      if (typeof gtag !== 'undefined') gtag('event', 'sign_up', {method: 'email'});
     localStorage.setItem('fra_landlord', JSON.stringify(data.landlord));
     // Show verify notice if not verified (but still allow login)
     if (data.landlord && !data.landlord.emailVerified) {
@@ -168,6 +178,7 @@ async function doRegister() {
     const data=await res.json();
     if (!res.ok) throw new Error(data.error||'Registration failed');
     localStorage.setItem('fra_token', data.token);
+      if (typeof gtag !== 'undefined') gtag('event', 'sign_up', {method: 'email'});
     localStorage.setItem('fra_landlord', JSON.stringify(data.landlord));
     suc.textContent='Account created! Check your email to verify your account. Taking you to your dashboard...';
     suc.classList.add('show');
