@@ -290,7 +290,7 @@ select.form-input{cursor:pointer;}
   <!-- DASHBOARD VIEW -->
   
   <!-- Email verify banner -->
-  <div id="verify-banner" style="display:none;background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.65rem 2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+  <div id="verify-banner" style="background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.65rem 2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;display:none;">
     <div style="font-size:0.82rem;color:#b07d2a;">
       <strong>Verify your email to add properties.</strong>
       Check your inbox for a link from info@fairrentalai.com &mdash; or check spam.
@@ -593,38 +593,52 @@ function scoreClass(s) { return s>=80?'score-high':s>=60?'score-mid':'score-low'
 const statusLabel = {PENDING:'Pending',INITIAL_APPROVED:'Initially approved',DOCS_REQUESTED:'Awaiting docs',DOCS_RECEIVED:'Docs received',FINALLY_APPROVED:'Finally approved',DECLINED:'Declined',WAITLISTED:'Waitlisted'};
 const statusChip = {PENDING:'chip-pending',INITIAL_APPROVED:'chip-initial',DOCS_REQUESTED:'chip-docs',DOCS_RECEIVED:'chip-docs',FINALLY_APPROVED:'chip-final',DECLINED:'chip-declined',WAITLISTED:'chip-pending'};
 
+
+function updateUserUI(landlord) {
+  if (!landlord) return;
+  const name = landlord.name || 'Landlord';
+  const email = landlord.email || '';
+  const initials = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('user-name').textContent = name;
+  const emailEl = document.getElementById('user-email');
+  if (emailEl) emailEl.textContent = email;
+  document.getElementById('user-initials').textContent = initials;
+}
+
+function showVerifyBanner(isVerified) {
+  const banner = document.getElementById('verify-banner');
+  if (!banner) return;
+  banner.style.display = isVerified ? 'none' : 'flex';
+}
+
+async function refreshLandlordInBackground() {
+  try {
+    const meData = await apiCall('GET', '/api/auth/me');
+    if (meData && meData.landlord) {
+      localStorage.setItem('fra_landlord', JSON.stringify(meData.landlord));
+      updateUserUI(meData.landlord);
+      showVerifyBanner(meData.landlord.emailVerified);
+    }
+  } catch(e) {
+    console.log('Background refresh skipped:', e.message);
+  }
+}
+
 async function loadDashboard() {
   try {
-    // Show stored data immediately so UI doesn't look stuck
+    // STEP 1: Show stored data immediately
     const stored = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
-    if (stored.name) {
-      document.getElementById('user-name').textContent = stored.name;
-      document.getElementById('user-email').textContent = stored.email || '';
-      document.getElementById('user-initials').textContent = (stored.name||'L').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-    }
-    
-    // Refresh landlord from server in background
-    try {
-      const meData = await apiCall('GET', '/api/auth/me');
-      if (meData && meData.landlord) {
-        const updated = meData.landlord;
-        localStorage.setItem('fra_landlord', JSON.stringify(updated));
-        document.getElementById('user-name').textContent = updated.name || 'Landlord';
-        document.getElementById('user-email').textContent = updated.email || '';
-        document.getElementById('user-initials').textContent = (updated.name||'L').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-        const banner = document.getElementById('verify-banner');
-        if (banner) banner.style.display = updated.emailVerified ? 'none' : 'flex';
-      }
-    } catch(e) { 
-      console.log('Auth refresh skipped:', e.message);
-      const banner = document.getElementById('verify-banner');
-      if (banner) banner.style.display = stored.emailVerified ? 'none' : 'flex';
-    }
+    updateUserUI(stored);
+    showVerifyBanner(stored.emailVerified);
+
+    // STEP 2: Load properties (critical path)
     const data = await apiCall('GET', '/api/properties');
     properties = data.properties || [];
     renderProperties();
     updateStats();
     updateUsageUI();
+    // Refresh landlord data in background (non-blocking)
+    refreshLandlordInBackground();
   } catch(e) {
     document.getElementById('properties-list').innerHTML = `<div class="empty-state"><div class="empty-state-title">Error loading properties</div><div class="empty-state-desc">${e.message}</div></div>`;
   }
