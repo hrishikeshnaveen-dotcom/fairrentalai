@@ -290,9 +290,12 @@ select.form-input{cursor:pointer;}
   <!-- DASHBOARD VIEW -->
   
   <!-- Email verify banner -->
-  <div id="verify-banner" style="display:none;background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-    <div style="font-size:0.8rem;color:#b07d2a;"><strong>Please verify your email</strong> &mdash; check your inbox for a link from info@fairrentalai.com</div>
-    <button onclick="document.getElementById('verifyModal').classList.add('open');resendVerifyEmail();" style="background:#b07d2a;color:white;border:none;border-radius:6px;padding:0.35rem 0.85rem;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Verify email</button>
+  <div id="verify-banner" style="display:none;background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.65rem 2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+    <div style="font-size:0.82rem;color:#b07d2a;">
+      <strong>Verify your email to add properties.</strong>
+      Check your inbox for a link from info@fairrentalai.com &mdash; or check spam.
+    </div>
+    <button id="resend-banner-btn" onclick="resendFromBanner()" style="background:#b07d2a;color:white;border:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;flex-shrink:0;">Resend verification email</button>
   </div>
 
   <div class="view active" id="view-dashboard">
@@ -405,7 +408,7 @@ select.form-input{cursor:pointer;}
     <div class="modal-title">Please verify your email</div>
     <div class="modal-sub">Check your inbox for a verification email from <strong>info@fairrentalai.com</strong> and click the link before adding properties.</div>
     <div style="background:#fdf4e3;border:1px solid rgba(176,125,42,0.25);border-radius:8px;padding:0.75rem;margin-bottom:1.25rem;font-size:0.8rem;color:#b07d2a;">Check your spam folder if you cannot find it in your inbox.</div>
-    <button class="btn-gold" style="width:100%;justify-content:center;margin-bottom:0.75rem;" id="resend-verify-btn" onclick="resendVerifyEmail()">Resend verification email</button>
+    <button class="btn-gold" style="width:100%;justify-content:center;margin-bottom:0.75rem;" id="resend-verify-btn" onclick="resendVerifyEmail().then(ok => { if(ok) document.getElementById('resend-verify-btn').textContent='Sent! Check inbox.'; })">Resend verification email</button>
     <button class="modal-close" onclick="document.getElementById('verifyModal').classList.remove('open')">Close</button>
   </div>
 </div>
@@ -592,20 +595,29 @@ const statusChip = {PENDING:'chip-pending',INITIAL_APPROVED:'chip-initial',DOCS_
 
 async function loadDashboard() {
   try {
-    // Refresh landlord data to get latest emailVerified status
+    // Always refresh landlord from server to get latest emailVerified
     try {
       const meData = await apiCall('GET', '/api/auth/me');
-      if (meData.landlord) {
-        const stored = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
-        const updated = {...stored, ...meData.landlord};
+      if (meData && meData.landlord) {
+        const updated = meData.landlord;
         localStorage.setItem('fra_landlord', JSON.stringify(updated));
-        // Hide banner if now verified
-        if (updated.emailVerified) {
-          const banner = document.getElementById('verify-banner');
-          if (banner) banner.style.display = 'none';
+        // Update UI
+        document.getElementById('user-name').textContent = updated.name || 'Landlord';
+        document.getElementById('user-email').textContent = updated.email || '';
+        document.getElementById('user-initials').textContent = (updated.name||'L').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+        // Show/hide banner based on real server data
+        const banner = document.getElementById('verify-banner');
+        if (banner) {
+          banner.style.display = updated.emailVerified ? 'none' : 'flex';
         }
       }
-    } catch(e) { /* ignore auth refresh errors */ }
+    } catch(e) { 
+      console.log('Auth refresh error:', e.message);
+      // Fall back to localStorage
+      const stored = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+      const banner = document.getElementById('verify-banner');
+      if (banner) banner.style.display = stored.emailVerified ? 'none' : 'flex';
+    }
     const data = await apiCall('GET', '/api/properties');
     properties = data.properties || [];
     renderProperties();
@@ -895,16 +907,38 @@ function toggleSidebar() {
 
 async function resendVerifyEmail() {
   const btn = document.getElementById('resend-verify-btn');
-  btn.disabled = true; btn.textContent = 'Sending...';
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
   try {
     const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+    if (!landlord.email) throw new Error('No email found. Please log out and log back in.');
     await apiCall('POST', '/api/auth/resend-verification', { email: landlord.email });
-    btn.textContent = 'Sent! Check your inbox.';
-    setTimeout(() => { btn.disabled = false; btn.textContent = 'Resend verification email'; }, 3000);
+    if (btn) { btn.textContent = 'Sent! Check your inbox.'; setTimeout(() => { btn.disabled = false; btn.textContent = 'Resend verification email'; }, 3000); }
+    return true;
   } catch(e) {
-    btn.disabled = false; btn.textContent = 'Try again';
+    if (btn) { btn.disabled = false; btn.textContent = 'Try again'; }
+    alert('Error: ' + e.message);
+    return false;
   }
 }
+
+async function resendFromBanner() {
+  const btn = document.getElementById('resend-banner-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+  try {
+    const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+    if (!landlord.email) throw new Error('Please log out and log back in.');
+    await apiCall('POST', '/api/auth/resend-verification', { email: landlord.email });
+    if (btn) { btn.textContent = 'Sent! Check your inbox.'; }
+    setTimeout(() => { if (btn) { btn.disabled = false; btn.textContent = 'Resend verification email'; } }, 4000);
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Try again'; }
+    alert('Error sending email: ' + e.message);
+  }
+}
+
+// Legacy placeholder
+async function _old_resend_placeholder() {
+  const btn = document.getElementById('resend-verify-btn');
 
 let stripeInst, cardEl;
 function initStripe() {
@@ -966,6 +1000,7 @@ async function confirmPayment() {
 function tryAddProperty() {
   const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
   if (!landlord.emailVerified) {
+    // Show verify modal and auto-trigger resend if they haven't verified yet
     document.getElementById('verifyModal').classList.add('open');
     return;
   }
@@ -1075,13 +1110,8 @@ document.querySelectorAll('.modal-overlay').forEach(o=>{
   o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
 });
 
-const _landlordData = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
-if (_landlordData && !_landlordData.emailVerified) {
-  const banner = document.getElementById('verify-banner');
-  if (banner) banner.style.display = 'flex';
-}
-
-loadDashboard();
+initApp();
+async function initApp() { await loadDashboard(); }
 </script>
 <script src="https://js.stripe.com/v3/"></script>
 </body>
