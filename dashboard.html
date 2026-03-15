@@ -290,7 +290,7 @@ select.form-input{cursor:pointer;}
   <!-- DASHBOARD VIEW -->
   
   <!-- Email verify banner -->
-  <div id="verify-banner" style="background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.65rem 2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;display:none;">
+  <div id="verify-banner" style="display:none;background:#fdf4e3;border-bottom:1px solid rgba(176,125,42,0.25);padding:0.65rem 2rem;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
     <div style="font-size:0.82rem;color:#b07d2a;">
       <strong>Verify your email to add properties.</strong>
       Check your inbox for a link from info@fairrentalai.com &mdash; or check spam.
@@ -951,10 +951,6 @@ async function resendFromBanner() {
     alert('Error sending email: ' + e.message);
   }
 }
-
-// Legacy placeholder
-async function _old_resend_placeholder() {
-  const btn = document.getElementById('resend-verify-btn');
 
 let stripeInst, cardEl;
 function initStripe() {
