@@ -6,30 +6,36 @@
 <title>FairRentalAI — Landlord Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--navy:#0e1e3a;--gold:#c9963a;--gold-light:#e8b55a;--cream:#faf7f2;--white:#fff;--text-dark:#0e1e3a;--text-mid:#4a5568;--text-light:#8a9ab5;--border:rgba(14,30,58,0.12);--green:#3a9a6e;--green-bg:#eaf6f1;--red:#c0392b;--red-bg:#fdf0ee;}
+:root{--navy:#0e1e3a;--gold:#c9963a;--gold-light:#e8b55a;--border:rgba(14,30,58,0.12);--green:#3a9a6e;--green-bg:#eaf6f1;--red:#c0392b;--red-bg:#fdf0ee;--amber:#b07d2a;--amber-bg:#fdf4e3;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
 .logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:white;margin-bottom:2rem;text-align:center;}
 .logo span{color:var(--gold);}
 .card{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,0.3);}
 .tabs{display:flex;gap:0;margin-bottom:2rem;background:#f5f3ef;border-radius:10px;padding:4px;}
-.tab{flex:1;padding:0.6rem;text-align:center;font-size:0.875rem;font-weight:500;color:var(--text-light);cursor:pointer;border-radius:8px;transition:all 0.2s;}
+.tab{flex:1;padding:0.6rem;text-align:center;font-size:0.875rem;font-weight:500;color:#8a9ab5;cursor:pointer;border-radius:8px;transition:all 0.2s;}
 .tab.active{background:white;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
 .form-group{margin-bottom:1rem;}
-.form-label{font-size:0.78rem;font-weight:500;color:var(--text-dark);margin-bottom:6px;display:block;}
+.form-label{font-size:0.78rem;font-weight:500;color:var(--navy);margin-bottom:6px;display:block;}
 .form-input{width:100%;padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;color:var(--navy);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
 .form-input:focus{border-color:var(--gold);}
 .btn-submit{width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:0.85rem;font-size:0.95rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;margin-top:0.5rem;}
 .btn-submit:hover{background:#162d56;}
 .btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
-.error-msg{background:var(--red-bg);color:var(--red);border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;}
-.error-msg.show{display:block;}
-.success-msg{background:var(--green-bg);color:var(--green);border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;}
-.success-msg.show{display:block;}
-.divider{text-align:center;font-size:0.78rem;color:var(--text-light);margin:1.5rem 0;}
+.msg{border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;}
+.msg.show{display:block;}
+.msg-error{background:var(--red-bg);color:var(--red);}
+.msg-success{background:var(--green-bg);color:var(--green);}
+.msg-info{background:var(--amber-bg);color:var(--amber);}
+.forgot-link{text-align:right;margin-top:-0.5rem;margin-bottom:0.75rem;}
+.forgot-link a{font-size:0.78rem;color:var(--gold);text-decoration:none;cursor:pointer;}
+.forgot-link a:hover{text-decoration:underline;}
+.divider{text-align:center;font-size:0.78rem;color:#8a9ab5;margin:1.25rem 0;}
 .back-link{text-align:center;margin-top:1.5rem;}
 .back-link a{color:rgba(255,255,255,0.6);font-size:0.82rem;text-decoration:none;}
 .back-link a:hover{color:white;}
+.verify-notice{background:var(--amber-bg);border:1px solid rgba(176,125,42,0.25);border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;color:var(--amber);margin-bottom:1rem;display:none;}
+.verify-notice.show{display:block;}
 </style>
 </head>
 <body>
@@ -42,7 +48,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;di
 
   <!-- LOGIN -->
   <div id="login-form">
-    <div class="error-msg" id="login-error"></div>
+    <div class="msg msg-error" id="login-error"></div>
+    <div class="verify-notice" id="verify-notice">Please check your email and verify your account before logging in. <a href="#" onclick="resendVerify()">Resend verification email</a></div>
     <div class="form-group">
       <label class="form-label">Email address</label>
       <input class="form-input" type="email" id="login-email" placeholder="you@example.com"/>
@@ -51,13 +58,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;di
       <label class="form-label">Password</label>
       <input class="form-input" type="password" id="login-password" placeholder="Your password"/>
     </div>
+    <div class="forgot-link"><a onclick="showTab('forgot')">Forgot password?</a></div>
     <button class="btn-submit" id="login-btn" onclick="doLogin()">Log in to dashboard</button>
   </div>
 
   <!-- REGISTER -->
   <div id="register-form" style="display:none;">
-    <div class="error-msg" id="register-error"></div>
-    <div class="success-msg" id="register-success">Account created! Logging you in...</div>
+    <div class="msg msg-error" id="register-error"></div>
+    <div class="msg msg-success" id="register-success"></div>
     <div class="form-group">
       <label class="form-label">Full name</label>
       <input class="form-input" type="text" id="reg-name" placeholder="Jane Smith"/>
@@ -72,19 +80,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;di
     </div>
     <button class="btn-submit" id="register-btn" onclick="doRegister()">Create free account</button>
   </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div id="forgot-form" style="display:none;">
+    <div class="msg msg-error" id="forgot-error"></div>
+    <div class="msg msg-success" id="forgot-success"></div>
+    <p style="font-size:0.85rem;color:#4a5568;margin-bottom:1.25rem;line-height:1.6;">Enter your email address and we'll send you a link to reset your password.</p>
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <input class="form-input" type="email" id="forgot-email" placeholder="you@example.com"/>
+    </div>
+    <button class="btn-submit" id="forgot-btn" onclick="doForgot()">Send reset link</button>
+    <div style="text-align:center;margin-top:1rem;"><a onclick="showTab('login')" style="font-size:0.82rem;color:var(--gold);cursor:pointer;">← Back to login</a></div>
+  </div>
 </div>
 <div class="back-link"><a href="/index.html">← Back to FairRentalAI.com</a></div>
 
 <script>
 const API = 'https://tenantiq-api-production.up.railway.app';
-
-// Redirect if already logged in
 if (localStorage.getItem('fra_token')) window.location.href = '/dashboard.html';
 
 function showTab(tab) {
-  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
-  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  ['login','register','forgot'].forEach(t => {
+    document.getElementById(t+'-form').style.display = t===tab?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
+  });
 }
 
 async function doLogin() {
@@ -92,53 +114,83 @@ async function doLogin() {
   const password = document.getElementById('login-password').value;
   const btn = document.getElementById('login-btn');
   const err = document.getElementById('login-error');
-  err.classList.remove('show');
-  if (!email || !password) { err.textContent = 'Please enter your email and password.'; err.classList.add('show'); return; }
-  btn.disabled = true; btn.textContent = 'Logging in...';
+  const verifyNotice = document.getElementById('verify-notice');
+  err.classList.remove('show'); verifyNotice.classList.remove('show');
+  if (!email || !password) { err.textContent='Please enter your email and password.'; err.classList.add('show'); return; }
+  btn.disabled=true; btn.textContent='Logging in...';
   try {
-    const res = await fetch(API + '/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    const res = await fetch(API+'/api/auth/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Login failed');
+    if (!res.ok) throw new Error(data.error||'Login failed');
     localStorage.setItem('fra_token', data.token);
     localStorage.setItem('fra_landlord', JSON.stringify(data.landlord));
-    window.location.href = '/dashboard.html';
+    // Show verify notice if not verified (but still allow login)
+    if (data.landlord && !data.landlord.emailVerified) {
+      verifyNotice.classList.add('show');
+      btn.disabled=false; btn.textContent='Log in to dashboard';
+      // Still redirect after a moment
+      setTimeout(() => window.location.href='/dashboard.html', 2000);
+      return;
+    }
+    window.location.href='/dashboard.html';
   } catch(e) {
-    err.textContent = e.message; err.classList.add('show');
-    btn.disabled = false; btn.textContent = 'Log in to dashboard';
+    err.textContent=e.message; err.classList.add('show');
+    btn.disabled=false; btn.textContent='Log in to dashboard';
   }
 }
 
 async function doRegister() {
-  const name = document.getElementById('reg-name').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
-  const password = document.getElementById('reg-password').value;
-  const btn = document.getElementById('register-btn');
-  const err = document.getElementById('register-error');
-  const suc = document.getElementById('register-success');
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const password=document.getElementById('reg-password').value;
+  const btn=document.getElementById('register-btn');
+  const err=document.getElementById('register-error');
+  const suc=document.getElementById('register-success');
   err.classList.remove('show'); suc.classList.remove('show');
-  if (!name || !email || !password) { err.textContent = 'Please fill in all fields.'; err.classList.add('show'); return; }
-  if (password.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.classList.add('show'); return; }
-  btn.disabled = true; btn.textContent = 'Creating account...';
+  if (!name||!email||!password) { err.textContent='Please fill in all fields.'; err.classList.add('show'); return; }
+  if (password.length<8) { err.textContent='Password must be at least 8 characters.'; err.classList.add('show'); return; }
+  btn.disabled=true; btn.textContent='Creating account...';
   try {
-    const res = await fetch(API + '/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, email, password}) });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    const res=await fetch(API+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
+    const data=await res.json();
+    if (!res.ok) throw new Error(data.error||'Registration failed');
     localStorage.setItem('fra_token', data.token);
     localStorage.setItem('fra_landlord', JSON.stringify(data.landlord));
+    suc.textContent='Account created! Check your email to verify your account. Taking you to your dashboard...';
     suc.classList.add('show');
-    setTimeout(() => window.location.href = '/dashboard.html', 1000);
+    setTimeout(()=>window.location.href='/dashboard.html', 2500);
   } catch(e) {
-    err.textContent = e.message; err.classList.add('show');
-    btn.disabled = false; btn.textContent = 'Create free account';
+    err.textContent=e.message; err.classList.add('show');
+    btn.disabled=false; btn.textContent='Create free account';
   }
 }
 
-// Allow Enter key
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    if (document.getElementById('login-form').style.display !== 'none') doLogin();
-    else doRegister();
+async function doForgot() {
+  const email=document.getElementById('forgot-email').value.trim();
+  const btn=document.getElementById('forgot-btn');
+  const err=document.getElementById('forgot-error');
+  const suc=document.getElementById('forgot-success');
+  err.classList.remove('show'); suc.classList.remove('show');
+  if (!email) { err.textContent='Please enter your email address.'; err.classList.add('show'); return; }
+  btn.disabled=true; btn.textContent='Sending...';
+  try {
+    const res=await fetch(API+'/api/auth/forgot-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const data=await res.json();
+    suc.textContent='If that email exists, a reset link has been sent. Check your inbox!';
+    suc.classList.add('show');
+    btn.disabled=false; btn.textContent='Send reset link';
+  } catch(e) {
+    err.textContent=e.message; err.classList.add('show');
+    btn.disabled=false; btn.textContent='Send reset link';
   }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key!=='Enter') return;
+  const active = document.querySelector('[id$="-form"]:not([style*="none"])');
+  if (active?.id==='login-form') doLogin();
+  else if (active?.id==='register-form') doRegister();
+  else if (active?.id==='forgot-form') doForgot();
 });
 </script>
 </body>
