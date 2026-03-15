@@ -442,17 +442,7 @@ select.form-input{cursor:pointer;}
     </div>
     <div class="form-group">
       <label class="form-label">Card details</label>
-      <div id="saved-card-info" style="display:none;background:#f5f3ef;border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:0.85rem;color:var(--navy);" id="saved-card-text">Use saved card</span>
-        <button onclick="showNewCard()" style="font-size:0.72rem;color:var(--gold);background:none;border:none;cursor:pointer;">Use different card</button>
-      </div>
-      <div id="card-element-wrap">
-        <div id="card-element" style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;background:white;min-height:44px;"></div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-          <input type="checkbox" id="save-card-cb" checked style="cursor:pointer;"/>
-          <label for="save-card-cb" style="font-size:0.75rem;color:var(--text-mid);cursor:pointer;">Save card for future properties</label>
-        </div>
-      </div>
+      <div id="card-element" style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;background:white;min-height:44px;"></div>
       <div id="card-errors" style="color:var(--red);font-size:0.78rem;margin-top:5px;"></div>
     </div>
     <div style="display:flex;gap:8px;margin-top:0.5rem;">
@@ -944,12 +934,6 @@ function updateUsageUI() {
   }
 }
 
-function showNewCard() {
-  document.getElementById('saved-card-info').style.display = 'none';
-  document.getElementById('card-element-wrap').style.display = 'block';
-  localStorage.removeItem('fra_saved_pm');
-}
-
 function toggleSidebar() {
   document.querySelector('.sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('open');
@@ -988,18 +972,8 @@ async function resendFromBanner() {
 
 let stripeInst, cardEl;
 function initStripe() {
-  // Check for saved card display
-  const savedPM = localStorage.getItem('fra_saved_pm');
-  if (savedPM) {
-    try {
-      const pm = JSON.parse(savedPM);
-      if (pm.saved) {
-        document.getElementById('saved-card-info').style.display = 'flex';
-        document.getElementById('saved-card-text').textContent = 'Saved card on file';
-        document.getElementById('card-element-wrap').style.display = 'none';
-      }
-    } catch(e) {}
-  }
+  // Always clear any stale saved card data
+  localStorage.removeItem('fra_saved_pm');
   if (stripeInst) return;
   stripeInst = Stripe('pk_live_51TAyNhGpmibFVGSwiRUrddd5pLs94yZUmqbM1mS0ofVGaV9GaPXJdSePdcUulXIpz2k93zC62g0uWjchAIxDg6KD00de8B2C87');
   const elements = stripeInst.elements();
@@ -1039,13 +1013,6 @@ async function confirmPayment() {
     const piData = await apiCall('POST', '/api/properties/payment-intent', { country });
     const result = await stripeInst.confirmCardPayment(piData.clientSecret, { payment_method: { card: cardEl } });
     if (result.error) { err.textContent = result.error.message; err.classList.add('show'); btn.disabled = false; btn.textContent = 'Pay $5 & add property'; return; }
-    // Save payment method info for display
-    if (result.paymentIntent.payment_method) {
-      try {
-        const pm = result.paymentIntent.payment_method;
-        localStorage.setItem('fra_saved_pm', JSON.stringify({ id: pm, saved: true }));
-      } catch(e) {}
-    }
     const availableDate = document.getElementById('pay-available').value || null;
     const data = await apiCall('POST', '/api/properties/paid', { address, unitType, monthlyRent, availableDate, paymentIntentId: result.paymentIntent.id });
     document.getElementById('paymentModal').classList.remove('open');
