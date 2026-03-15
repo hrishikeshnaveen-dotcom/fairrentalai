@@ -550,6 +550,20 @@ const statusChip = {PENDING:'chip-pending',INITIAL_APPROVED:'chip-initial',DOCS_
 
 async function loadDashboard() {
   try {
+    // Refresh landlord data to get latest emailVerified status
+    try {
+      const meData = await apiCall('GET', '/api/auth/me');
+      if (meData.landlord) {
+        const stored = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+        const updated = {...stored, ...meData.landlord};
+        localStorage.setItem('fra_landlord', JSON.stringify(updated));
+        // Hide banner if now verified
+        if (updated.emailVerified) {
+          const banner = document.getElementById('verify-banner');
+          if (banner) banner.style.display = 'none';
+        }
+      }
+    } catch(e) { /* ignore auth refresh errors */ }
     const data = await apiCall('GET', '/api/properties');
     properties = data.properties || [];
     renderProperties();

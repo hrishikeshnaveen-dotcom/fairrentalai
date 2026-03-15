@@ -45,7 +45,12 @@ async function verify() {
     const res = await fetch(API + '/api/auth/verify-email?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email));
     const data = await res.json();
     if (res.ok && data.success) {
-      document.getElementById('card').innerHTML = '<div class="icon icon-success">&#x2713;</div><div class="title">Email verified!</div><div class="sub">Your account is now active. You can log in to your dashboard.</div><a href="/login.html" class="btn btn-gold">Go to login</a>';
+      // Update localStorage so dashboard knows email is verified
+try {
+  const landlord = JSON.parse(localStorage.getItem('fra_landlord') || '{}');
+  if (landlord) { landlord.emailVerified = true; localStorage.setItem('fra_landlord', JSON.stringify(landlord)); }
+} catch(e) {}
+document.getElementById('card').innerHTML = '<div class="icon icon-success">&#x2713;</div><div class="title">Email verified!</div><div class="sub">Your account is now active. You can now add properties to your dashboard.</div><a href="/dashboard.html" class="btn btn-gold">Go to dashboard</a>';
     } else {
       throw new Error(data.error || 'Verification failed');
     }
