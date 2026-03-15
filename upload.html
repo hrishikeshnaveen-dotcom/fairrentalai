@@ -139,7 +139,7 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
         <div class="doc-header">
           <div class="doc-icon" id="icon-BANK_STATEMENT">&#x1F3E6;</div>
           <div><div class="doc-title">Bank statements</div><div class="doc-sub">Last 3 months &middot; PDF, JPG, or PNG &middot; Max 10MB &middot; Optional</div></div>
-          <span class="doc-status status-pending" id="status-BANK_STATEMENT">Optional</span>
+          <span class="doc-status status-pending" id="status-BANK_STATEMENT" style="background:#f0ede8;color:#888;">Optional</span>
         </div>
         <div class="upload-zone" id="zone-BANK_STATEMENT">
           <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'BANK_STATEMENT')"/>
@@ -157,7 +157,7 @@ h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin-bott
         <div class="doc-header">
           <div class="doc-icon" id="icon-OTHER">&#x1F4C2;</div>
           <div><div class="doc-title">Additional documents</div><div class="doc-sub">Any other documents requested by your landlord &middot; Max 10MB</div></div>
-          <span class="doc-status status-pending" id="status-OTHER">Optional</span>
+          <span class="doc-status status-pending" id="status-OTHER" style="background:#f0ede8;color:#888;">Optional</span>
         </div>
         <div class="upload-zone" id="zone-OTHER">
           <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(event,'OTHER')"/>
@@ -283,7 +283,7 @@ async function submitAll() {
   let lastResult = null;
 
   for (const type of types) {
-    if (!files[type]) continue; // Skip optional OTHER if not provided
+    if (!files[type]) continue; // Only upload selected files
     const err = document.getElementById('err-'+type);
     try {
       btn.textContent = 'Uploading ' + type.toLowerCase().replace('_', ' ') + '...';

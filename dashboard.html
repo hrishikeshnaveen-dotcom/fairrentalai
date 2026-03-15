@@ -258,7 +258,7 @@ select.form-input{cursor:pointer;}
     <div class="usage-count" id="sb-usage-count">0 <span>of 5 free</span></div>
     <div class="usage-bar-bg"><div class="usage-bar-fill" id="sb-usage-bar" style="width:0%;background:var(--gold);"></div></div>
     <div class="usage-free" id="sb-usage-note"><strong>5 free slots</strong> remaining</div>
-    <button class="btn-upgrade-sm" onclick="document.getElementById('upgradeModal').classList.add('open')">Upgrade plan</button>
+    <button class="btn-upgrade-sm" id="upgrade-btn" onclick="tryAddProperty()" style="display:none;">+ Add property ($5 CAD)</button>
   </div>
   <div class="sidebar-footer">
     <div class="user-avatar" id="user-initials">?</div>
@@ -837,6 +837,14 @@ function selectApplicant(i) {
       <div class="detail-row"><span class="detail-row-label">Evictions</span><span class="detail-row-value">${a.hasEviction?'Yes':'None'}</span></div>
     </div>
     ${strengths||concerns?`<div class="detail-section"><div class="detail-section-title">Strengths & concerns</div><div>${strengths}${concerns}</div></div>`:''}
+    ${['INITIAL_APPROVED','DOCS_REQUESTED','DOCS_RECEIVED','FINALLY_APPROVED'].includes(a.status) ? `
+    <div class="detail-section">
+      <div class="detail-section-title">Contact details (visible after initial approval)</div>
+      <div class="detail-row"><span class="detail-row-label">Email</span><span class="detail-row-value"><a href="mailto:${a.email}" style="color:var(--gold);">${a.email}</a></span></div>
+      ${a.phone ? `<div class="detail-row"><span class="detail-row-label">Phone</span><span class="detail-row-value"><a href="tel:${a.phone}" style="color:var(--gold);">${a.phone}</a></span></div>` : ''}
+      ${a.refName ? `<div class="detail-row"><span class="detail-row-label">Reference name</span><span class="detail-row-value">${a.refName}</span></div>` : ''}
+      ${a.refContact ? `<div class="detail-row"><span class="detail-row-label">Reference contact</span><span class="detail-row-value">${a.refContact}</span></div>` : ''}
+    </div>` : ''}
     ${a.notes?`<div class="detail-section"><div class="detail-section-title">Notes from applicant</div><div style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;">${a.notes}</div></div>`:''}
     ${docsHTML}
     ${actionsHTML}`;
@@ -904,21 +912,28 @@ function updateStats() {
 
 function updateUsageUI() {
   const count = properties.length;
-  // Effective limit increases by 1 for each paid property beyond 5
   const paidExtra = Math.max(0, count - FREE_LIMIT);
-  const effectiveLimit = FREE_LIMIT + paidExtra;
-  const pct = Math.min(100, Math.round((count/effectiveLimit)*100));
+  const pct = Math.min(100, Math.round((count/FREE_LIMIT)*100));
   const slots = Math.max(0, FREE_LIMIT-count);
   const barColor = count>=FREE_LIMIT?'var(--amber)':'var(--gold)';
-  const freeUsed = Math.min(count, FREE_LIMIT);
+  
+  // Update count display
   document.getElementById('sb-usage-count').innerHTML = count > FREE_LIMIT 
     ? `${count} <span>${FREE_LIMIT} free + ${paidExtra} paid</span>`
     : `${count} <span>of ${FREE_LIMIT} free</span>`;
-  document.getElementById('sb-usage-bar').style.width = pct+'%';
+  document.getElementById('sb-usage-bar').style.width = Math.min(100,pct)+'%';
   document.getElementById('sb-usage-bar').style.background = barColor;
-  document.getElementById('sb-usage-note').innerHTML = count>=FREE_LIMIT
-    ? `<strong style="color:var(--gold-light);">$5 CAD per extra property</strong>`
-    : `<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
+  
+  const upgradeBtn = document.getElementById('upgrade-btn');
+  
+  if (count >= FREE_LIMIT) {
+    // Show upgrade button only when at/over free limit
+    document.getElementById('sb-usage-note').innerHTML = `<strong style="color:rgba(255,255,255,0.5);">$5 CAD one-time per extra</strong>`;
+    if (upgradeBtn) upgradeBtn.style.display = 'block';
+  } else {
+    document.getElementById('sb-usage-note').innerHTML = `<strong>${slots} free slot${slots!==1?'s':''}</strong> remaining`;
+    if (upgradeBtn) upgradeBtn.style.display = 'none';
+  }
 }
 
 function showNewCard() {
