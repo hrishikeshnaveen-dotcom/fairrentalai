@@ -931,11 +931,23 @@ function showEmailPreview(status, a) {
 
 function updateStats() {
   let totalApps = 0, docsWaiting = 0, finalApproved = 0;
-  properties.forEach(p => { totalApps += p._count?.applications || 0; });
-  currentApplicants.forEach(a => {
-    if (a.status === 'DOCS_REQUESTED') docsWaiting++;
-    if (a.status === 'FINALLY_APPROVED') finalApproved++;
+  properties.forEach(p => {
+    totalApps += p._count?.applications || p.applicantCount || 0;
+    // Count across ALL applicants from all properties
+    (p.applications || []).forEach(a => {
+      if (['INITIAL_APPROVED','DOCS_REQUESTED','DOCS_RECEIVED'].includes(a.status)) docsWaiting++;
+      if (a.status === 'FINALLY_APPROVED') finalApproved++;
+    });
   });
+  // Also count from currentApplicants for currently loaded property
+  let propDocsWaiting = 0, propFinalApproved = 0;
+  currentApplicants.forEach(a => {
+    if (['INITIAL_APPROVED','DOCS_REQUESTED','DOCS_RECEIVED'].includes(a.status)) propDocsWaiting++;
+    if (a.status === 'FINALLY_APPROVED') propFinalApproved++;
+  });
+  // Use whichever is higher (currentApplicants is more up to date for selected property)
+  docsWaiting = Math.max(docsWaiting, propDocsWaiting);
+  finalApproved = Math.max(finalApproved, propFinalApproved);
   document.getElementById('stat-props').textContent = properties.filter(p=>p.status==='ACTIVE').length;
   document.getElementById('stat-apps').textContent = totalApps;
   document.getElementById('stat-docs').textContent = docsWaiting;
